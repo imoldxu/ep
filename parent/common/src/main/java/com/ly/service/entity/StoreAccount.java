@@ -1,0 +1,53 @@
+package com.ly.service.entity;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.apache.ibatis.type.JdbcType;
+
+import tk.mybatis.mapper.annotation.ColumnType;
+
+@Table(name="t_storeaccount")
+public class StoreAccount {
+
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private int id;
+	
+	@Column(name = "storeid")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private int storeid;
+	
+	@Column(name = "balance")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private int balance;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getStoreid() {
+		return storeid;
+	}
+
+	public void setStoreid(int storeid) {
+		this.storeid = storeid;
+	}
+
+	public int getBalance() {
+		return balance;
+	}
+
+	public void setBalance(int balance) {
+		this.balance = balance;
+	}
+}

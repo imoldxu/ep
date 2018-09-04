@@ -1,0 +1,249 @@
+package com.ly.service.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ly.service.context.TransactionDrug;
+import com.ly.service.context.HandleException;
+import com.ly.service.context.Response;
+import com.ly.service.context.SearchOption;
+import com.ly.service.entity.Order;
+import com.ly.service.entity.Prescription;
+import com.ly.service.entity.PrescriptionDrug;
+import com.ly.service.service.PrescriptionService;
+import com.ly.service.utils.JSONUtils;
+import com.ly.service.utils.SessionUtil;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
+@RestController
+@Api(description = "处方接口")
+public class PrescriptionController {
+	
+
+	@Autowired
+	PrescriptionService prescriptionService;
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/open", method = RequestMethod.POST)
+	@ApiOperation(value = "医生在线开处方", notes = "医生在线开处方")
+	public Response open(
+			@ApiParam(name = "perscription", value = "拼音首字母索引或药品名称") @RequestParam(name = "perscription") String perscription,
+			@ApiParam(name = "drugList", value = "药品清单") @RequestParam(name = "drugList") String drugList,
+			HttpServletRequest request, HttpServletResponse response) {
+		Prescription p = null;
+		List<PrescriptionDrug> list = null;
+		try{
+			p = JSONUtils.getObjectByJson(perscription, Prescription.class);
+			list = JSONUtils.getObjectListByJson(drugList, PrescriptionDrug.class);
+		}catch (Exception e) {
+			return Response.Error(-1, "参数错误");
+		}
+			
+		try{
+			Integer doctorid = SessionUtil.getDoctorId(request);
+			prescriptionService.open(doctorid, p, list);
+			return Response.OK(null);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}
+	}
+
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/commitByHosiptal", method = RequestMethod.POST)
+	@ApiOperation(value = "从医院处方系统传入处方", notes = "从医院传入处方")
+	public Response commit(
+			@ApiParam(name = "hospitalid", value = "医院编号") @RequestParam(name = "hospitalid") Integer hospitalid,
+			@ApiParam(name = "perscription", value = "拼音首字母索引或药品名称") @RequestParam(name = "perscription") String perscription,
+			@ApiParam(name = "drugList", value = "药品清单") @RequestParam(name = "drugList") String drugList,
+			HttpServletRequest request, HttpServletResponse response) {
+		
+		//TODO:此处应该有安全机制认证医院的身份
+		Prescription p = null;
+		List<PrescriptionDrug> list = null;
+		try{
+			p = JSONUtils.getObjectByJson(perscription, Prescription.class);
+			list = JSONUtils.getObjectListByJson(drugList, PrescriptionDrug.class);
+		}catch (Exception e) {
+			return Response.Error(-1, "参数错误");
+		}
+		try{
+			prescriptionService.commit(hospitalid, p, list);
+			return Response.OK(null);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.Error(Response.ERROR, "系统异常");		
+		}
+	}
+		
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/receive", method = RequestMethod.POST)
+	@ApiOperation(value = "用户领取处方", notes = "用户领取处方")
+	public Response receive(
+			@ApiParam(name = "perscriptionid", value = "处方编号") @RequestParam(name = "perscriptionid") Long pid,
+			HttpServletRequest request, HttpServletResponse response) {
+		
+		try{
+			Integer userid = SessionUtil.getUserId(request);
+			prescriptionService.receive(userid, pid);
+	
+			Response resp = new Response(Response.SUCCESS, null, Response.SUCCESS_MSG);
+			
+			return resp;
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.Error(Response.ERROR, "系统异常");		
+		}
+	}
+	
+	//管理工具用
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getPrescriptionList", method = RequestMethod.GET)
+	@ApiOperation(value = "获取处方列表", notes = "获取处方列表")
+	public Response getPrescriptionList(
+			@ApiParam(name = "option", value = "查询条件") @RequestParam(name = "option") String option,
+			HttpServletRequest request, HttpServletResponse respons) {
+		respons.setHeader("Access-Control-Allow-Origin", "*");
+		respons.setHeader("Access-Control-Allow-Methods", "GET");
+		Response resp = null;
+		SearchOption searchOption = null;
+		try{
+			searchOption = JSONUtils.getObjectByJson(option, SearchOption.class);
+		}catch (Exception e) {
+			Response.Error(-1, "参数错误");
+		}
+		try{
+			List<Prescription> plist =  prescriptionService.getPrescriptionListByOption(searchOption);
+			resp = new Response(Response.SUCCESS, plist, "成功");		
+			return resp;
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.Error(Response.ERROR, "系统异常");		
+		}
+	}
+	
+	//管理工具用
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getPrescriptionByID", method = RequestMethod.GET)
+	@ApiOperation(value = "获取处方详情", notes = "获取处方详情")
+	public Response getPrescriptionByID(
+			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Integer pid,
+			HttpServletRequest request, HttpServletResponse respons) {
+		respons.setHeader("Access-Control-Allow-Origin", "*");
+		respons.setHeader("Access-Control-Allow-Methods", "GET");
+		try{
+			Prescription detail = prescriptionService.getPrescriptionDetail(pid);		
+			return Response.OK(detail);		
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.Error(Response.ERROR, "系统异常");
+		}
+	}
+
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getUserPrescriptionList", method = RequestMethod.GET)
+	@ApiOperation(value = "获取处方详情", notes = "获取处方详情")
+	public Response getUserPrescriptionList(
+			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
+			@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
+			@ApiParam(name = "pageSize", value = "最大数") @RequestParam(name = "pageSize") int pageSize,
+			HttpServletRequest request, HttpServletResponse respons) {
+		respons.setHeader("Access-Control-Allow-Origin", "*");
+		respons.setHeader("Access-Control-Allow-Methods", "GET");
+		try{
+			Integer uid = SessionUtil.getUserId(request);
+		    List<Prescription> list = prescriptionService.getPrescriptionListByUser(uid, pageIndex, pageSize);		
+		    return Response.OK(list);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.Error(Response.ERROR, "系统异常");
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getPrescriptionByIDFromStore", method = RequestMethod.GET)
+	@ApiOperation(value = "药房获取处方详情,只提供药房有的药品信息", notes = "药房获取处方详情")
+	public Response getPrescriptionByIDFromStore(
+			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
+			HttpServletRequest request, HttpServletResponse respons) {
+		respons.setHeader("Access-Control-Allow-Origin", "*");
+		respons.setHeader("Access-Control-Allow-Methods", "GET");
+		try{
+			Integer storeid = SessionUtil.getStoreId(request);
+		    Prescription detail = prescriptionService.getPrescriptionDetailByStore(storeid, pid);		
+		    return Response.OK(detail);		
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.Error(Response.ERROR, "系统异常");
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/buy", method = RequestMethod.POST)
+	@ApiOperation(value = "买药", notes = "买药")
+	public Response buy(
+			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
+			@ApiParam(name = "drugList", value = "药品清单") @RequestParam(name = "drugList") String drugList,
+			HttpServletRequest request, HttpServletResponse respons) {
+		List<TransactionDrug> transDrugList = null;
+		try{
+			transDrugList = JSONUtils.getObjectListByJson(drugList, TransactionDrug.class);
+		}catch (Exception e) {
+			return Response.Error(-1, "参数错误");
+		}
+		try{
+			Order order = prescriptionService.buy(pid, transDrugList);		
+			return Response.OK(order);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.Error(Response.ERROR, "系统异常");
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/buyFromStore", method = RequestMethod.POST)
+	@ApiOperation(value = "买药", notes = "买药")
+	public Response buyFromStore(
+			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
+			@ApiParam(name = "drugList", value = "药品清单") @RequestParam(name = "drugList") List<TransactionDrug> drugList,
+			HttpServletRequest request, HttpServletResponse respons) {
+		
+		
+		try{
+			Integer storeid = SessionUtil.getStoreId(request);
+			Order order = prescriptionService.buyFromStore(storeid, pid, drugList);		
+			return Response.OK(order);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.Error(Response.ERROR, "系统异常");
+		}
+	}
+
+}

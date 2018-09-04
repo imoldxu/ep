@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.ly.service</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.ly.service</groupId>
+  <artifactId>drug</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>drug</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+  
+  	<dependency>
+		<groupId>com.ly.service</groupId>
+		<artifactId>common</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+
+	<!-- excel poi -->
+	<dependency>
+		<groupId>org.apache.poi</groupId>
+		<artifactId>poi</artifactId>
+		<version>3.13</version>
+	</dependency>
+	<dependency>
+   		<groupId>org.apache.poi</groupId>
+   		<artifactId>poi-ooxml</artifactId>
+   		<version>3.13</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
+	<dependency>
+	    <groupId>com.belerweb</groupId>
+	    <artifactId>pinyin4j</artifactId>
+	    <version>2.5.1</version>
+	</dependency>
+
+  </dependencies>
+</project>

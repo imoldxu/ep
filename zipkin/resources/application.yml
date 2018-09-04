@@ -1,0 +1,30 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: zipkin
+  cloud:
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        healthCheckInterval: 15s
+        instanceId: zipkin1
+  zipkin:
+    enable: false 
+          
+#actuator
+management:
+  endpoint:
+    web:
+      exposure:
+        include: '*'
+    health:
+      show-details: always
+  security:
+    enabled: false
+  metrics:
+    web:
+      server:
+        autoTimeRequests: false  #避免与zipkin的metrics与mvc的配置冲突

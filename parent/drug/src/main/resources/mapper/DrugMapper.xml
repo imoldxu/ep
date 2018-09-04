@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ly.service.mapper.DrugMapper" >
+		
+	<resultMap id="SimpleDrugInfo" type="com.ly.service.context.SimpleDrugInfo" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="showname" property="showname" jdbcType="VARCHAR" />
+  	</resultMap>
+
+	<select id="getDrugsByKeys" resultType="SimpleDrugInfo">
+		SELECT id ,CONCAT(drugname,'--',standard,'--',company) as showname FROM t_drug WHERE iszy = 1 and (drugname LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
+	</select>
+	
+	<select id="getZyDrugsByKeys" resultType="SimpleDrugInfo">
+		SELECT id ,CONCAT(drugname,'--',standard,'--',company) as showname FROM t_drug WHERE iszy = 2 and (drugname LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
+	</select>
+
+	<select id="getDrugsByKeysWithoutID" resultType="SimpleDrugInfo">
+		SELECT id ,CONCAT(drugname,'--',standard,'--',company) as showname FROM t_drug WHERE iszy = 1 and id != #{myid,jdbcType=INTEGER} AND (drugname LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
+	</select>
+	
+	<select id="getZyDrugsByKeysWithoutID" resultType="SimpleDrugInfo">
+		SELECT id ,CONCAT(drugname,'--',standard,'--',company) as showname FROM t_drug WHERE iszy = 2 and  id != #{myid,jdbcType=INTEGER} AND (drugname LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
+	</select>
+
+	<select id="getDrugByTag" resultType="SimpleDrugInfo">
+		SELECT t_drug.id, CONCAT(drugname,'--',standard,'--',company) as showname from t_drug LEFT JOIN t_tagmap ON t_drug.id = t_tagmap.tagetid LEFT JOIN t_tag ON t_tag.id = t_tagmap.tagid WHERE t_tag.tag = #{tag, jdbcType=VARCHAR} and iszy = 1;
+	</select>
+	
+	<select id="getZyDrugByTag" resultType="SimpleDrugInfo">
+		SELECT t_drug.id, CONCAT(drugname,'--',standard,'--',company) as showname from t_drug LEFT JOIN t_tagmap ON t_drug.id = t_tagmap.tagetid LEFT JOIN t_tag ON t_tag.id = t_tagmap.tagid WHERE t_tag.tag = #{tag, jdbcType=VARCHAR} and iszy = 2;
+	</select>
+</mapper>

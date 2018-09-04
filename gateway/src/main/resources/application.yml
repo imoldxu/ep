@@ -1,0 +1,43 @@
+server:
+  port: 8901
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        healthCheckInterval: 15s
+        instanceId: gateway1
+    gateway:
+      locator:
+        enable: true
+      filter:
+        remove-non-proxy-headers:
+          headers:
+          - dummy
+#      routes:
+#        - id: user-service
+#          uri: lb://user-service
+#          predicates:
+#          - Path=/user/**
+#          filters:
+#          - StripPrefix=1
+  zipkin:
+    enable: true
+    baseUrl: http://127.0.0.1:9001
+  sleuth:
+    sampler:
+      percentage: 1        
+#actuator
+management:
+  endpoint:
+    web:
+      exposure:
+        include: '*'
+    health:
+      show-details: always
+  security:
+    enabled: false
