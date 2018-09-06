@@ -1,5 +1,7 @@
 package com.ly.service.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,10 +67,10 @@ public class AccoutClientImpl implements AccountClient{
 
 	@Override
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/internal/settleSalesRecord", method = RequestMethod.POST)
+	@RequestMapping(value = "/internal/settleSalesRecords", method = RequestMethod.POST)
 	@ApiOperation(value = "结算交易记录", notes = "结算交易记录")
-	public void settleSalesRecord(@ApiParam(name="salesRecord", value="销售记录") @RequestParam(name="salesRecord") SalesRecord salesRecord) {
-		accountService.settleSalesRecord(salesRecord);
+	public void settleSalesRecords(@ApiParam(name="salesRecords", value="销售记录") @RequestParam(name="salesRecords") List<SalesRecord> salesRecords) {
+		accountService.settleSalesRecords(salesRecords);
 	}
 	
 	

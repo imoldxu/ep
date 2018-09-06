@@ -1,5 +1,7 @@
 package com.ly.service.feign.client;
 
+import java.util.List;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,6 +42,6 @@ public interface AccountClient {
 			 @RequestParam(name = "amount") int amount,
 			 @RequestParam(name = "msg") String msg) ;
 	
-	@RequestMapping(value = "/internal/settleSalesRecord", method = RequestMethod.POST)
-	public void settleSalesRecord(@RequestParam(name = "salesRecord") SalesRecord salesRecord);
+	@RequestMapping(value = "/internal/settleSalesRecords", method = RequestMethod.POST)
+	public void settleSalesRecords(@RequestParam(name = "salesRecords") List<SalesRecord> salesRecords);
 }

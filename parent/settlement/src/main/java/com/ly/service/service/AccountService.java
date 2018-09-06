@@ -59,14 +59,16 @@ public class AccountService {
 	}
 
 	@Transactional
-	public void settleSalesRecord(SalesRecord salesRecord) {
-		int sellerid = salesRecord.getSellerid();
-		int sellfee = salesRecord.getSellerfee()*salesRecord.getNum();
-		addSellerAccount(sellerid, sellfee, "处方:"+salesRecord.getPrescriptionid()+",领药记录:"+salesRecord.getId()+"推广费奖励");
-		
-		int storeid = salesRecord.getStoreid();
-		int settleamount = salesRecord.getSettlementprice()*salesRecord.getNum();
-		reduceStoreAccount(storeid, settleamount, "结算处方:"+salesRecord.getPrescriptionid()+",领药记录:"+salesRecord.getId()+"领取"+salesRecord.getDrugname()+"*"+salesRecord.getNum());
+	public void settleSalesRecords(List<SalesRecord> salesRecords) {
+		for(SalesRecord salesRecord: salesRecords){
+			int sellerid = salesRecord.getSellerid();
+			int sellfee = salesRecord.getSellerfee()*salesRecord.getNum();
+			addSellerAccount(sellerid, sellfee, "处方:"+salesRecord.getPrescriptionid()+",领药记录:"+salesRecord.getId()+"推广费奖励");
+			
+			int storeid = salesRecord.getStoreid();
+			int settleamount = salesRecord.getSettlementprice()*salesRecord.getNum();
+			reduceStoreAccount(storeid, settleamount, "结算处方:"+salesRecord.getPrescriptionid()+",领药记录:"+salesRecord.getId()+"领取"+salesRecord.getDrugname()+"*"+salesRecord.getNum());
+		}
 		return;
 	}
 

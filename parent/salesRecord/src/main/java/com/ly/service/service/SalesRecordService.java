@@ -13,6 +13,7 @@ import com.ly.service.context.TransactionDrug;
 import com.ly.service.entity.Order;
 import com.ly.service.entity.SalesRecord;
 import com.ly.service.entity.StoreDrug;
+import com.ly.service.feign.client.AccountClient;
 import com.ly.service.feign.client.StoreClient;
 import com.ly.service.mapper.SalesRecordMapper;
 import com.ly.service.utils.JSONUtils;
@@ -27,6 +28,8 @@ public class SalesRecordService {
 	SalesRecordMapper recordMapper;
 	@Autowired
 	StoreClient storeClient;
+	@Autowired
+	AccountClient accountClient;
 	@Autowired
 	RedissonUtil redissonUtil;
 	
@@ -82,6 +85,8 @@ public class SalesRecordService {
 		}
 
 		recordMapper.insertList(recordList);
+		
+		accountClient.settleSalesRecords(recordList);//结算交易
 	}
 
 	public void createByOnlinePay(Order order) {

@@ -21,10 +21,34 @@ public class Order {
 	@ColumnType(jdbcType = JdbcType.BIGINT)
 	private Long id;
 	
-	@Column(name = "userid")
-	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int userid;  //用户id
+	public static final int TAGET_USER = 1;
+	public static final int TAGET_STORE = 2;
+	public static final int TAGET_SELLER = 3;
 	
+	@Column(name = "tagettype")
+	@ColumnType(jdbcType = JdbcType.TINYINT)
+	private int tagettype;  //用户1 或 店铺2 销售 3
+	
+	@Column(name = "tagetid")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private int tagetid;  //用户id或店铺id
+
+	public static final int CODE_TRANS = 1;
+	public static final int CODE_CHARGE = 2;
+	public static final int CODE_PAYOUT = 3;
+	
+	@Column(name = "transcode")
+	@ColumnType(jdbcType = JdbcType.TINYINT)
+	private int transcode;
+	
+	public int getTranscode() {
+		return transcode;
+	}
+
+	public void setTranscode(int transcode) {
+		this.transcode = transcode;
+	}
+
 	@Column(name = "info")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String info;  //交易清单
@@ -126,12 +150,19 @@ public class Order {
 		this.state = state;
 	}
 	
-	
-	public int getUserid() {
-		return userid;
+	public int getTagettype() {
+		return tagettype;
 	}
 
-	public void setUserid(int userid) {
-		this.userid = userid;
+	public void setTagettype(int tagettype) {
+		this.tagettype = tagettype;
+	}
+
+	public int getTagetid() {
+		return tagetid;
+	}
+
+	public void setTagetid(int tagetid) {
+		this.tagetid = tagetid;
 	}
 }
