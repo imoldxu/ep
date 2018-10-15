@@ -98,5 +98,5 @@ management:
 
 #mybatis
 mybatis:
-  typeAliasesPackage: com.ly.service.entity
+  typeAliasesPackage: com.ly.service.context
   mapperLocations: classpath:mapper/*.xml     

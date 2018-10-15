@@ -19,36 +19,34 @@ public class StoreDrugService {
 	StoreDrugMapper storeDrugMapper;
 		
 	
-	public void upDrug(int storeid, int drugid){
+	public StoreDrug upDrug(int storeid, int drugid){
 		Example ex = new Example(StoreDrug.class);
 		ex.createCriteria().andEqualTo("drugid", drugid).andEqualTo("storeid", storeid);
-		List<StoreDrug> list= storeDrugMapper.selectByExample(ex);
-		if(list.isEmpty()){
-			StoreDrug drug = new StoreDrug();
+		StoreDrug drug= storeDrugMapper.selectOneByExample(ex);
+		if(drug == null){
+			drug = new StoreDrug();
 			drug.setDrugid(drugid);
 			drug.setStoreid(storeid);
 			drug.setState(1);
-			storeDrugMapper.insert(drug);
+			storeDrugMapper.insertUseGeneratedKeys(drug);
 		}else{
-			StoreDrug drug = list.get(0);
 			drug.setState(1);
 			storeDrugMapper.updateByPrimaryKey(drug);
 		}
-		return ;
+		return drug;
 	}
 	
-	public void downDrug(int storeid, int drugid){		
+	public StoreDrug downDrug(int storeid, int drugid){		
 		Example ex = new Example(StoreDrug.class);
 		ex.createCriteria().andEqualTo("drugid", drugid).andEqualTo("storeid", storeid);
-		List<StoreDrug> list= storeDrugMapper.selectByExample(ex);
-		if(list.isEmpty()){
+		StoreDrug drug = storeDrugMapper.selectOneByExample(ex);
+		if(drug == null){
 			throw new HandleException(-1, "药品不存在");
 		}else{
-			StoreDrug drug = list.get(0);
 			drug.setState(0);
 			storeDrugMapper.updateByPrimaryKey(drug);
 		}
-		return;
+		return drug;
 	}
 	
 	public List<StoreDrug> getStoreDrugList(int storeid, int pageIndex, int pageSize){

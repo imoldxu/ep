@@ -43,7 +43,7 @@ public class AccountService {
 			account = new SellerAccount();
 			account.setSellerid(sellerid);
 			account.setBalance(0);
-			sellerAccountMapper.insert(account);
+			sellerAccountMapper.insertUseGeneratedKeys(account);
 		}
 		return account;
 	}
@@ -108,7 +108,7 @@ public class AccountService {
 			account = new StoreAccount();
 			account.setStoreid(storeid);
 			account.setBalance(0);
-			storeAccountMapper.insert(account);
+			storeAccountMapper.insertUseGeneratedKeys(account);
 		}
 		return account;
 	}

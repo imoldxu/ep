@@ -17,11 +17,11 @@ public class HospitalDrug {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@ColumnType(jdbcType = JdbcType.BIGINT)
-	private long id;
+	private Long id;
 
 	@Column(name = "drugid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int drugid;//药品id
+	private Integer drugid;//药品id
 	
 	@Column(name = "drugname")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -37,7 +37,7 @@ public class HospitalDrug {
 	
 	@Column(name = "sellerid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int sellerid;//销售人员id
+	private Integer sellerid;//销售人员id
 	
 	@Column(name = "sellername")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -45,7 +45,7 @@ public class HospitalDrug {
 	
 	@Column(name = "hospitalid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int hospitalid;//医院id
+	private Integer hospitalid;//医院id
 
 	@Column(name = "hospitalname")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -53,7 +53,7 @@ public class HospitalDrug {
 	
 	@Column(name = "sellfee")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int sellfee;//推广费分 不同医院，不用药品的推广费不一样
+	private Integer sellfee;//推广费分 不同医院，不用药品的推广费不一样
 	
 	public String getDrugname() {
 		return drugname;
@@ -95,43 +95,43 @@ public class HospitalDrug {
 		this.hospitalname = hospitalname;
 	}
 
-	public int getSellfee() {
+	public Integer getSellfee() {
 		return sellfee;
 	}
 
-	public void setSellfee(int sellfee) {
+	public void setSellfee(Integer sellfee) {
 		this.sellfee = sellfee;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public int getDrugid() {
+	public Integer getDrugid() {
 		return drugid;
 	}
 
-	public void setDrugid(int drugid) {
+	public void setDrugid(Integer drugid) {
 		this.drugid = drugid;
 	}
 
-	public int getSellerid() {
+	public Integer getSellerid() {
 		return sellerid;
 	}
 
-	public void setSellerid(int sellerid) {
+	public void setSellerid(Integer sellerid) {
 		this.sellerid = sellerid;
 	}
 
-	public int getHospitalid() {
+	public Integer getHospitalid() {
 		return hospitalid;
 	}
 
-	public void setHospitalid(int hospitalid) {
+	public void setHospitalid(Integer hospitalid) {
 		this.hospitalid = hospitalid;
 	}
 	

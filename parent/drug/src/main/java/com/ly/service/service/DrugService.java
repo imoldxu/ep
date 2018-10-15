@@ -13,6 +13,7 @@ import com.ly.service.mapper.TagMapper;
 import tk.mybatis.mapper.entity.Example;
 
 import com.ly.service.context.SimpleDrugInfo;
+import com.ly.service.context.TagInfo;
 import com.ly.service.entity.Drug;
 import com.ly.service.entity.Tag;
 import com.ly.service.entity.TagMap;
@@ -29,6 +30,8 @@ public class DrugService {
 	
 	public Drug getDrugById(Integer id){
 		Drug drug = drugMapper.selectByPrimaryKey(id);
+		List<TagInfo> tags = getTagsByTargetId(drug.getId());
+		drug.setTags(tags);
 		return drug;
 	}
 	
@@ -111,22 +114,41 @@ public class DrugService {
 	public void addTag(int drugid, int tagid, String tag) {
 		if(tagid>0){
 			TagMap map = new TagMap();
-			map.setTagetid(drugid);
+			map.setTargetid(drugid);
 			map.setTagid(tagid);
 			tagMapMapper.insert(map);
 		}else{
-			Tag t = new Tag();
-			t.setTag(tag);
-			tagMapper.insert(t);
+			Tag t = insertTag(tag);
 			
 			TagMap map = new TagMap();
-			map.setTagetid(drugid);
+			map.setTargetid(drugid);
 			map.setTagid(t.getId());
 			tagMapMapper.insert(map);
 		}
 	}
 
+	private Tag insertTag(String tag) {
+		Tag t = getTagByName(tag);
+		if(t==null){
+		    t = new Tag();
+			t.setTag(tag);
+			tagMapper.insertUseGeneratedKeys(t);
+		}
+		return t;
+	}
+	
+	private Tag getTagByName(String name){
+		Example ex = new Example(Tag.class);
+		ex.createCriteria().andEqualTo("tag", name);
+		Tag tag = tagMapper.selectOneByExample(ex);
+		return tag;
+	}
+
 	public void delTag(long tagMapid) {
 		tagMapMapper.deleteByPrimaryKey(tagMapid);
+	}
+	
+	public List<TagInfo> getTagsByTargetId(int targetid){
+		return tagMapMapper.getTagsByTargetId(targetid);
 	}
 }

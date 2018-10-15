@@ -17,112 +17,112 @@ public class StoreDrug {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@ColumnType(jdbcType = JdbcType.BIGINT)
-	private long id;
+	private Long id;
 	
 	@Column(name = "storeid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int storeid;
+	private Integer storeid;
 	
 	@Column(name = "drugid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int drugid;
+	private Integer drugid;
 	
 	@Column(name = "drugname")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private int drugname;
+	private String drugname;
 	
 	@Column(name = "drugstander")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private int drugstander;
+	private String drugstander;
 	
 	@Column(name = "drugcompany")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private int drugcompany;
+	private String drugcompany;
 	
 	@Column(name = "price")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int price;//售价
+	private Integer price;//售价
 	
 	@Column(name = "settlementprice")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int settlementprice;//药店给平台的费用, 各个地区的各个药店结算价格都不一致，结算价由管理员设置
+	private Integer settlementprice;//药店给平台的费用, 各个地区的各个药店结算价格都不一致，结算价由管理员设置
 	
 	public static final int STATE_UP = 1;//有货
 	public static final int STATE_DOWN = 2;//没货
 		
 	@Column(name = "state")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private int state;
+	private Integer state;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public int getDrugname() {
+	public String getDrugname() {
 		return drugname;
 	}
 
-	public void setDrugname(int drugname) {
+	public void setDrugname(String drugname) {
 		this.drugname = drugname;
 	}
 
-	public int getDrugstander() {
+	public String getDrugstander() {
 		return drugstander;
 	}
 
-	public void setDrugstander(int drugstander) {
+	public void setDrugstander(String drugstander) {
 		this.drugstander = drugstander;
 	}
 
-	public int getDrugcompany() {
+	public String getDrugcompany() {
 		return drugcompany;
 	}
 
-	public void setDrugcompany(int drugcompany) {
+	public void setDrugcompany(String drugcompany) {
 		this.drugcompany = drugcompany;
 	}
 
-	public int getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(Integer price) {
 		this.price = price;
 	}
 
-	public int getSettlementprice() {
+	public Integer getSettlementprice() {
 		return settlementprice;
 	}
 
-	public void setSettlementprice(int settlementprice) {
+	public void setSettlementprice(Integer settlementprice) {
 		this.settlementprice = settlementprice;
 	}
 	
-	public int getStoreid() {
+	public Integer getStoreid() {
 		return storeid;
 	}
 
-	public void setStoreid(int storeid) {
+	public void setStoreid(Integer storeid) {
 		this.storeid = storeid;
 	}
 
-	public int getDrugid() {
+	public Integer getDrugid() {
 		return drugid;
 	}
 
-	public void setDrugid(int drugid) {
+	public void setDrugid(Integer drugid) {
 		this.drugid = drugid;
 	}
 
-	public int getState() {
+	public Integer getState() {
 		return state;
 	}
 
-	public void setState(int state) {
+	public void setState(Integer state) {
 		this.state = state;
 	}
 }

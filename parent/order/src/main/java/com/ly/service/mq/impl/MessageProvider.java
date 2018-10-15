@@ -8,12 +8,12 @@ import org.springframework.messaging.MessageChannel;
 
 import com.ly.service.entity.Order;
 import com.ly.service.mq.IMessageProvider;
-import com.ly.service.mq.MyProcess;
+import com.ly.service.mq.OrderChannel;
 
-@EnableBinding(MyProcess.class)
+@EnableBinding(OrderChannel.class)
 public class MessageProvider implements IMessageProvider {
 
-	@Resource(name = MyProcess.OUTPUT)
+	@Resource(name = OrderChannel.OUTPUT)
     private MessageChannel output; // 消息的发送管道
 	
 	@Override

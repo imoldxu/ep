@@ -8,21 +8,24 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ly.service.entity.Order;
-import com.ly.service.mq.MyProcess;
+import com.ly.service.mq.OrderChannel;
 import com.ly.service.service.SalesRecordService;
 
 @Component
-@EnableBinding(MyProcess.class)
+@EnableBinding(OrderChannel.class)
 public class MessageListener {
 
 	@Autowired
 	SalesRecordService salesRecordService;
 	
 	@Transactional
-	@StreamListener(MyProcess.INPUT)
+	@StreamListener(OrderChannel.INPUT)
     public void input(Message<Order> msg) {
         Order order = msg.getPayload();
-        salesRecordService.createByOnlinePay(order);
+        //处理order状态变化消息
+        if(order.getState()==Order.STATE_PAYED){
+        	salesRecordService.createByOnlinePay(order);
+        }
 	}
 	
 }

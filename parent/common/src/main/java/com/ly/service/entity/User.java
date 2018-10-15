@@ -20,7 +20,7 @@ public class User {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int id;
+	private Integer id;
 	
 	@Column(name = "name")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -28,24 +28,24 @@ public class User {
 	
 	@Column(name = "sex")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private int sex;
+	private Integer sex;
 	
 	public static final int TYPE_IDCARD = 1;
 	public static final int TYPE_JG = 2;
 	
 	@Column(name = "idcardtype")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private int idcardtype;
+	private Integer idcardtype;
 	
 	@Column(name = "idcardnum")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String idcardnum;
 	
-	public int getIdcardtype() {
+	public Integer getIdcardtype() {
 		return idcardtype;
 	}
 
-	public void setIdcardtype(int idcardtype) {
+	public void setIdcardtype(Integer idcardtype) {
 		this.idcardtype = idcardtype;
 	}
 
@@ -105,11 +105,11 @@ public class User {
 		this.subscribe = subscribe;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -121,11 +121,11 @@ public class User {
 		this.name = name;
 	}
 
-	public int getSex() {
+	public Integer getSex() {
 		return sex;
 	}
 
-	public void setSex(int sex) {
+	public void setSex(Integer sex) {
 		this.sex = sex;
 	}
 	

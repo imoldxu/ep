@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
 import com.ly.service.entity.Patient;
 import com.ly.service.entity.User;
 import com.ly.service.service.PatientService;
 import com.ly.service.service.UserService;
+import com.ly.service.utils.JSONUtils;
 import com.ly.service.utils.SessionUtil;
 
 import io.swagger.annotations.Api;
@@ -43,18 +45,18 @@ public class UserController{
 			HttpServletRequest request, HttpServletResponse response) {
 	
 		if (StringUtils.isEmpty(wxCode)) {
-			return new Response(Response.ERROR, null, "未获得微信授权码");
+			return Response.NormalError("未获得微信授权码");
 		} else {
 			try{
 				User user = userService.loginByWx(wxCode);
 				SessionUtil.setUserId(request, user.getId());
-				return new Response(Response.SUCCESS, user, "登录成功");
+				return Response.OK(user);
 			}catch (IOException e) {
 				e.printStackTrace();
-				return new Response(Response.ERROR, null, e.getMessage());
+				return Response.NormalError(e.getMessage());
 			}catch (Exception e){
 				e.printStackTrace();
-				return new Response(Response.ERROR, null, "系统异常");
+				return Response.SystemError();
 			}
 			
 		}
@@ -62,7 +64,7 @@ public class UserController{
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	@ApiOperation(value = "微信登录", notes = "微信登录")
+	@ApiOperation(value = "注册", notes = "注册")
 	public Response register(
 			@ApiParam(name = "phone", value = "电话号码") @RequestParam(name = "phone") String phone,
 			@ApiParam(name = "password", value = "密码") @RequestParam(name = "password") String password,
@@ -75,13 +77,13 @@ public class UserController{
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e){
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	@ApiOperation(value = "微信登录", notes = "微信登录")
+	@ApiOperation(value = "账号登录", notes = "账号登录")
 	public Response login(
 			@ApiParam(name = "phone", value = "电话号码") @RequestParam(name = "phone") String phone,
 			@ApiParam(name = "password", value = "密码") @RequestParam(name = "password") String password,
@@ -89,12 +91,12 @@ public class UserController{
 		try{
 			User user = userService.login(phone, password);
 			SessionUtil.setUserId(request, user.getId());
-			return new Response(Response.SUCCESS, user, "登录成功");
+			return Response.OK(user);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e){
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 	}
 	
@@ -117,7 +119,7 @@ public class UserController{
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e){
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 	}
 
@@ -141,7 +143,7 @@ public class UserController{
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e){
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 	}
 	
@@ -156,7 +158,7 @@ public class UserController{
 			
 			int ret = patientService.del(uid, pid);
 			if(ret==0){
-				return Response.Error(Response.ERROR, "删除失败");	
+				return Response.NormalError("删除失败");	
 			}else{
 				return Response.OK(null);
 			}
@@ -164,7 +166,7 @@ public class UserController{
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e){
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 	}
 	
@@ -172,23 +174,29 @@ public class UserController{
 	@RequestMapping(value = "/updatePatient", method = RequestMethod.POST)
 	@ApiOperation(value = "添加患者信息", notes = "添加患者信息")
 	public Response updatePatient(
-			@ApiParam(name = "patient", value = "patient") @RequestParam(name = "patient") Patient patient,
+			@ApiParam(name = "patient", value = "patient") @RequestParam(name = "patient") String patient,
 			HttpServletRequest request, HttpServletResponse response) {
-	
+		Patient p;
+		try{
+			p = JSONUtils.getObjectByJson(patient, Patient.class);
+		}catch (Exception e) {
+			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
+		}
+		
 		try{
 			int uid = SessionUtil.getUserId(request);
 			
-			int ret = patientService.update(uid, patient);
+			int ret = patientService.update(uid, p);
 			if(ret==1){
 				return Response.OK(patient);	
 			}else{
-				return Response.Error(Response.ERROR, "更新失败");
+				return Response.NormalError("更新失败");
 			}
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e){
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 	}
 	
@@ -205,7 +213,7 @@ public class UserController{
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e){
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 	}
 

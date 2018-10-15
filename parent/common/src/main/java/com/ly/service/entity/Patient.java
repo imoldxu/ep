@@ -24,7 +24,7 @@ public class Patient {
 	
 	@Column(name = "userid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int userid;
+	private Integer userid;
 
 	@Column(name = "name")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -39,7 +39,7 @@ public class Patient {
 	
 	@Column(name = "idcardtype")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private int idcardtype;
+	private Integer idcardtype;
 	
 	@Column(name = "idcardnum")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -50,7 +50,7 @@ public class Patient {
 	private String birthday;
 		
 	@Transient
-	private Date age;
+	private int age;
 	
 
 	@Column(name = "phone")
@@ -88,12 +88,12 @@ public class Patient {
 	}
 
 
-	public int getIdcardtype() {
+	public Integer getIdcardtype() {
 		return idcardtype;
 	}
 
 
-	public void setIdcardtype(int idcardtype) {
+	public void setIdcardtype(Integer idcardtype) {
 		this.idcardtype = idcardtype;
 	}
 
@@ -118,12 +118,12 @@ public class Patient {
 	}
 
 
-	public Date getAge() {
+	public int getAge() {
 		return age;
 	}
 
 
-	public void setAge(Date age) {
+	public void setAge(int age) {
 		this.age = age;
 	}
 
@@ -137,12 +137,12 @@ public class Patient {
 		this.phone = phone;
 	}
 	
-	public int getUserid() {
+	public Integer getUserid() {
 		return userid;
 	}
 
 
-	public void setUserid(int userid) {
+	public void setUserid(Integer userid) {
 		this.userid = userid;
 	}
 }

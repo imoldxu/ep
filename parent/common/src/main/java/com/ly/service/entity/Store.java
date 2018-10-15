@@ -20,7 +20,7 @@ public class Store {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name ="id")
 	@ColumnType(jdbcType= JdbcType.INTEGER)
-	private int id;
+	private Integer id;
 	
 	@Column(name ="name")
 	@ColumnType(jdbcType= JdbcType.VARCHAR)
@@ -68,11 +68,11 @@ public class Store {
 		this.distance = distance;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

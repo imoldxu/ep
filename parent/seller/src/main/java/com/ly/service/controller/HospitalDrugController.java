@@ -46,7 +46,7 @@ public class HospitalDrugController {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");		
+			return Response.SystemError();		
 		}
 	}
 	
@@ -70,7 +70,7 @@ public class HospitalDrugController {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");		
+			return Response.SystemError();		
 		}
 	}
 	

@@ -1,14 +1,18 @@
 package com.ly.service.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.ibatis.type.JdbcType;
+
+import com.ly.service.context.TagInfo;
 
 import tk.mybatis.mapper.annotation.ColumnType;
 
@@ -37,8 +41,16 @@ public class Drug implements Serializable{
 	
 	@Column(name = "iszy")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private int iszy;//是否是中药
+	private Integer iszy;//是否是中药
 	
+	public Integer getIszy() {
+		return iszy;
+	}
+
+	public void setIszy(Integer iszy) {
+		this.iszy = iszy;
+	}
+
 	@Column(name = "category")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String category;//分类：OTC、处方药、饮片、耗材、保健品、特殊膳食
@@ -101,6 +113,16 @@ public class Drug implements Serializable{
 //	public void setState(int state) {
 //		this.state = state;
 //	}
+	@Transient
+	private List<TagInfo> tags;
+	
+	public List<TagInfo> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<TagInfo> tags) {
+		this.tags = tags;
+	}
 
 	public String getShortnamekeys() {
 		return shortnamekeys;

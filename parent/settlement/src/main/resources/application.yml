@@ -6,6 +6,11 @@ server:
 spring:
   application:
     name: account-service
+  rabbitmq:    #必须配置，否则heathcheck要报错
+    addresses: amqp://127.0.0.1:5672
+    username: imoldxu
+    password: 123456
+    virtual-host: /
   cloud:
     consul:
       host: 127.0.0.1
@@ -19,6 +24,43 @@ spring:
     loadbalancer:
       retry:
         enabled: true  #重试机制开关,默认false
+    stream:
+      rabbit: # 进行rabbit的相关绑定配置
+        bindings:
+          order_input:
+            consumer: # 进行消费端配置
+              bindingRoutingKey: orderstatuschange # 设置一个RoutingKey信息
+          salesrecord_input:
+            consumer:
+              bindingRoutingKey: settleAccount
+ #         my_output:
+ #           producer: # 进行消费端配置
+ #             routing-key-expression: '''my-key''' #定义 RoutingKey 的表达式配置    
+      binders: # 在此处配置要绑定的rabbitmq的服务信息；
+        defaultRabbit: # 表示定义的名称，用于于binding整合
+          type: rabbit # 消息组件类型
+          environment: # 设置rabbitmq的相关的环境配置
+            spring:
+              rabbitmq:
+                addresses: ${spring.rabbitmq.addresses}
+                username: ${spring.rabbitmq.username}
+                password: ${spring.rabbitmq.password}
+                virtual-host: ${spring.rabbitmq.virtual-host}
+      bindings: # 服务的整合处理
+        order_input: # 这个名字是一个通道的名称，在分析具体源代码的时候会进行说明
+          destination: OrderExchange # 表示要使用的Exchange名称定义
+          content-type: application/json # 设置消息类型，本次为对象json，如果是文本则设置“text/plain”
+          binder: defaultRabbit # 设置要绑定的消息服务的具体设置
+          group: settle-group # 进行操作的分组，实际上就表示持久化
+        salesrecord_input:
+          destination: SalesRecordExchange # 表示要使用的Exchange名称定义
+          content-type: application/json # 设置消息类型，本次为对象json，如果是文本则设置“text/plain”
+          binder: defaultRabbit # 设置要绑定的消息服务的具体设置
+          group: settle-group # 进行操作的分组，实际上就表示持久化
+#        my_output: # 这个名字是一个通道的名称，在分析具体源代码的时候会进行说明
+#          destination: MyExchange # 表示要使用的Exchange名称定义
+#          content-type: application/json # 设置消息类型，本次为对象json，如果是文本则设置“text/plain”
+#          binder: defaultRabbit # 设置要绑定的消息服务的具体设置
   zipkin:
     enable: true
     baseUrl: http://127.0.0.1:9001

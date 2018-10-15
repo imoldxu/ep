@@ -2,8 +2,6 @@ package com.ly.service.context;
 
 public class Response {
 	
-	public static final int ERROR = 0;
-    public static final int SUCCESS = 1;
     public static final String SUCCESS_MSG = "成功";
     
 	private int code;
@@ -13,7 +11,7 @@ public class Response {
     private String msg;
 
     public Response(){
-    	this.code = ERROR;
+    	this.code = ErrorCode.NORMAL_ERROR;
     	this.data = null;
     	this.msg = "失败";
     }
@@ -56,10 +54,18 @@ public class Response {
 	}
 
 	public static Response OK(Object object) {
-		return new Response(SUCCESS, object, SUCCESS_MSG);
+		return new Response(ErrorCode.OK, object, SUCCESS_MSG);
 	}
 	
 	public static Response Error(int code, String msg) {
 		return new Response(code, null, msg);
+	}
+
+	public static Response SystemError() {
+		return new Response(ErrorCode.NORMAL_ERROR, null, "系统异常");
+	}
+
+	public static Response NormalError(String msg) {
+		return new Response(ErrorCode.NORMAL_ERROR, null, msg);
 	}
 }

@@ -126,7 +126,7 @@ public class PrescriptionService {
 	}
 
 	@Transactional
-	public void commit(Integer hospitalid, Prescription perscription, List<PrescriptionDrug> drugList) {	
+	public void commit(int doctorid, int hospitalid, Prescription perscription, List<PrescriptionDrug> drugList) {	
 		//检查是否有相同编号的处方签
 		Example ex = new Example(Prescription.class);
 		ex.createCriteria().andEqualTo("sn", perscription.getSn()).andEqualTo("hospitalid", hospitalid);
@@ -144,9 +144,9 @@ public class PrescriptionService {
 		Date now = new Date();
 		perscription.setCreatedate(now);
 		perscription.setHospitalid(hospitalid);
-		//TODO:医生的id，要根据医院、医生姓名、以及科室来提取，或者由医院传入医生的id
-		
-		pMapper.insert(perscription);
+		perscription.setDoctorid(doctorid);
+		//FIXME:医生的id，要根据医院、医生姓名、以及科室来提取，或者由医院传入医生的id
+		pMapper.insertUseGeneratedKeys(perscription);
 		Long pid = perscription.getId();
 		
 		for(PrescriptionDrug pdrug : drugList){

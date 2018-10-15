@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.entity.Doctor;
 import com.ly.service.mapper.DoctorMapper;
@@ -83,12 +84,12 @@ public class DoctorService {
 		ex.createCriteria().andEqualTo("phone", phone);
 		Doctor doctor = doctorMapper.selectOneByExample(ex);
 		if(doctor == null){
-			throw new HandleException(-1, "用户不存在");
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "用户不存在");
 		}else{
 			if(doctor.getPassword().equals(password)){
 				return doctor;
 			}else{
-				throw new HandleException(-1, "用户密码错误");
+				throw new HandleException(ErrorCode.NORMAL_ERROR, "用户密码错误");
 			}
 		}
 	}

@@ -3,6 +3,7 @@ package com.ly.service.utils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 
 public class SessionUtil {
@@ -17,7 +18,7 @@ public class SessionUtil {
 		HttpSession session = request.getSession();
 		Integer id = (Integer) session.getAttribute("DOCTOR_ID");
 		if(id==null){
-			throw new HandleException(-1, "登录已过期,请重新登录");
+			throw new HandleException(ErrorCode.SESSION_ERROR, "登录已过期,请重新登录");
 		}
 		return id;
 	}
@@ -32,7 +33,7 @@ public class SessionUtil {
 		HttpSession session = request.getSession();
 		Integer id = (Integer) session.getAttribute("USER_ID");
 		if(id==null){
-			throw new HandleException(-1, "登录已过期,请重新登录");
+			throw new HandleException(ErrorCode.SESSION_ERROR, "登录已过期,请重新登录");
 		}
 		return id;
 	}
@@ -47,7 +48,7 @@ public class SessionUtil {
 		HttpSession session = request.getSession();
 		Integer id = (Integer) session.getAttribute("STORE_ID");
 		if(id==null){
-			throw new HandleException(-1, "登录已过期,请重新登录");
+			throw new HandleException(ErrorCode.SESSION_ERROR, "登录已过期,请重新登录");
 		}
 		return id;
 	}
@@ -62,7 +63,7 @@ public class SessionUtil {
 		HttpSession session = request.getSession();
 		Integer id = (Integer) session.getAttribute("SELLER_ID");
 		if(id==null){
-			throw new HandleException(-1, "登录已过期,请重新登录");
+			throw new HandleException(ErrorCode.SESSION_ERROR, "登录已过期,请重新登录");
 		}
 		return id;
 	}

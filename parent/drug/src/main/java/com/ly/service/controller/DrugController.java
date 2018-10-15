@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
 import com.ly.service.entity.Drug;
 import com.ly.service.entity.Tag;
@@ -43,11 +44,17 @@ public class DrugController {
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "GET");
-		
-		List<SimpleDrugInfo> ret = drugService.getSimpleDrugListByKeys(type, keys);
-		
-		Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
-		return resp;
+		try{
+			List<SimpleDrugInfo> ret = drugService.getSimpleDrugListByKeys(type, keys);
+			
+			Response resp = Response.OK(ret);
+			return resp;
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
@@ -58,27 +65,39 @@ public class DrugController {
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "GET");
-		
-		List<Drug> ret = drugService.getDrugListByKeys(keys);
-		
-		Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
-		return resp;
+		try{
+			List<Drug> ret = drugService.getDrugListByKeys(keys);
+			
+			Response resp = Response.OK(ret);
+			return resp;
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getDrugListByTag", method = RequestMethod.GET)
-	@ApiOperation(value = "根据分类搜索药品", notes = "根据分类搜索药品")
+	@ApiOperation(value = "根据标签搜索药品", notes = "根据标签搜索药品")
 	public Response getDrugListByTag(
 			@ApiParam(name = "tag", value = "标签") @RequestParam(name = "tag") String tag,
 			@ApiParam(name = "type", value = "西药为1，中药为2") @RequestParam(name = "type") int type,
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "GET");
-		
-		List<SimpleDrugInfo> ret = drugService.getSimpleDrugListByTag(type, tag);
-		
-		Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
-		return resp;
+		try{
+			List<SimpleDrugInfo> ret = drugService.getSimpleDrugListByTag(type, tag);
+			
+			Response resp = Response.OK(ret);
+			return resp;
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
@@ -89,15 +108,21 @@ public class DrugController {
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "GET");
-		
-		Drug drug = drugService.getDrugById(drugid);
-		Response resp = null;
-		if(drug==null){
-			resp = new Response(Response.ERROR, null, "请求的药品不存在或已下架");
-		}else{
-			resp = new Response(Response.SUCCESS, drug, Response.SUCCESS_MSG);
+		try{
+			Drug drug = drugService.getDrugById(drugid);
+			Response resp = null;
+			if(drug==null){
+				resp = Response.NormalError("请求的药品不存在");
+			}else{
+				resp = Response.OK(drug);
+			}
+			return resp;
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
 		}
-		return resp;
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
@@ -108,7 +133,7 @@ public class DrugController {
 		response.setHeader("Access-Control-Allow-Methods", "POST");
 		
 		if(file==null){
-			return new Response(Response.ERROR, null, "请求参数异常");
+			return Response.NormalError("请求参数异常");
 		}
 		
 		//获取文件名
@@ -116,7 +141,7 @@ public class DrugController {
 	    //进一步判断文件是否为空（即判断其大小是否为0或其名称是否为null）
 	    long size=file.getSize();
 	    if(name == null || ("").equals(name) && size==0){
-	    	return new Response(Response.ERROR, null, "文件不存在或没有内容");
+	    	return Response.NormalError("文件不存在或没有内容");
 	    }
 	    //批量导入。参数：文件名，文件。
 	    Response resp = null;
@@ -125,12 +150,12 @@ public class DrugController {
 			ExcelUtils excelUtils = new ExcelUtils();
 	    	List<Drug> drugList = excelUtils.getExcelInfo(name, file);
 	    	drugService.uploadDrugList(drugList);
-	    	resp = new Response(Response.SUCCESS, drugList, Response.SUCCESS_MSG);    
+	    	resp = Response.OK(drugList);    
 	    }catch(IOException ioe){
-	    	 resp = new Response(Response.ERROR,null, ioe.getMessage());
+	    	 resp = Response.NormalError(ioe.getMessage());
 	    }catch (Exception e) {
 	    	e.printStackTrace();
-	        resp = new Response(Response.ERROR,null, "导入失败");
+	        resp = Response.NormalError("导入失败");
 	    }
 
 		return resp;
@@ -142,7 +167,6 @@ public class DrugController {
 	public Response modifyDrug(@RequestParam(value="drugInfo") String drugInfo,HttpServletRequest request,HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "POST");
-		
 		Drug drug = null;
 		try{
 			drug = JSONUtils.getObjectByJson(drugInfo, Drug.class);
@@ -150,15 +174,22 @@ public class DrugController {
 			return Response.Error(-1, "参数错误");
 		}
 		
-		if(drug.getId() != null){
-			int opRet = drugService.modify(drug);
-			if(opRet == 0){
-				return Response.Error(Response.ERROR, "修改失败");    
+		try{
+			if(drug.getId() != null){
+				int opRet = drugService.modify(drug);
+				if(opRet == 0){
+					return Response.NormalError("修改失败");    
+				}else{
+					return Response.OK(drug);    
+				}
 			}else{
-				return Response.OK(drug);    
+				return Response.NormalError("参数错误");
 			}
-		}else{
-			return Response.Error(Response.ERROR, "参数错误");
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
 		}
 	}
 	
@@ -168,15 +199,21 @@ public class DrugController {
 	public Response delDrug(@RequestParam(value="drugid") int drugid, HttpServletRequest request,HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "POST");
-		
-		Response resp = null;			
-		int optRet = drugService.del(drugid);	
-		if(optRet!=0){
-			resp = new Response(Response.SUCCESS, null, "删除成功");
-		}else{
-			resp = new Response(Response.ERROR, null, "药品不存在");
-		}
-		return resp;
+		try{
+			Response resp = null;			
+			int optRet = drugService.del(drugid);	
+			if(optRet!=0){
+				resp = Response.OK(null);
+			}else{
+				resp = Response.NormalError("药品不存在");
+			}
+			return resp;
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}		
 	}
 	
 //	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
@@ -230,7 +267,7 @@ public class DrugController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/addTag", method = RequestMethod.POST)
-	@ApiOperation(value = "上架药品信息", notes = "上架药品信息")
+	@ApiOperation(value = "添加药品标签", notes = "添加药品标签")
 	public Response addTag(@ApiParam(name = "drugid", value = "药品id") @RequestParam(value="drugid") int drugid,
 			@ApiParam(name="tagid", value="标签id") @RequestParam(value="tagid") int tagid,
 			@ApiParam(name="tag", value="标签名称") @RequestParam(value="tag") String tag){
@@ -241,7 +278,7 @@ public class DrugController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/delTag", method = RequestMethod.POST)
-	@ApiOperation(value = "上架药品信息", notes = "上架药品信息")
+	@ApiOperation(value = "删除药品标签", notes = "删除药品标签")
 	public Response delTag(@ApiParam(name = "mapid", value = "药品id") @RequestParam(value="mapid") long mapid){
 		
 		drugService.delTag(mapid);

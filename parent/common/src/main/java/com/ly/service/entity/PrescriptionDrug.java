@@ -23,11 +23,11 @@ public class PrescriptionDrug implements Serializable{
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@ColumnType(jdbcType = JdbcType.BIGINT)
-	private long id;
+	private Long id;
 	
 	@Column(name = "prescriptionid")
 	@ColumnType(jdbcType = JdbcType.BIGINT)
-	private long prescriptionid;//处方id
+	private Long prescriptionid;//处方id
 	
 	@Column(name = "drugid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
@@ -55,7 +55,7 @@ public class PrescriptionDrug implements Serializable{
 //	
 	@Column(name = "sellfee")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int sellfee;//推广费
+	private Integer sellfee;//推广费
 //	
 //	@Column(name = "settlementprice")
 //	@ColumnType(jdbcType = JdbcType.DOUBLE)
@@ -67,11 +67,11 @@ public class PrescriptionDrug implements Serializable{
 	
 	@Column(name = "number")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int number;//数量
+	private Integer number;//数量
 	
 	@Column(name = "soldnumber")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int soldnumber;//数量
+	private Integer soldnumber;//数量
 	
 	@Column(name = "singledose")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -125,11 +125,11 @@ public class PrescriptionDrug implements Serializable{
 		this.unit = unit;
 	}
 
-	public int getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
 
-	public void setNumber(int number) {
+	public void setNumber(Integer number) {
 		this.number = number;
 	}
 
@@ -173,11 +173,11 @@ public class PrescriptionDrug implements Serializable{
 		this.category = category;
 	}
 	
-	public int getSoldnumber() {
+	public Integer getSoldnumber() {
 		return soldnumber;
 	}
 
-	public void setSoldnumber(int soldnumber) {
+	public void setSoldnumber(Integer soldnumber) {
 		this.soldnumber = soldnumber;
 	}
 	
@@ -190,11 +190,11 @@ public class PrescriptionDrug implements Serializable{
 		this.drugid = drugid;
 	}
 	
-	public int getSellfee() {
+	public Integer getSellfee() {
 		return sellfee;
 	}
 
-	public void setSellfee(int sellfee) {
+	public void setSellfee(Integer sellfee) {
 		this.sellfee = sellfee;
 	}
 	
@@ -204,10 +204,6 @@ public class PrescriptionDrug implements Serializable{
 
 	public void setSellerid(Integer sellerid) {
 		this.sellerid = sellerid;
-	}
-
-	public void setPrescriptionid(long prescriptionid) {
-		this.prescriptionid = prescriptionid;
 	}
 
 //

@@ -50,7 +50,7 @@ public class SellerService {
 			seller = new Seller();
 			seller.setWxunionid(unionID);
 			seller.setCreatetime(new Date());
-			sellerMapper.insert(seller);
+			sellerMapper.insertUseGeneratedKeys(seller);
 		} else {
 			// 微信用户已经注册
 			// 更新用户的昵称和头像
@@ -93,4 +93,20 @@ public class SellerService {
 		}
 	}
 	
+	public boolean modifypassword(String phone, String oldPassword, String newPassword) {
+		Example ex = new Example(Seller.class);
+		ex.createCriteria().andEqualTo("phone", phone);
+		Seller seller = sellerMapper.selectOneByExample(ex);
+		if(seller == null){
+			throw new HandleException(-1, "用户不存在");
+		}else{
+			if(seller.getPassword().equals(oldPassword)){
+				seller.setPassword(newPassword);
+				sellerMapper.updateByPrimaryKey(seller);
+				return true;
+			}else{
+				throw new HandleException(-1, "用户密码错误");
+			}
+		}
+	}
 }

@@ -17,37 +17,37 @@ public class StoreAccount {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int id;
+	private Integer id;
 	
 	@Column(name = "storeid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int storeid;
+	private Integer storeid;
 	
 	@Column(name = "balance")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int balance;
+	private Integer balance;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public int getStoreid() {
+	public Integer getStoreid() {
 		return storeid;
 	}
 
-	public void setStoreid(int storeid) {
+	public void setStoreid(Integer storeid) {
 		this.storeid = storeid;
 	}
 
-	public int getBalance() {
+	public Integer getBalance() {
 		return balance;
 	}
 
-	public void setBalance(int balance) {
+	public void setBalance(Integer balance) {
 		this.balance = balance;
 	}
 }

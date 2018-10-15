@@ -27,11 +27,11 @@ public class Order {
 	
 	@Column(name = "tagettype")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private int tagettype;  //用户1 或 店铺2 销售 3
+	private Integer tagettype;  //用户1 或 店铺2 销售 3
 	
 	@Column(name = "tagetid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int tagetid;  //用户id或店铺id
+	private Integer tagetid;  //用户id或店铺id
 
 	public static final int CODE_TRANS = 1;
 	public static final int CODE_CHARGE = 2;
@@ -39,13 +39,13 @@ public class Order {
 	
 	@Column(name = "transcode")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private int transcode;
+	private Integer transcode;
 	
-	public int getTranscode() {
+	public Integer getTranscode() {
 		return transcode;
 	}
 
-	public void setTranscode(int transcode) {
+	public void setTranscode(Integer transcode) {
 		this.transcode = transcode;
 	}
 
@@ -55,7 +55,7 @@ public class Order {
 	
 	@Column(name = "amount")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int amount;  //交易金额
+	private Integer amount;  //交易金额
 	
 	@Column(name = "createtime")
 	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
@@ -73,20 +73,20 @@ public class Order {
 	
 	@Column(name = "state")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private int state;
+	private Integer state;
 	
 	public final static int PAY_OFFLINESTORE = 1;
 	public final static int PAY_WX = 2;
 	
 	@Column(name = "payway")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private int payway;//支付订单id
+	private Integer payway;//支付订单id
 	
-	public int getPayway() {
+	public Integer getPayway() {
 		return payway;
 	}
 
-	public void setPayway(int payway) {
+	public void setPayway(Integer payway) {
 		this.payway = payway;
 	}
 
@@ -118,11 +118,11 @@ public class Order {
 		this.info = info;
 	}
 
-	public int getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
 
-	public void setAmount(int amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 
@@ -142,27 +142,27 @@ public class Order {
 		this.completetime = completetime;
 	}
 
-	public int getState() {
+	public Integer getState() {
 		return state;
 	}
 
-	public void setState(int state) {
+	public void setState(Integer state) {
 		this.state = state;
 	}
 	
-	public int getTagettype() {
+	public Integer getTagettype() {
 		return tagettype;
 	}
 
-	public void setTagettype(int tagettype) {
+	public void setTagettype(Integer tagettype) {
 		this.tagettype = tagettype;
 	}
 
-	public int getTagetid() {
+	public Integer getTagetid() {
 		return tagetid;
 	}
 
-	public void setTagetid(int tagetid) {
+	public void setTagetid(Integer tagetid) {
 		this.tagetid = tagetid;
 	}
 }

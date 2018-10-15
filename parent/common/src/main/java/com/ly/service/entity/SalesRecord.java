@@ -31,7 +31,7 @@ public class SalesRecord {
 	
 	@Column(name = "drugid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int drugid;//药品编号
+	private Integer drugid;//药品编号
 	
 	@Column(name = "drugname")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -40,7 +40,7 @@ public class SalesRecord {
 
 	@Column(name = "sellerid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int sellerid;//哪个销售的单子
+	private Integer sellerid;//哪个销售的单子
 
 	@Column(name = "sellername")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -48,7 +48,7 @@ public class SalesRecord {
 	
 	@Column(name = "storeid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int storeid;//哪个药店的单子
+	private Integer storeid;//哪个药店的单子
 	
 	@Column(name = "storename")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -56,7 +56,7 @@ public class SalesRecord {
 	
 	@Column(name = "doctorid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int doctorid;//哪个医生的单子
+	private Integer doctorid;//哪个医生的单子
 	
 	@Column(name = "doctorname")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -64,7 +64,7 @@ public class SalesRecord {
 	
 	@Column(name = "hospitalid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int hospitalid;//哪个医院的单子
+	private Integer hospitalid;//哪个医院的单子
 	
 	@Column(name = "hospitalname")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -72,15 +72,15 @@ public class SalesRecord {
 	
 	@Column(name = "num")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int num;//销售数量
+	private Integer num;//销售数量
 	
 	@Column(name = "sellerfee")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int sellerfee;//推广费
+	private Integer sellerfee;//推广费
 
 	@Column(name = "settlementprice")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int settlementprice;//结算费
+	private Integer settlementprice;//结算费
 
 	@Column(name = "createtime")
 	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
@@ -102,43 +102,43 @@ public class SalesRecord {
 		this.orderid = orderid;
 	}
 
-	public int getDrugid() {
+	public Integer getDrugid() {
 		return drugid;
 	}
 
-	public void setDrugid(int drugid) {
+	public void setDrugid(Integer drugid) {
 		this.drugid = drugid;
 	}
 
-	public int getSellerid() {
+	public Integer getSellerid() {
 		return sellerid;
 	}
 
-	public void setSellerid(int sellerid) {
+	public void setSellerid(Integer sellerid) {
 		this.sellerid = sellerid;
 	}
 
-	public int getStoreid() {
+	public Integer getStoreid() {
 		return storeid;
 	}
 
-	public void setStoreid(int storeid) {
+	public void setStoreid(Integer storeid) {
 		this.storeid = storeid;
 	}
 
-	public int getNum() {
+	public Integer getNum() {
 		return num;
 	}
 
-	public void setNum(int num) {
+	public void setNum(Integer num) {
 		this.num = num;
 	}
 	
-	public int getDoctorid() {
+	public Integer getDoctorid() {
 		return doctorid;
 	}
 
-	public void setDoctorid(int doctorid) {
+	public void setDoctorid(Integer doctorid) {
 		this.doctorid = doctorid;
 	}
 
@@ -198,19 +198,19 @@ public class SalesRecord {
 		this.hospitalname = hospitalname;
 	}
 
-	public int getSellerfee() {
+	public Integer getSellerfee() {
 		return sellerfee;
 	}
 
-	public void setSellerfee(int sellerfee) {
+	public void setSellerfee(Integer sellerfee) {
 		this.sellerfee = sellerfee;
 	}
 
-	public int getSettlementprice() {
+	public Integer getSettlementprice() {
 		return settlementprice;
 	}
 
-	public void setSettlementprice(int settlementprice) {
+	public void setSettlementprice(Integer settlementprice) {
 		this.settlementprice = settlementprice;
 	}
 

@@ -57,7 +57,7 @@ public class AccoutClientImpl implements AccountClient{
 
 	@Override
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/internal/reduceSellerAccount", method = RequestMethod.POST)
+	@RequestMapping(value = "/internal/reduceStoreAccount", method = RequestMethod.POST)
 	@ApiOperation(value = "减少店铺的余额", notes = "减少店铺的余额")
 	public StoreAccount reduceStoreAccount(@ApiParam(name="storeid", value="药店id") @RequestParam(name="storeid") int storeid,
 			@ApiParam(name="amount", value="金额") @RequestParam(name="amount") int amount,
@@ -71,8 +71,7 @@ public class AccoutClientImpl implements AccountClient{
 	@ApiOperation(value = "结算交易记录", notes = "结算交易记录")
 	public void settleSalesRecords(@ApiParam(name="salesRecords", value="销售记录") @RequestParam(name="salesRecords") List<SalesRecord> salesRecords) {
 		accountService.settleSalesRecords(salesRecords);
+		return;
 	}
-	
-	
 	
 }

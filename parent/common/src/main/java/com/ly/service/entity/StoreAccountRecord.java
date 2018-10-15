@@ -20,17 +20,17 @@ public class StoreAccountRecord {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int id;
+	private Integer id;
 	
 	@Column(name = "storeid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int storeid;
+	private Integer storeid;
 	
-	public int getStoreid() {
+	public Integer getStoreid() {
 		return storeid;
 	}
 
-	public void setStoreid(int storeid) {
+	public void setStoreid(Integer storeid) {
 		this.storeid = storeid;
 	}
 
@@ -39,15 +39,15 @@ public class StoreAccountRecord {
 	
 	@Column(name = "type")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private int type;
+	private Integer type;
 	
 	@Column(name = "code")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private int code;
+	private Integer code;
 	
 	@Column(name = "amount")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int amount;
+	private Integer amount;
 
 	@Column(name = "msg")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -65,35 +65,35 @@ public class StoreAccountRecord {
 		this.createdate = createdate;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public int getType() {
+	public Integer getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 
-	public int getCode() {
+	public Integer getCode() {
 		return code;
 	}
 
-	public void setCode(int code) {
+	public void setCode(Integer code) {
 		this.code = code;
 	}
 
-	public int getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
 
-	public void setAmount(int amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 

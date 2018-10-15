@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
 import com.ly.service.entity.Seller;
@@ -41,10 +42,10 @@ public class SellerController {
 			SessionUtil.setSellerId(request, seller.getId());
 			return Response.OK(seller);
 		} catch (IOException e) {
-			return Response.Error(Response.ERROR, "微信登录失败");
+			return Response.Error(ErrorCode.LOGIN_ERROR, "微信登录网络故障");
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 		
 	}

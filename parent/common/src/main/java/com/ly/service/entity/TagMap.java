@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.ibatis.type.JdbcType;
 
@@ -17,37 +18,48 @@ public class TagMap {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@ColumnType(jdbcType = JdbcType.BIGINT)
-	private long id;
+	private Long id;
 
-	@Column(name = "tagetid")
+	@Column(name = "targetid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	int tagetid;
+	private Integer targetid;
 	
 	@Column(name = "tagid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	int tagid;
+	private Integer tagid;
+	
+	@Transient
+	private String tarname;
 
-	public long getId() {
+	public String getTarname() {
+		return tarname;
+	}
+
+	public void setTarname(String tarname) {
+		this.tarname = tarname;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
-	public int getTagetid() {
-		return tagetid;
+	public Integer getTargetid() {
+		return targetid;
 	}
 
-	public void setTagetid(int tagetid) {
-		this.tagetid = tagetid;
+	public void setTargetid(Integer targetid) {
+		this.targetid = targetid;
 	}
 
-	public int getTagid() {
+	public Integer getTagid() {
 		return tagid;
 	}
 
-	public void setTagid(int tagid) {
+	public void setTagid(Integer tagid) {
 		this.tagid = tagid;
 	}
 }

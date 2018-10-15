@@ -16,34 +16,35 @@ public class HospitalDrugService {
 	@Autowired
 	HospitalDrugMapper drugMapper;
 	
-	public void setHospitalDrug(int sellerid, String sellername, int drugid, String drugname, String drugstandard, String drugcompany, int hospitalid, String hospitalname, int sellfee){
+	public HospitalDrug setHospitalDrug(int sellerid, String sellername, int drugid, String drugname, String drugstandard, String drugcompany, int hospitalid, String hospitalname, int sellfee){
 		Example ex = new Example(HospitalDrug.class);
 		ex.createCriteria().andEqualTo("sellerid", sellerid).andEqualTo("drugid", drugid).andEqualTo("hospitalid", hospitalid);
-		HospitalDrug sd = drugMapper.selectOneByExample(ex);
-		if(sd ==  null){
-			sd = new HospitalDrug();
-			sd.setHospitalid(hospitalid);
-			sd.setHospitalname(hospitalname);
-			sd.setDrugid(drugid);
-			sd.setDrugname(drugname);
-			sd.setDrugstandard(drugstandard);
-			sd.setDrugcompany(drugcompany);
-			sd.setSellerid(sellerid);
-			sd.setSellername(sellername);
-			sd.setSellfee(sellfee);
-			drugMapper.insert(sd);
+		HospitalDrug hdrug = drugMapper.selectOneByExample(ex);
+		if(hdrug ==  null){
+			hdrug = new HospitalDrug();
+			hdrug.setHospitalid(hospitalid);
+			hdrug.setHospitalname(hospitalname);
+			hdrug.setDrugid(drugid);
+			hdrug.setDrugname(drugname);
+			hdrug.setDrugstandard(drugstandard);
+			hdrug.setDrugcompany(drugcompany);
+			hdrug.setSellerid(sellerid);
+			hdrug.setSellername(sellername);
+			hdrug.setSellfee(sellfee);
+			drugMapper.insertUseGeneratedKeys(hdrug);
 		}else{
-			sd.setHospitalid(hospitalid);
-			sd.setHospitalname(hospitalname);
-			sd.setDrugid(drugid);
-			sd.setDrugname(drugname);
-			sd.setDrugstandard(drugstandard);
-			sd.setDrugcompany(drugcompany);
-			sd.setSellerid(sellerid);
-			sd.setSellername(sellername);
-			sd.setSellfee(sellfee);
-			drugMapper.updateByPrimaryKey(sd);
+			hdrug.setHospitalid(hospitalid);
+			hdrug.setHospitalname(hospitalname);
+			hdrug.setDrugid(drugid);
+			hdrug.setDrugname(drugname);
+			hdrug.setDrugstandard(drugstandard);
+			hdrug.setDrugcompany(drugcompany);
+			hdrug.setSellerid(sellerid);
+			hdrug.setSellername(sellername);
+			hdrug.setSellfee(sellfee);
+			drugMapper.updateByPrimaryKey(hdrug);
 		}
+		return hdrug;
 	}
 	
 	public List<HospitalDrug> getMyDrugList(int sellerid){

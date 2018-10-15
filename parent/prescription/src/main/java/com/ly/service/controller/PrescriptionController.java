@@ -63,8 +63,8 @@ public class PrescriptionController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/commitByHosiptal", method = RequestMethod.POST)
 	@ApiOperation(value = "从医院处方系统传入处方", notes = "从医院传入处方")
-	public Response commit(
-			@ApiParam(name = "hospitalid", value = "医院编号") @RequestParam(name = "hospitalid") Integer hospitalid,
+	public Response commit(@ApiParam(name = "doctorid", value = "医生") @RequestParam(name = "doctorid") int doctorid,
+			@ApiParam(name = "hospitalid", value = "医院编号") @RequestParam(name = "hospitalid") int hospitalid,
 			@ApiParam(name = "perscription", value = "拼音首字母索引或药品名称") @RequestParam(name = "perscription") String perscription,
 			@ApiParam(name = "drugList", value = "药品清单") @RequestParam(name = "drugList") String drugList,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -79,13 +79,13 @@ public class PrescriptionController {
 			return Response.Error(-1, "参数错误");
 		}
 		try{
-			prescriptionService.commit(hospitalid, p, list);
+			prescriptionService.commit(doctorid, hospitalid, p, list);
 			return Response.OK(null);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");		
+			return Response.SystemError();		
 		}
 	}
 		
@@ -100,14 +100,13 @@ public class PrescriptionController {
 			Integer userid = SessionUtil.getUserId(request);
 			prescriptionService.receive(userid, pid);
 	
-			Response resp = new Response(Response.SUCCESS, null, Response.SUCCESS_MSG);
+			return Response.OK(null);
 			
-			return resp;
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");		
+			return Response.SystemError();		
 		}
 	}
 	
@@ -120,7 +119,6 @@ public class PrescriptionController {
 			HttpServletRequest request, HttpServletResponse respons) {
 		respons.setHeader("Access-Control-Allow-Origin", "*");
 		respons.setHeader("Access-Control-Allow-Methods", "GET");
-		Response resp = null;
 		SearchOption searchOption = null;
 		try{
 			searchOption = JSONUtils.getObjectByJson(option, SearchOption.class);
@@ -129,13 +127,12 @@ public class PrescriptionController {
 		}
 		try{
 			List<Prescription> plist =  prescriptionService.getPrescriptionListByOption(searchOption);
-			resp = new Response(Response.SUCCESS, plist, "成功");		
-			return resp;
+			return Response.OK(plist);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");		
+			return Response.SystemError();		
 		}
 	}
 	
@@ -155,7 +152,7 @@ public class PrescriptionController {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 	}
 
@@ -177,7 +174,7 @@ public class PrescriptionController {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 	}
 	
@@ -197,7 +194,7 @@ public class PrescriptionController {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 	}
 	
@@ -221,7 +218,7 @@ public class PrescriptionController {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 	}
 	
@@ -242,7 +239,7 @@ public class PrescriptionController {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			return Response.Error(Response.ERROR, "系统异常");
+			return Response.SystemError();
 		}
 	}
 

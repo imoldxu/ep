@@ -37,7 +37,7 @@ public class OrderService {
 		order.setAmount(amount);
 		order.setCreatetime(new Date());
 		order.setState(Order.STATE_NEW);
-		orderMapper.insert(order);
+		orderMapper.insertUseGeneratedKeys(order);
 		return order;
 	}
 	
@@ -78,7 +78,7 @@ public class OrderService {
 		order.setAmount(0);
 		order.setPayway(Order.PAY_OFFLINESTORE);
 		order.setState(Order.STATE_COMPLETE);
-		orderMapper.insert(order);
+		orderMapper.insertUseGeneratedKeys(order);
 		
 		salesRecordClient.createByStore(storeid, order);//购药记录处理
 		
@@ -93,7 +93,7 @@ public class OrderService {
 		order.setCreatetime(new Date());
 		order.setAmount(amount);
 		order.setState(Order.STATE_NEW);
-		orderMapper.insert(order);
+		orderMapper.insertUseGeneratedKeys(order);
 		
 		return order;
 	}

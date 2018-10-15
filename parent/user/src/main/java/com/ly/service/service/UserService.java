@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.entity.User;
 import com.ly.service.mapper.UserMapper;
 import com.ly.service.utils.IdCardUtil;
 import com.ly.service.utils.RedissonUtil;
+import com.ly.service.utils.ValidDataUtil;
 import com.ly.service.utils.WxUtil;
 
 import tk.mybatis.mapper.entity.Example;
@@ -47,16 +49,15 @@ public class UserService {
 		Example wxUserExample = new Example(User.class);
 		wxUserExample.createCriteria().andEqualTo("wxunionid", unionID);
 		wxUserExample.setOrderByClause("id asc");
-		List<User> wxUserList = userMapper.selectByExample(wxUserExample);
-		User user = null;
-		if (wxUserList.isEmpty()) {
+		User user = userMapper.selectOneByExample(wxUserExample);
+		if (user == null) {
 			// 微信用户未注册
 			user = new User();
 			user.setWxunionid(unionID);
 			user.setCreatetime(new Date());
+			userMapper.insertUseGeneratedKeys(user);
 		} else {
 			// 微信用户已经注册
-			user = wxUserList.get(0);
 			// 更新用户的昵称和头像
 			userMapper.updateByPrimaryKey(user);			
 		}
@@ -88,7 +89,18 @@ public class UserService {
 		
 		User user = userMapper.selectByPrimaryKey(uid);
 		if(user == null){
-			throw new HandleException(-1, "系统异常,用户不存在");
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "系统异常,用户不存在");
+		}
+		if(idcardtype != User.TYPE_IDCARD && idcardtype != User.TYPE_JG){
+			throw new HandleException(ErrorCode.ARG_ERROR, "证件类型异常,请检查客户端");
+		}
+		if(idcardtype==User.TYPE_IDCARD){
+			if(!IdCardUtil.isIDCard(idcardnum)){
+				throw new HandleException(ErrorCode.NORMAL_ERROR, "身份证号有误,请检查");
+			}
+		}
+		if(!ValidDataUtil.isPhone(phone)){
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "手机号有误,请检查"); 
 		}
 		
 		user.setName(name);
@@ -104,27 +116,31 @@ public class UserService {
 		ex.createCriteria().andEqualTo("phone", phone);
 		User user = userMapper.selectOneByExample(ex);
 		if(user == null){
-			throw new HandleException(-1, "用户不存在");
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "用户不存在");
 		}else{
 			if(user.getPassword().equals(password)){
 				return user;
 			}else{
-				throw new HandleException(-1, "密码错误");
+				throw new HandleException(ErrorCode.NORMAL_ERROR, "密码错误");
 			}
 		}
 	}
 
 	public void register(String phone, String password) {
+		if(!ValidDataUtil.isPhone(phone)){
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "手机号有误,请检查"); 
+		}
+		
 		Example ex = new Example(User.class);
 		ex.createCriteria().andEqualTo("phone", phone);
 		User user = userMapper.selectOneByExample(ex);
 		if(user != null){
-			throw new HandleException(-1, "用户已存在");
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "用户已存在");
 		}else{
 			user = new User();
 			user.setPhone(phone);
 			user.setPassword(password);
-			userMapper.insert(user);
+			userMapper.insertUseGeneratedKeys(user);
 		}
 	}
 }
