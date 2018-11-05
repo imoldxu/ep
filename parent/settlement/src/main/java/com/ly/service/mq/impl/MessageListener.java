@@ -27,7 +27,7 @@ public class MessageListener {
         Order order = msg.getPayload();
         //处理order状态变化消息
         if(order.getState()==Order.STATE_PAYED){
-        	accountService.addStoreAccount(order.getTagetid(), order.getAmount(), "充值");
+        	accountService.addStoreAccount(order.getTargetid(), order.getAmount(), "充值");
         }
 	}
 	

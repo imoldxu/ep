@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ly.service.context.Response;
 import com.ly.service.feign.client.fallback.DefaultUserClient;
 
 
@@ -12,7 +13,7 @@ import com.ly.service.feign.client.fallback.DefaultUserClient;
 public interface UserClient {
 
 	@RequestMapping(value = "/internal/addPatient", method = RequestMethod.POST)
-	public void addPatient(
+	public Response addPatient(
 			@RequestParam(name = "uid") Integer uid,
 			@RequestParam(name = "name") String name,
 			@RequestParam(name = "sex") String sex,	

@@ -49,7 +49,7 @@ public class Prescription implements Serializable{
 	
 	@Column(name = "type")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int type;
+	private Integer type;
 	
 	@Column(name = "department")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -65,7 +65,7 @@ public class Prescription implements Serializable{
 	
 	@Column(name = "patientage")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private int patientage;//患者年龄
+	private Integer patientage;//患者年龄
 	
 	@Column(name = "patientsex")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -85,7 +85,7 @@ public class Prescription implements Serializable{
 	
 	@Column(name = "zynum")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private int zynum;
+	private Integer zynum;
 	
 	@Column(name = "zyusage")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -162,11 +162,11 @@ public class Prescription implements Serializable{
 		this.patientname = patientname;
 	}
 
-	public int getPatientage() {
+	public Integer getPatientage() {
 		return patientage;
 	}
 
-	public void setPatientage(int patientage) {
+	public void setPatientage(Integer patientage) {
 		this.patientage = patientage;
 	}
 
@@ -202,19 +202,19 @@ public class Prescription implements Serializable{
 		this.createdate = createdate;
 	}
 
-	public int getType() {
+	public Integer getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 	
-	public int getZynum() {
+	public Integer getZynum() {
 		return zynum;
 	}
 
-	public void setZynum(int zynum) {
+	public void setZynum(Integer zynum) {
 		this.zynum = zynum;
 	}
 

@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ly.service.context.ErrorCode;
+import com.ly.service.context.HandleException;
+import com.ly.service.context.Response;
 import com.ly.service.context.TransactionDrug;
 import com.ly.service.entity.Order;
 import com.ly.service.entity.SalesRecord;
@@ -50,8 +53,7 @@ public class SalesRecordService {
 		try{
 			transactionList = JSONUtils.getObjectListByJson(transactionInfo, TransactionDrug.class);
 		}catch (Exception e) {
-			//FIXME:此处不应该出现问题
-			e.printStackTrace();
+			throw new HandleException(ErrorCode.DATA_ERROR, "内部数据异常");
 		}
 		List<SalesRecord> recordList = new ArrayList<SalesRecord>();
 		for(TransactionDrug transdrug : transactionList){
@@ -75,8 +77,8 @@ public class SalesRecordService {
 			record.setOrderid(order.getId());
 			record.setPrescriptionid(transdrug.getPrescriptionid());
 			
-			StoreDrug storeDrug = storeClient.getDrugByStore(storeid, transdrug.getDrugid());
-			
+			Response resp = storeClient.getDrugByStore(storeid, transdrug.getDrugid());
+			StoreDrug storeDrug = (StoreDrug) resp.getOKData();
 			record.setSettlementprice(storeDrug.getSettlementprice());
 			record.setStoreid(storeid);
 			record.setNum(transdrug.getNum());
@@ -86,7 +88,10 @@ public class SalesRecordService {
 
 		recordMapper.insertList(recordList);
 		
-		accountClient.settleSalesRecords(recordList);//结算交易
+		String recordListStr = JSONUtils.getJsonString(recordList);
+		
+		Response resp = accountClient.settleSalesRecords(recordListStr);//结算交易
+		resp.getOKData();
 	}
 
 	public void createByOnlinePay(Order order) {
@@ -139,7 +144,5 @@ public class SalesRecordService {
 		List<SalesRecord> list = recordMapper.selectByExampleAndRowBounds(ex, rowBounds);
 		return list;
 	}
-
-	
 
 }

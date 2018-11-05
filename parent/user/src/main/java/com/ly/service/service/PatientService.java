@@ -26,11 +26,11 @@ public class PatientService {
 			throw new HandleException(ErrorCode.ARG_ERROR, "证件类型异常,请检查客户端");
 		}
 		if(idcardtype==User.TYPE_IDCARD){
-			if(!IdCardUtil.isIDCard(idcardnum)){
+			if(!idcardnum.isEmpty() && !IdCardUtil.isIDCard(idcardnum)){
 				throw new HandleException(ErrorCode.NORMAL_ERROR, "身份证号有误,请检查");
 			}
 		}
-		if(!ValidDataUtil.isPhone(phone)){
+		if(!phone.isEmpty() && !ValidDataUtil.isPhone(phone)){
 			throw new HandleException(ErrorCode.NORMAL_ERROR, "手机号有误,请检查"); 
 		}
 		

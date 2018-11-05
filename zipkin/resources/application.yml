@@ -10,7 +10,10 @@ spring:
       port: 8500
       discovery:
         healthCheckInterval: 15s
-        instanceId: zipkin1
+        instanceId: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+        preferIpAddress: true
+        ipAddress: ${spring.cloud.client.ip-address}
+        port: ${server.port}
   zipkin:
     enable: false 
           

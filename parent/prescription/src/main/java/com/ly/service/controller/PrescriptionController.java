@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ly.service.context.TransactionDrug;
+import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
 import com.ly.service.context.SearchOption;
@@ -76,7 +77,7 @@ public class PrescriptionController {
 			p = JSONUtils.getObjectByJson(perscription, Prescription.class);
 			list = JSONUtils.getObjectListByJson(drugList, PrescriptionDrug.class);
 		}catch (Exception e) {
-			return Response.Error(-1, "参数错误");
+			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
 		}
 		try{
 			prescriptionService.commit(doctorid, hospitalid, p, list);
@@ -160,7 +161,6 @@ public class PrescriptionController {
 	@RequestMapping(value = "/getUserPrescriptionList", method = RequestMethod.GET)
 	@ApiOperation(value = "获取处方详情", notes = "获取处方详情")
 	public Response getUserPrescriptionList(
-			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
 			@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
 			@ApiParam(name = "pageSize", value = "最大数") @RequestParam(name = "pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse respons) {
@@ -227,13 +227,18 @@ public class PrescriptionController {
 	@ApiOperation(value = "买药", notes = "买药")
 	public Response buyFromStore(
 			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
-			@ApiParam(name = "drugList", value = "药品清单") @RequestParam(name = "drugList") List<TransactionDrug> drugList,
+			@ApiParam(name = "drugList", value = "药品清单") @RequestParam(name = "drugList") String drugList,
 			HttpServletRequest request, HttpServletResponse respons) {
-		
+		List<TransactionDrug> transDrugList = null;
+		try{
+			transDrugList = JSONUtils.getObjectListByJson(drugList, TransactionDrug.class);
+		}catch (Exception e) {
+			return Response.Error(-1, "参数错误");
+		}
 		
 		try{
 			Integer storeid = SessionUtil.getStoreId(request);
-			Order order = prescriptionService.buyFromStore(storeid, pid, drugList);		
+			Order order = prescriptionService.buyFromStore(storeid, pid, transDrugList);		
 			return Response.OK(order);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());

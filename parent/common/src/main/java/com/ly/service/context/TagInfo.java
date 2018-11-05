@@ -14,8 +14,8 @@ public class TagInfo {
 		return tagname;
 	}
 
-	public void setTagname(String tarname) {
-		this.tagname = tarname;
+	public void setTagname(String tagname) {
+		this.tagname = tagname;
 	}
 
 	public Long getId() {

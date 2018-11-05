@@ -1,5 +1,6 @@
 package com.ly.service.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,7 +14,12 @@ import org.apache.ibatis.type.JdbcType;
 import tk.mybatis.mapper.annotation.ColumnType;
 
 @Table(name="t_order")
-public class Order {
+public class Order implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1026976489215761449L;
 
 	@Id
 	@Column(name = "id")
@@ -21,17 +27,17 @@ public class Order {
 	@ColumnType(jdbcType = JdbcType.BIGINT)
 	private Long id;
 	
-	public static final int TAGET_USER = 1;
-	public static final int TAGET_STORE = 2;
-	public static final int TAGET_SELLER = 3;
+	public static final int TARGET_USER = 1;
+	public static final int TARGET_STORE = 2;
+	public static final int TARGET_SELLER = 3;
 	
-	@Column(name = "tagettype")
+	@Column(name = "targettype")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private Integer tagettype;  //用户1 或 店铺2 销售 3
+	private Integer targettype;  //用户1 或 店铺2 销售 3
 	
-	@Column(name = "tagetid")
+	@Column(name = "targetid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer tagetid;  //用户id或店铺id
+	private Integer targetid;  //用户id或店铺id
 
 	public static final int CODE_TRANS = 1;
 	public static final int CODE_CHARGE = 2;
@@ -150,19 +156,19 @@ public class Order {
 		this.state = state;
 	}
 	
-	public Integer getTagettype() {
-		return tagettype;
+	public Integer getTargettype() {
+		return targettype;
 	}
 
-	public void setTagettype(Integer tagettype) {
-		this.tagettype = tagettype;
+	public void setTargettype(Integer targettype) {
+		this.targettype = targettype;
 	}
 
-	public Integer getTagetid() {
-		return tagetid;
+	public Integer getTargetid() {
+		return targetid;
 	}
 
-	public void setTagetid(Integer tagetid) {
-		this.tagetid = tagetid;
+	public void setTargetid(Integer targetid) {
+		this.targetid = targetid;
 	}
 }

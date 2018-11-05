@@ -5,6 +5,7 @@ D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\utils\ValidDataUti
 D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\feign\client\DrugClient.java
 D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\feign\client\fallback\DefaultAccountClient.java
 D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\entity\TagMap.java
+D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\config\FeignConfiguration.java
 D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\context\TagInfo.java
 D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\feign\client\fallback\DefaultStoreClient.java
 D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\utils\RedissonUtil.java
@@ -29,6 +30,7 @@ D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\utils\IdCardUtil.j
 D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\feign\client\OrderClient.java
 D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\context\SimpleDrugInfo.java
 D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\feign\client\fallback\DefaultDrugClient.java
+D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\context\InternalErrorMessage.java
 D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\entity\StoreAccount.java
 D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\entity\Hospital.java
 D:\workspace\ep\ep\parent\common\src\main\java\com\ly\service\entity\Doctor.java

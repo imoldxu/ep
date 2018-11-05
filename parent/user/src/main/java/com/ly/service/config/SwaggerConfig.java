@@ -37,7 +37,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport{
 
 	private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-        		.description("药品系统接口").title("药品系统").version("0.1")
+        		.description("用户系统接口").title("用户系统").version("0.1")
         		.build();
     }
 

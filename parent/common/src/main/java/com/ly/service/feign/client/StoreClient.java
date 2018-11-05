@@ -1,12 +1,10 @@
 package com.ly.service.feign.client;
 
-import java.util.List;
-
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ly.service.entity.StoreDrug;
+import com.ly.service.context.Response;
 import com.ly.service.feign.client.fallback.DefaultStoreClient;
 
 
@@ -14,11 +12,11 @@ import com.ly.service.feign.client.fallback.DefaultStoreClient;
 public interface StoreClient {
 
 	@RequestMapping("/internal/getDrugsInStore")
-	public List<StoreDrug> getDrugsInStore(@RequestParam(name = "storeid")Integer storeid,
-			@RequestParam(name = "drugList") List<Integer> drugList);
+	public Response getDrugsInStore(@RequestParam(name = "storeid")Integer storeid,
+			@RequestParam(name = "drugListStr") String drugListStr);
 	
-	@RequestMapping("/internal/getDrugsInStore")
-	public StoreDrug getDrugByStore(@RequestParam(name = "storeid")Integer storeid,
+	@RequestMapping("/internal/getDrugByStore")
+	public Response getDrugByStore(@RequestParam(name = "storeid")Integer storeid,
 			@RequestParam(name = "drugid") Integer drugid);
 	
 }

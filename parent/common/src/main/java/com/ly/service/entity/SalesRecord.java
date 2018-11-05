@@ -19,7 +19,7 @@ public class SalesRecord {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@ColumnType(jdbcType = JdbcType.BIGINT)
-	private long id;
+	private Long id;
 	
 	@Column(name = "orderid")
 	@ColumnType(jdbcType = JdbcType.BIGINT)
@@ -86,11 +86,11 @@ public class SalesRecord {
 	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
 	private Date createtime;//结算费
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -182,11 +182,11 @@ public class SalesRecord {
 		this.doctorname = doctorname;
 	}
 
-	public int getHospitalid() {
+	public Integer getHospitalid() {
 		return hospitalid;
 	}
 
-	public void setHospitalid(int hospitalid) {
+	public void setHospitalid(Integer hospitalid) {
 		this.hospitalid = hospitalid;
 	}
 

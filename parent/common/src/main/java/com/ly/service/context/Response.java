@@ -53,6 +53,14 @@ public class Response {
 		this.data = data;
 	}
 
+	public Object getOKData(){
+		if(code ==  ErrorCode.OK){
+			return data;
+		}else{
+			throw new HandleException(code, msg);
+		}
+	}
+	
 	public static Response OK(Object object) {
 		return new Response(ErrorCode.OK, object, SUCCESS_MSG);
 	}

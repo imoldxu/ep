@@ -1,10 +1,10 @@
 package com.ly.service.feign.client.fallback;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
+import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
+import com.ly.service.context.Response;
 import com.ly.service.entity.StoreDrug;
 import com.ly.service.feign.client.StoreClient;
 
@@ -12,13 +12,13 @@ import com.ly.service.feign.client.StoreClient;
 public class DefaultStoreClient implements StoreClient{
 
 	@Override
-	public List<StoreDrug> getDrugsInStore(Integer storeid, List<Integer> drugList) {
-		throw new HandleException(-1, "网络故障");
+	public Response getDrugsInStore(Integer storeid, String drugListStr) {
+		return Response.Error(ErrorCode.MODULE_ERROR, "网络故障");
 	}
 
 	@Override
-	public StoreDrug getDrugByStore(Integer storeid, Integer drugid) {
-		throw new HandleException(-1, "网络故障");
+	public Response getDrugByStore(Integer storeid, Integer drugid) {
+		return Response.Error(ErrorCode.MODULE_ERROR, "网络故障");
 	}
 
 }

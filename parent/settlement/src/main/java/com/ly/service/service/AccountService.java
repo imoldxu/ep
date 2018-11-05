@@ -37,7 +37,7 @@ public class AccountService {
 	
 	private SellerAccount getSellerAccount(int sellerid) {
 		Example ex = new Example(SellerAccount.class);
-		ex.createCriteria().andEqualTo("storeid", sellerid);
+		ex.createCriteria().andEqualTo("sellerid", sellerid);
 		SellerAccount account = sellerAccountMapper.selectOneByExample(ex);
 		if(null == account){
 			account = new SellerAccount();
@@ -84,7 +84,7 @@ public class AccountService {
 				StoreAccountRecord record = new StoreAccountRecord();
 				record.setAmount(amount);
 				record.setType(StoreAccountRecord.TYPE_PAYOUT);
-				record.setCreatedate(new Date());
+				record.setCreatetime(new Date());
 				record.setStoreid(storeid);
 				record.setMsg(msg);
 				storeRecordMapper.insert(record);
@@ -124,7 +124,7 @@ public class AccountService {
 			StoreAccountRecord record = new StoreAccountRecord();
 			record.setAmount(amount);
 			record.setType(StoreAccountRecord.TYPE_INCOME);
-			record.setCreatedate(new Date());
+			record.setCreatetime(new Date());
 			record.setStoreid(storeid);
 			record.setMsg(msg);
 			storeRecordMapper.insert(record);
@@ -147,7 +147,7 @@ public class AccountService {
 				SellerAccountRecord record = new SellerAccountRecord();
 				record.setAmount(amount);
 				record.setType(SellerAccountRecord.TYPE_PAYOUT);
-				record.setCreatedate(new Date());
+				record.setCreatetime(new Date());
 				record.setSellerid(sellerid);
 				record.setMsg(msg);
 				sellerRecordMapper.insert(record);
@@ -173,7 +173,7 @@ public class AccountService {
 			SellerAccountRecord record = new SellerAccountRecord();
 			record.setAmount(amount);
 			record.setType(SellerAccountRecord.TYPE_INCOME);
-			record.setCreatedate(new Date());
+			record.setCreatetime(new Date());
 			record.setSellerid(sellerid);
 			record.setMsg(msg);
 			sellerRecordMapper.insert(record);

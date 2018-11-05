@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ly.service.context.Response;
 import com.ly.service.context.TransactionDrug;
 import com.ly.service.entity.Order;
 import com.ly.service.feign.client.AccountClient;
@@ -31,9 +32,9 @@ public class OrderService {
 	public Order create(int uid, int amount, List<TransactionDrug> transactionList){
 		Order order = new Order();
 		order.setInfo(JSONUtils.getJsonString(transactionList));
-		order.setTagettype(Order.TAGET_USER);
+		order.setTargettype(Order.TARGET_USER);
 		order.setTranscode(Order.CODE_TRANS);
-		order.setTagetid(uid);
+		order.setTargetid(uid);
 		order.setAmount(amount);
 		order.setCreatetime(new Date());
 		order.setState(Order.STATE_NEW);
@@ -59,9 +60,9 @@ public class OrderService {
 		if(order.getTranscode()==Order.CODE_TRANS){
 			messageProvide.send(order);
 		}else if(order.getTranscode()==Order.CODE_CHARGE){
-			if(order.getTagettype()==Order.TAGET_STORE){
+			if(order.getTargettype()==Order.TARGET_STORE){
 				//FIXME:此处应该发消息更好,毕竟支付通知不会重复通知
-				accountClient.addStoreAccount(order.getTagetid(), order.getAmount(), order.getInfo());
+				accountClient.addStoreAccount(order.getTargetid(), order.getAmount(), order.getInfo());
 			}
 		}
 	}
@@ -70,8 +71,8 @@ public class OrderService {
 	public Order createByStore(int uid, int storeid, List<TransactionDrug> transactionList) {
 		Order order = new Order();
 		order.setInfo(JSONUtils.getJsonString(transactionList));
-		order.setTagettype(Order.TAGET_USER);
-		order.setTagetid(uid);
+		order.setTargettype(Order.TARGET_USER);
+		order.setTargetid(uid);
 		order.setTranscode(Order.CODE_TRANS);
 		order.setCreatetime(new Date());
 		order.setCompletetime(new Date());
@@ -80,7 +81,10 @@ public class OrderService {
 		order.setState(Order.STATE_COMPLETE);
 		orderMapper.insertUseGeneratedKeys(order);
 		
-		salesRecordClient.createByStore(storeid, order);//购药记录处理
+		String orderStr = JSONUtils.getJsonString(order);
+		
+		Response resp = salesRecordClient.createByStore(storeid, orderStr);//购药记录处理
+		resp.getOKData();
 		
 		return order;
 	}
@@ -88,8 +92,8 @@ public class OrderService {
 	public Order createChargeOrder(int storeid, int amount) {
 		Order order = new Order();
 		order.setInfo("账户充值"+MoneyUtil.changeF2Y(amount));
-		order.setTagettype(Order.TAGET_STORE);
-		order.setTagetid(storeid);
+		order.setTargettype(Order.TARGET_STORE);
+		order.setTargetid(storeid);
 		order.setCreatetime(new Date());
 		order.setAmount(amount);
 		order.setState(Order.STATE_NEW);

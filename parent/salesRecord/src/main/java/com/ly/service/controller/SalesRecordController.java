@@ -28,7 +28,7 @@ public class SalesRecordController {
 
 	@Autowired
 	SalesRecordService recordService;
-	
+		
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getRecordByStore", method = RequestMethod.GET)
 	@ApiOperation(value = "获取处方列表", notes = "获取处方列表")

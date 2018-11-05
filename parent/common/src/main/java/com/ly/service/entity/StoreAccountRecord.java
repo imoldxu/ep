@@ -53,16 +53,16 @@ public class StoreAccountRecord {
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String msg;
 
-	@Column(name = "createdate")
+	@Column(name = "createtime")
 	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
-	private Date createdate;
+	private Date createtime;
 	
-	public Date getCreatedate() {
-		return createdate;
+	public Date getCreatetime() {
+		return createtime;
 	}
 
-	public void setCreatedate(Date createdate) {
-		this.createdate = createdate;
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
 	}
 
 	public Integer getId() {
