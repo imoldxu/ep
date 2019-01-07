@@ -11,8 +11,8 @@ import org.apache.ibatis.type.JdbcType;
 
 import tk.mybatis.mapper.annotation.ColumnType;
 
-@Table(name="t_tagmap")
-public class TagMap {
+@Table(name="t_drug_tag_map")
+public class DrugTagMap {
 
 	@Id
 	@Column(name = "id")
@@ -20,9 +20,9 @@ public class TagMap {
 	@ColumnType(jdbcType = JdbcType.BIGINT)
 	private Long id;
 
-	@Column(name = "targetid")
+	@Column(name = "drugid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer targetid;
+	private Integer drugid;
 	
 	@Column(name = "tagid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
@@ -47,14 +47,6 @@ public class TagMap {
 		this.id = id;
 	}
 	
-	public Integer getTargetid() {
-		return targetid;
-	}
-
-	public void setTargetid(Integer targetid) {
-		this.targetid = targetid;
-	}
-
 	public Integer getTagid() {
 		return tagid;
 	}
@@ -62,4 +54,13 @@ public class TagMap {
 	public void setTagid(Integer tagid) {
 		this.tagid = tagid;
 	}
+
+	public Integer getDrugid() {
+		return drugid;
+	}
+
+	public void setDrugid(Integer drugid) {
+		this.drugid = drugid;
+	}
+	
 }

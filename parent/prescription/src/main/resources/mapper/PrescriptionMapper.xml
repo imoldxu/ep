@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ly.service.mapper.PrescriptionMapper" >
+		
+	<resultMap id="myPrescription" type="com.ly.service.entity.Prescription" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="doctorid" property="doctorid" jdbcType="INTEGER" />
+	    <result column="hospitalid" property="hospitalid" jdbcType="INTEGER" />
+	    <result column="userid" property="userid" jdbcType="INTEGER" />
+	    <result column="sn" property="sn" jdbcType="VARCHAR" />
+	    <result column="type" property="type" jdbcType="INTEGER" />
+	    <result column="department" property="department" jdbcType="VARCHAR" />
+	    <result column="diagnosis" property="diagnosis" jdbcType="VARCHAR" />
+	    <result column="patientname" property="patientname" jdbcType="VARCHAR" />
+	    <result column="patientage" property="patientage" jdbcType="VARCHAR" />
+	    <result column="patientsex" property="patientsex" jdbcType="VARCHAR" />
+	    <result column="patientphone" property="patientphone" jdbcType="VARCHAR" />
+	    <result column="doctorname" property="doctorname" jdbcType="VARCHAR" />
+	    <result column="patientname" property="patientname" jdbcType="VARCHAR" />
+	    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+	    <result column="zynum" property="zynum" jdbcType="INTEGER" />
+	    <result column="zyusage" property="zyusage" jdbcType="VARCHAR" />
+	    <result column="zysingledose" property="zysingledose" jdbcType="VARCHAR" />
+	    <result column="zyfrequence" property="zyfrequence" jdbcType="VARCHAR" />
+	    <result column="zymode" property="zymode" jdbcType="VARCHAR" />
+  	</resultMap>
+
+	<select id="getStorePrescripts" resultMap="myPrescription">
+		
+	</select>
+	
+</mapper>

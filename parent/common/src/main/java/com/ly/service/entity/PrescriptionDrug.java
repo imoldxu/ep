@@ -12,7 +12,7 @@ import org.apache.ibatis.type.JdbcType;
 
 import tk.mybatis.mapper.annotation.ColumnType;
 
-@Table(name="t_prescriptiondrug")
+@Table(name="t_prescription_drug")
 public class PrescriptionDrug implements Serializable{
 	/**
 	 * 

@@ -13,10 +13,10 @@ import com.ly.service.mapper.TagMapper;
 import tk.mybatis.mapper.entity.Example;
 
 import com.ly.service.context.SimpleDrugInfo;
-import com.ly.service.context.TagInfo;
+import com.ly.service.context.DrugTagInfo;
 import com.ly.service.entity.Drug;
-import com.ly.service.entity.Tag;
-import com.ly.service.entity.TagMap;
+import com.ly.service.entity.DrugTag;
+import com.ly.service.entity.DrugTagMap;
 
 @Service
 public class DrugService {
@@ -30,7 +30,7 @@ public class DrugService {
 	
 	public Drug getDrugById(Integer id){
 		Drug drug = drugMapper.selectByPrimaryKey(id);
-		List<TagInfo> tags = getTagsByTargetId(drug.getId());
+		List<DrugTagInfo> tags = getTagsByTargetId(drug.getId());
 		drug.setTags(tags);
 		return drug;
 	}
@@ -107,40 +107,40 @@ public class DrugService {
 		return opRet;
 	}
 
-	public List<Tag> getTags() {
+	public List<DrugTag> getTags() {
 		return tagMapper.selectAll();
 	}
 
 	public void addTag(int drugid, int tagid, String tag) {
 		if(tagid>0){
-			TagMap map = new TagMap();
-			map.setTargetid(drugid);
+			DrugTagMap map = new DrugTagMap();
+			map.setDrugid(drugid);
 			map.setTagid(tagid);
 			tagMapMapper.insert(map);
 		}else{
-			Tag t = insertTag(tag);
+			DrugTag t = insertTag(tag);
 			
-			TagMap map = new TagMap();
-			map.setTargetid(drugid);
+			DrugTagMap map = new DrugTagMap();
+			map.setDrugid(drugid);
 			map.setTagid(t.getId());
 			tagMapMapper.insert(map);
 		}
 	}
 
-	private Tag insertTag(String tag) {
-		Tag t = getTagByName(tag);
+	private DrugTag insertTag(String tag) {
+		DrugTag t = getTagByName(tag);
 		if(t==null){
-		    t = new Tag();
+		    t = new DrugTag();
 			t.setTag(tag);
 			tagMapper.insertUseGeneratedKeys(t);
 		}
 		return t;
 	}
 	
-	private Tag getTagByName(String name){
-		Example ex = new Example(Tag.class);
+	private DrugTag getTagByName(String name){
+		Example ex = new Example(DrugTag.class);
 		ex.createCriteria().andEqualTo("tag", name);
-		Tag tag = tagMapper.selectOneByExample(ex);
+		DrugTag tag = tagMapper.selectOneByExample(ex);
 		return tag;
 	}
 
@@ -148,7 +148,7 @@ public class DrugService {
 		tagMapMapper.deleteByPrimaryKey(tagMapid);
 	}
 	
-	public List<TagInfo> getTagsByTargetId(int targetid){
+	public List<DrugTagInfo> getTagsByTargetId(int targetid){
 		return tagMapMapper.getTagsByTargetId(targetid);
 	}
 }

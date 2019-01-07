@@ -21,16 +21,32 @@ public class Hospital {
 
 	@Column(name = "name")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String name;
+	private String name;//医院名称
 
 	@Column(name = "email")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String email;
+	private String email;//医院登录账号
 
 	@Column(name = "password")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String password;
+	private String password;//医院登录密码
+	
+	@Column(name = "address")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String address;//医院地址
 
+	@Column(name ="longitude")
+	@ColumnType(jdbcType= JdbcType.DOUBLE)
+	private Double longitude;
+	
+	@Column(name ="latitude")
+	@ColumnType(jdbcType= JdbcType.DOUBLE)
+	private Double latitude;
+
+	@Column(name = "pwdnonce")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String pwdnonce;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -55,11 +71,45 @@ public class Hospital {
 		this.email = email;
 	}
 
-	public String getPassword() {
+	public String fetchPassword() {
 		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getPwdnonce() {
+		return pwdnonce;
+	}
+
+	public void setPwdnonce(String pwdnonce) {
+		this.pwdnonce = pwdnonce;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
+	
 }

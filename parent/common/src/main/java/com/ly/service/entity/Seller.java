@@ -35,6 +35,10 @@ public class Seller {
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String password;
 	
+	@Column(name = "pwdnonce")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String pwdnonce;
+	
 	@Column(name = "wxunionid")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String wxunionid;
@@ -74,7 +78,7 @@ public class Seller {
 		this.phone = phone;
 	}
 
-	public String getPassword() {
+	public String fetchPassword() {
 		return password;
 	}
 
@@ -82,7 +86,7 @@ public class Seller {
 		this.password = password;
 	}
 
-	public String getWxunionid() {
+	public String fetchWxunionid() {
 		return wxunionid;
 	}
 
@@ -90,7 +94,7 @@ public class Seller {
 		this.wxunionid = wxunionid;
 	}
 
-	public Date getCreatetime() {
+	public Date fetchCreatetime() {
 		return createtime;
 	}
 
@@ -98,7 +102,7 @@ public class Seller {
 		this.createtime = createtime;
 	}
 
-	public Date getLastlogintime() {
+	public Date fetchLastlogintime() {
 		return lastlogintime;
 	}
 
@@ -112,6 +116,14 @@ public class Seller {
 	
 	public void setSubscribe(int subscribe) {
 		this.subscribe = subscribe;
+	}
+
+	public String fetchPwdnonce() {
+		return pwdnonce;
+	}
+
+	public void setPwdnonce(String pwdnonce) {
+		this.pwdnonce = pwdnonce;
 	}
 	
 	

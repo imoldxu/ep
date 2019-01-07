@@ -37,14 +37,18 @@ public class Store {
 	@Column(name ="password")
 	@ColumnType(jdbcType= JdbcType.VARCHAR)
 	private String password;
+
+	@Column(name = "pwdnonce")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String pwdnonce;
 	
 	@Column(name ="longitude")
-	@ColumnType(jdbcType= JdbcType.VARCHAR)
-	private String longitude;
+	@ColumnType(jdbcType= JdbcType.DOUBLE)
+	private Double longitude;
 	
 	@Column(name ="latitude")
-	@ColumnType(jdbcType= JdbcType.VARCHAR)
-	private String latitude;
+	@ColumnType(jdbcType= JdbcType.DOUBLE)
+	private Double latitude;
 
 	@Transient
 	private int distance;
@@ -100,7 +104,7 @@ public class Store {
 		this.email = email;
 	}
 
-	public String getPassword() {
+	public String fetchPassword() {
 		return password;
 	}
 
@@ -108,20 +112,28 @@ public class Store {
 		this.password = password;
 	}
 
-	public String getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(String longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 
-	public String getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(String latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
+	}
+
+	public String fetchPwdnonce() {
+		return pwdnonce;
+	}
+
+	public void setPwdnonce(String pwdnonce) {
+		this.pwdnonce = pwdnonce;
 	}
 	
 	

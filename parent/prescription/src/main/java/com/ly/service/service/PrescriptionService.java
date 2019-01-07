@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ly.service.context.TransactionDrug;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
@@ -21,9 +23,7 @@ import com.ly.service.entity.Patient;
 import com.ly.service.entity.Prescription;
 import com.ly.service.entity.PrescriptionDrug;
 import com.ly.service.entity.StoreDrug;
-import com.ly.service.feign.client.OrderClient;
-import com.ly.service.feign.client.SellerClient;
-import com.ly.service.feign.client.StoreClient;
+import com.ly.service.feign.client.DrugClient;
 import com.ly.service.feign.client.UserClient;
 import com.ly.service.mapper.PrescriptionDrugMapper;
 import com.ly.service.mapper.PrescriptionMapper;
@@ -41,14 +41,14 @@ public class PrescriptionService {
 	PrescriptionMapper pMapper;
 	@Autowired
 	PrescriptionDrugMapper drugMapper;
+	
 	@Autowired
-	OrderClient orderClient;
+	OrderService orderService;
+	
 	@Autowired
 	UserClient userClient;
 	@Autowired
-	SellerClient sellerClient;
-	@Autowired
-	StoreClient storeClient;
+	DrugClient drugClient;
 	@Autowired
 	RedissonUtil redissonUtil;
 	
@@ -64,7 +64,7 @@ public class PrescriptionService {
 			p.setUserid(uid);
 			pMapper.updateByPrimaryKey(p);
 			//为用户添加患者信息	
-			Response resp = userClient.addPatient(uid, p.getPatientname(), p.getPatientsex(), p.getPatientphone(), Patient.TYPE_IDCARD, "", "");
+			userClient.addPatient(uid, p.getPatientname(), p.getPatientsex(), p.getPatientphone(), Patient.TYPE_IDCARD, "", "");
 			//FIXME:此处即使有异常也不抛出resp.getOKData();
 		}else{
 			throw new HandleException(ErrorCode.NORMAL_ERROR, "处方已经被领取，不可被重复领取");
@@ -151,7 +151,7 @@ public class PrescriptionService {
 			throw new HandleException(ErrorCode.RECOMMIT_ERROR, "处方已提交，请勿重复提交");
 		}
 		Date now = new Date();
-		perscription.setCreatedate(now);
+		perscription.setCreatetime(now);
 		perscription.setHospitalid(hospitalid);
 		perscription.setDoctorid(doctorid);
 		//FIXME:医生的id，要根据医院、医生姓名、以及科室来提取，或者由医院传入医生的id
@@ -160,8 +160,9 @@ public class PrescriptionService {
 		
 		for(PrescriptionDrug pdrug : drugList){
 			pdrug.setPrescriptionid(pid);
-			Response resp = sellerClient.getHospitalDrug(pdrug.getDrugid(), perscription.getHospitalid());
-			HospitalDrug hospitalDrug = (HospitalDrug) resp.getOKData();
+			ObjectMapper om = new ObjectMapper();
+			Response resp = drugClient.getHospitalDrug(pdrug.getDrugid(), perscription.getHospitalid());
+			HospitalDrug hospitalDrug = om.convertValue(resp.fetchOKData(), HospitalDrug.class);
 			pdrug.setSellfee(hospitalDrug.getSellfee());
 			pdrug.setSellerid(hospitalDrug.getSellerid());
 		}
@@ -169,18 +170,22 @@ public class PrescriptionService {
 	}
 
 	@Transactional
-	public Order buy(Long pid, List<TransactionDrug> buyList) {
+	public Order buy(Integer uid, Long pid, List<TransactionDrug> buyList) {
 		int amount = 0;
 		Prescription p = null;
 		boolean islock = redissonUtil.tryLock("BUY_PRESCRIPTION_"+pid, TimeUnit.MILLISECONDS, 1000, 1500);
 		if(islock){
 			p = getPrescriptionById(pid);
+			if(p.getUserid() != uid){
+				throw new HandleException(ErrorCode.ARG_ERROR, "你无权进行此操作");
+			}
+			
 			Date now = new Date();
-			Date createDate = p.getCreatedate();
+			Date createDate = p.getCreatetime();
 			//TODO 处方有效期不得超过3天
 			int i = now.compareTo(createDate);
 			if(i>3){
-				throw new HandleException(-1, "处方已过期");
+				throw new HandleException(ErrorCode.NORMAL_ERROR, "处方已过期");
 			}
 			
 			List<PrescriptionDrug> pDrugList = getDrugListByPrescriptionID(pid);		
@@ -191,7 +196,7 @@ public class PrescriptionService {
 				for(PrescriptionDrug pd : pDrugList){
 					if(bd.getDrugid() == pd.getDrugid()){
 						if(bd.getNum()> pd.getNumber()-pd.getSoldnumber()){
-							throw new HandleException(-1, "购买数量不得超过处方数量");
+							throw new HandleException(ErrorCode.NORMAL_ERROR, "购买数量不得超过处方数量");
 						}
 					    bd.setDoctorid(p.getDoctorid());
 					    bd.setHospitalid(p.getHospitalid());
@@ -203,7 +208,7 @@ public class PrescriptionService {
 					}
 				}
 				if(!isMatch){
-					throw new HandleException(-1, "不可选购超过处方的药品");
+					throw new HandleException(ErrorCode.NORMAL_ERROR, "不可选购超过处方的药品");
 				}
 			}
 			
@@ -211,10 +216,10 @@ public class PrescriptionService {
 		}else{
 			throw new HandleException(ErrorCode.LOCK_ERROR, "系统异常");
 		}
-		String TransactionListStr = JSONUtils.getJsonString(buyList);
+		//String TransactionListStr = JSONUtils.getJsonString(buyList);
 		//创建订单
-		Response resp  = orderClient.create(p.getUserid(), amount, TransactionListStr);
-		return (Order) resp.getOKData();
+		Order order  = orderService.create(p.getUserid(), amount, buyList);
+		return order;
 		
 	}
 	
@@ -231,7 +236,7 @@ public class PrescriptionService {
 		if(islock){
 			p = getPrescriptionById(pid);
 			Date now = new Date();
-			Date createDate = p.getCreatedate();
+			Date createDate = p.getCreatetime();
 			//TODO 处方有效期不得超过3天
 			int i = now.compareTo(createDate);
 			if(i>3){
@@ -274,9 +279,9 @@ public class PrescriptionService {
 		}else{
 			throw new HandleException(ErrorCode.LOCK_ERROR, "系统异常");
 		}
-		String transListStr = JSONUtils.getJsonString(transList);
-		Response resp = orderClient.createByStore(storeid, p.getUserid(), transListStr);
-		return (Order) resp.getOKData();
+
+		Order order = orderService.createByStore(storeid, p.getUserid(), transList);
+		return order;
 	}
 
 	public Prescription getPrescriptionDetailByStore(Integer storeid, Long pid) {
@@ -287,14 +292,10 @@ public class PrescriptionService {
 			drugs.add(drug.getDrugid());
 		}
 		String drugsStr = JSONUtils.getJsonString(drugs);
-		Response resp = storeClient.getDrugsInStore(storeid, drugsStr);
-		String drugListStr = (String) resp.getOKData();
-		List<StoreDrug> storeDrugList;
-		try {
-			storeDrugList = JSONUtils.getObjectListByJson(drugListStr, StoreDrug.class);
-		} catch (Exception e) {
-			throw new HandleException(ErrorCode.DATA_ERROR, "内部数据异常");
-		}
+		Response resp = drugClient.getDrugsInStore(storeid, drugsStr);
+		ObjectMapper om = new ObjectMapper();
+		List<StoreDrug> storeDrugList = om.convertValue((String) resp.fetchOKData(), new TypeReference<List<StoreDrug>>() {});
+		
 		//药房显示的处方仅包含药房有的药品
 		for(PrescriptionDrug drug: drugList){
 			if(!storeDrugList.contains(drug.getDrugid())){
@@ -308,8 +309,18 @@ public class PrescriptionService {
 		Example ex = new Example(Prescription.class);
 		ex.createCriteria().andEqualTo("userid", uid);
 		ex.setOrderByClause("id DESC");
-		RowBounds rowBounds = new RowBounds(pageIndex*pageSize, pageSize);
+		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
 		List<Prescription> plist = pMapper.selectByExampleAndRowBounds(ex, rowBounds);
 		return plist;
+	}
+
+	public List<Prescription> getStorePrescriptions(Integer storeid, int pageIndex, int pageSize) {
+		
+		return null;
+	}
+	
+	public Prescription getStorePrescriptionDetail(Integer storeid, Long pid) {
+		
+		return null;
 	}
 }

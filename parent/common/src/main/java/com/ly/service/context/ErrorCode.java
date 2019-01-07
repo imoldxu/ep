@@ -22,4 +22,6 @@ public class ErrorCode {
 
 	public static final int LOCK_ERROR = 12; //锁异常
 
+	public static final int DOMAIN_ERROR = 13;//权限异常
+
 }

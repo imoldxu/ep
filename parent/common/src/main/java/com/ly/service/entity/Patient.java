@@ -1,7 +1,5 @@
 package com.ly.service.entity;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -51,7 +49,6 @@ public class Patient {
 		
 	@Transient
 	private int age;
-	
 
 	@Column(name = "phone")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -145,4 +142,6 @@ public class Patient {
 	public void setUserid(Integer userid) {
 		this.userid = userid;
 	}
+	
+	
 }

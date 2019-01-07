@@ -4,15 +4,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ly.service.mapper.TagMapMapper" >
 		
-	<resultMap id="TagInfo" type="com.ly.service.context.TagInfo" >
+	<resultMap id="TagInfo" type="com.ly.service.context.DrugTagInfo" >
 	    <id column="id" property="id" jdbcType="BIGINT" />
-	    <result column="targetid" property="targetid" jdbcType="VARCHAR" />
-	    <result column="tagid" property="tagid" jdbcType="VARCHAR" />
+	    <result column="drugid" property="drugid" jdbcType="INTEGER" />
+	    <result column="tagid" property="tagid" jdbcType="INTEGER" />
 	    <result column="tagname" property="tagname" jdbcType="VARCHAR" />
   	</resultMap>
 
-	<select id="getTagsByTargetId" resultType="TagInfo">
-		select  t_tagmap.id, tagid ,targetid, tag as tagname from t_tagmap LEFT JOIN t_tag ON t_tagmap.tagid = t_tag.id where t_tagmap.targetid = #{targetid,jdbcType=INTEGER}
+	<select id="getTagsByTargetId" resultMap="TagInfo">
+		select  t_drug_tag_map.id, tagid ,drugid, tag as tagname from t_drug_tag_map LEFT JOIN t_drug_tag ON t_drug_tag_map.tagid = t_drug_tag.id where t_drug_tag_map.drugid = #{drugid,jdbcType=INTEGER}
 	</select>
 
 </mapper>

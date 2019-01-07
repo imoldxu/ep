@@ -27,6 +27,10 @@ public class Order implements Serializable {
 	@ColumnType(jdbcType = JdbcType.BIGINT)
 	private Long id;
 	
+	@Column(name = "sn")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String sn;  //订单按日期的编号
+
 	public static final int TARGET_USER = 1;
 	public static final int TARGET_STORE = 2;
 	public static final int TARGET_SELLER = 3;
@@ -39,9 +43,9 @@ public class Order implements Serializable {
 	@ColumnType(jdbcType = JdbcType.INTEGER)
 	private Integer targetid;  //用户id或店铺id
 
-	public static final int CODE_TRANS = 1;
-	public static final int CODE_CHARGE = 2;
-	public static final int CODE_PAYOUT = 3;
+	public static final int CODE_TRANS = 1;//交易
+	public static final int CODE_CHARGE = 2;//充值
+	public static final int CODE_PAYOUT = 3;//提现结算
 	
 	@Column(name = "transcode")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
@@ -67,22 +71,26 @@ public class Order implements Serializable {
 	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
 	private Date createtime;  //创建时间
 	
+	@Column(name = "invalidtime")
+	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
+	private Date invalidtime;  //失效时间
+
 	@Column(name = "completetime")
 	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
 	private Date completetime;  //完成时间
 
-	public final static int STATE_NEW = 1;
-	public final static int STATE_PAYING = 2;
-	public final static int STATE_PAYED = 3;
-	public final static int STATE_COMPLETE = 5;
-	public final static int STATE_REFUND = 4;
+	public final static int STATE_NEW = 1;  //新建
+	public final static int STATE_PAYING = 2; //支付中
+	public final static int STATE_PAYED = 3; //已支付
+	public final static int STATE_COMPLETE = 5; //已出货
+	public final static int STATE_REFUND = 4; //已退款
 	
 	@Column(name = "state")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private Integer state;
+	private Integer state;//状态
 	
-	public final static int PAY_OFFLINESTORE = 1;
-	public final static int PAY_WX = 2;
+	public final static int PAY_OFFLINESTORE = 1;//药店自己收款
+	public final static int PAY_WX = 2;//线上支付
 	
 	@Column(name = "payway")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
@@ -171,4 +179,21 @@ public class Order implements Serializable {
 	public void setTargetid(Integer targetid) {
 		this.targetid = targetid;
 	}
+	
+	public Date getInvalidtime() {
+		return invalidtime;
+	}
+
+	public void setInvalidtime(Date invalidtime) {
+		this.invalidtime = invalidtime;
+	}
+
+	public String getSn() {
+		return sn;
+	}
+
+	public void setSn(String sn) {
+		this.sn = sn;
+	}
+
 }

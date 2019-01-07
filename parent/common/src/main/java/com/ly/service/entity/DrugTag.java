@@ -10,8 +10,8 @@ import org.apache.ibatis.type.JdbcType;
 
 import tk.mybatis.mapper.annotation.ColumnType;
 
-@Table(name="t_tag")
-public class Tag {
+@Table(name="t_drug_tag")
+public class DrugTag {
 
 	@Id
 	@Column(name = "id")

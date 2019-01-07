@@ -21,23 +21,23 @@ public class StoreDrug {
 	
 	@Column(name = "storeid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer storeid;
+	private Integer storeid;//药房id
 	
 	@Column(name = "drugid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer drugid;
+	private Integer drugid;//药品编号
 	
 	@Column(name = "drugname")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String drugname;
+	private String drugname;//药品名称
 	
 	@Column(name = "drugstander")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String drugstander;
+	private String drugstander;//药品规格
 	
 	@Column(name = "drugcompany")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String drugcompany;
+	private String drugcompany;//药品厂商
 	
 	@Column(name = "price")
 	@ColumnType(jdbcType = JdbcType.INTEGER)

@@ -1,5 +1,5 @@
 server:
-  port : 9207
+  port : 9201
   tomcat:
     max-http-header-size: 8192  
   
@@ -8,7 +8,7 @@ spring:
     name: user-service
   cloud:
     consul:
-      host: 127.0.0.1
+      host: 192.168.6.103
       port: 8500
       discovery:
         healthCheckInterval: 15s
@@ -26,8 +26,8 @@ spring:
     sampler:
       percentage: 0.1
   datasource:
-    name: user
-    url: jdbc:mysql://127.0.0.1:3306/user?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useUnicode=true
+    name: hk
+    url: jdbc:mysql://127.0.0.1:3306/hk?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useUnicode=true
     username: root
     password: 
     type: com.alibaba.druid.pool.DruidDataSource
@@ -62,8 +62,8 @@ spring:
 
 #redisson
 redisson:
-  address: redis://120.77.73.224:6379
-  password: leyou
+  address: redis://192.168.6.103:6379
+  password: oldxu
 
 #hystrix
 feign:

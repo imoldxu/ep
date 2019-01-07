@@ -12,7 +12,7 @@ import javax.persistence.Transient;
 
 import org.apache.ibatis.type.JdbcType;
 
-import com.ly.service.context.TagInfo;
+import com.ly.service.context.DrugTagInfo;
 
 import tk.mybatis.mapper.annotation.ColumnType;
 
@@ -38,6 +38,9 @@ public class Drug implements Serializable{
 	@Column(name = "standard")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String standard;//规格
+	
+	public static final int TYPE_ZY = 2;
+	public static final int TYPE_XY = 1;
 	
 	@Column(name = "iszy")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
@@ -73,7 +76,7 @@ public class Drug implements Serializable{
 	
 	@Column(name = "defaultusage")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String defaultusage;//用法
+	private String defaultusage;//默认用法
 	
 	@Column(name = "company")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -114,13 +117,13 @@ public class Drug implements Serializable{
 //		this.state = state;
 //	}
 	@Transient
-	private List<TagInfo> tags;
+	private List<DrugTagInfo> tags;
 	
-	public List<TagInfo> getTags() {
+	public List<DrugTagInfo> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<TagInfo> tags) {
+	public void setTags(List<DrugTagInfo> tags) {
 		this.tags = tags;
 	}
 

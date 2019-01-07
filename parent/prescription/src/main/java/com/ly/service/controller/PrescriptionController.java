@@ -30,6 +30,7 @@ import io.swagger.annotations.ApiParam;
 
 @RestController
 @Api(description = "处方接口")
+@RequestMapping("/prescription")
 public class PrescriptionController {
 	
 
@@ -37,7 +38,7 @@ public class PrescriptionController {
 	PrescriptionService prescriptionService;
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/open", method = RequestMethod.POST)
+	@RequestMapping(value = "/doctor/open", method = RequestMethod.POST)
 	@ApiOperation(value = "医生在线开处方", notes = "医生在线开处方")
 	public Response open(
 			@ApiParam(name = "perscription", value = "拼音首字母索引或药品名称") @RequestParam(name = "perscription") String perscription,
@@ -49,7 +50,7 @@ public class PrescriptionController {
 			p = JSONUtils.getObjectByJson(perscription, Prescription.class);
 			list = JSONUtils.getObjectListByJson(drugList, PrescriptionDrug.class);
 		}catch (Exception e) {
-			return Response.Error(-1, "参数错误");
+			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
 		}
 			
 		try{
@@ -62,7 +63,7 @@ public class PrescriptionController {
 	}
 
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/commitByHosiptal", method = RequestMethod.POST)
+	@RequestMapping(value = "/base/commitByHosiptal", method = RequestMethod.POST)
 	@ApiOperation(value = "从医院处方系统传入处方", notes = "从医院传入处方")
 	public Response commit(@ApiParam(name = "doctorid", value = "医生") @RequestParam(name = "doctorid") int doctorid,
 			@ApiParam(name = "hospitalid", value = "医院编号") @RequestParam(name = "hospitalid") int hospitalid,
@@ -89,9 +90,10 @@ public class PrescriptionController {
 			return Response.SystemError();		
 		}
 	}
-		
+	
+	//用户接口
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/receive", method = RequestMethod.POST)
+	@RequestMapping(value = "/user/receive", method = RequestMethod.POST)
 	@ApiOperation(value = "用户领取处方", notes = "用户领取处方")
 	public Response receive(
 			@ApiParam(name = "perscriptionid", value = "处方编号") @RequestParam(name = "perscriptionid") Long pid,
@@ -99,6 +101,7 @@ public class PrescriptionController {
 		
 		try{
 			Integer userid = SessionUtil.getUserId(request);
+			
 			prescriptionService.receive(userid, pid);
 	
 			return Response.OK(null);
@@ -113,7 +116,7 @@ public class PrescriptionController {
 	
 	//管理工具用
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getPrescriptionList", method = RequestMethod.GET)
+	@RequestMapping(value = "/manager/getPrescriptionList", method = RequestMethod.GET)
 	@ApiOperation(value = "获取处方列表", notes = "获取处方列表")
 	public Response getPrescriptionList(
 			@ApiParam(name = "option", value = "查询条件") @RequestParam(name = "option") String option,
@@ -127,6 +130,8 @@ public class PrescriptionController {
 			Response.Error(-1, "参数错误");
 		}
 		try{
+			SessionUtil.getManagerId(request);
+			
 			List<Prescription> plist =  prescriptionService.getPrescriptionListByOption(searchOption);
 			return Response.OK(plist);
 		}catch (HandleException e) {
@@ -139,7 +144,7 @@ public class PrescriptionController {
 	
 	//管理工具用
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getPrescriptionByID", method = RequestMethod.GET)
+	@RequestMapping(value = "/manager/getPrescriptionByID", method = RequestMethod.GET)
 	@ApiOperation(value = "获取处方详情", notes = "获取处方详情")
 	public Response getPrescriptionByID(
 			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Integer pid,
@@ -147,6 +152,8 @@ public class PrescriptionController {
 		respons.setHeader("Access-Control-Allow-Origin", "*");
 		respons.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
+			SessionUtil.getManagerId(request);
+			
 			Prescription detail = prescriptionService.getPrescriptionDetail(pid);		
 			return Response.OK(detail);		
 		}catch (HandleException e) {
@@ -157,8 +164,9 @@ public class PrescriptionController {
 		}
 	}
 
+	//用户
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getUserPrescriptionList", method = RequestMethod.GET)
+	@RequestMapping(value = "/user/getUserPrescriptionList", method = RequestMethod.GET)
 	@ApiOperation(value = "获取处方详情", notes = "获取处方详情")
 	public Response getUserPrescriptionList(
 			@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
@@ -179,7 +187,7 @@ public class PrescriptionController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getPrescriptionByIDFromStore", method = RequestMethod.GET)
+	@RequestMapping(value = "/store/getPrescriptionByIDFromStore", method = RequestMethod.GET)
 	@ApiOperation(value = "药房获取处方详情,只提供药房有的药品信息", notes = "药房获取处方详情")
 	public Response getPrescriptionByIDFromStore(
 			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
@@ -199,8 +207,8 @@ public class PrescriptionController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/buy", method = RequestMethod.POST)
-	@ApiOperation(value = "买药", notes = "买药")
+	@RequestMapping(value = "/user/buy", method = RequestMethod.POST)
+	@ApiOperation(value = "用户买药", notes = "用户买药")
 	public Response buy(
 			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
 			@ApiParam(name = "drugList", value = "药品清单") @RequestParam(name = "drugList") String drugList,
@@ -212,7 +220,9 @@ public class PrescriptionController {
 			return Response.Error(-1, "参数错误");
 		}
 		try{
-			Order order = prescriptionService.buy(pid, transDrugList);		
+			Integer uid = SessionUtil.getUserId(request);
+			
+			Order order = prescriptionService.buy(uid, pid, transDrugList);		
 			return Response.OK(order);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -223,7 +233,7 @@ public class PrescriptionController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/buyFromStore", method = RequestMethod.POST)
+	@RequestMapping(value = "/store/buyFromStore", method = RequestMethod.POST)
 	@ApiOperation(value = "买药", notes = "买药")
 	public Response buyFromStore(
 			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
@@ -248,4 +258,42 @@ public class PrescriptionController {
 		}
 	}
 
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/store/getStorePrescriptions", method = RequestMethod.GET)
+	@ApiOperation(value = "获取药房已经销售的处方列表", notes = "获取药房已经销售的处方列表")
+	public Response getStorePrescriptions(@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
+			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
+			HttpServletRequest request, HttpServletResponse response){
+		
+		try{
+			Integer storeid = SessionUtil.getStoreId(request);
+			
+			List<Prescription> list = prescriptionService.getStorePrescriptions(storeid, pageIndex, pageSize);
+			return Response.OK(list);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();		
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/store/getStorePrescriptionDetail", method = RequestMethod.GET)
+	@ApiOperation(value = "获取药房已经销售的处方列表", notes = "获取药房已经销售的处方列表")
+	public Response getStorePrescriptionDetail(@ApiParam(name="pid", value="处方id") @RequestParam(name="pid") Long pid,
+			HttpServletRequest request, HttpServletResponse response){
+		
+		try{
+			Integer storeid = SessionUtil.getStoreId(request);
+			
+			Prescription ret = prescriptionService.getStorePrescriptionDetail(storeid, pid);
+			return Response.OK(ret);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();		
+		}
+	}
 }

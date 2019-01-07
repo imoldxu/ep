@@ -27,8 +27,8 @@ public class User {
 	private String name;
 	
 	@Column(name = "sex")
-	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private Integer sex;
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String sex;
 	
 	public static final int TYPE_IDCARD = 1;
 	public static final int TYPE_JG = 2;
@@ -70,6 +70,10 @@ public class User {
 	@Column(name = "password")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String password;
+	
+	@Column(name = "pwdnonce")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String pwdnonce;
 	
 	@Column(name = "wxunionid")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -121,11 +125,11 @@ public class User {
 		this.name = name;
 	}
 
-	public Integer getSex() {
+	public String getSex() {
 		return sex;
 	}
 
-	public void setSex(Integer sex) {
+	public void setSex(String sex) {
 		this.sex = sex;
 	}
 	
@@ -145,7 +149,7 @@ public class User {
 		this.phone = phone;
 	}
 
-	public String getPassword() {
+	public String fetchPassword() {
 		return password;
 	}
 
@@ -161,7 +165,7 @@ public class User {
 		this.wxunionid = wxunionid;
 	}
 
-	public Date getCreatetime() {
+	public Date fetchCreatetime() {
 		return createtime;
 	}
 
@@ -169,13 +173,20 @@ public class User {
 		this.createtime = createtime;
 	}
 
-	public Date getLastlogintime() {
+	public Date fetchLastlogintime() {
 		return lastlogintime;
 	}
 
 	public void setLastlogintime(Date lastlogintime) {
 		this.lastlogintime = lastlogintime;
 	}
-	
+
+	public String fetchPwdnonce() {
+		return pwdnonce;
+	}
+
+	public void setPwdnonce(String pwdnonce) {
+		this.pwdnonce = pwdnonce;
+	}
 	
 }

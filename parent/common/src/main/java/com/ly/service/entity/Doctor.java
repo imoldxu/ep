@@ -24,34 +24,38 @@ public class Doctor {
 	
 	@Column(name = "name")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String name;
+	private String name;//姓名
 	
 	@Column(name = "hospitalid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private String hospitalid;
+	private Integer hospitalid;//医院id
 	
 	@Column(name = "phone")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String phone;
+	private String phone;//电话
 
 	@Column(name = "password")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String password;
+	private String password;//密码
+	
+	@Column(name = "pwdnonce")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String pwdnonce;//密码
 	
 	@Column(name = "wxunionid")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String wxunionid;
+	private String wxunionid;//微信唯一账号
 	
 	@Column(name = "createtime")
-	@ColumnType(jdbcType = JdbcType.TIME)
-	private Date createtime;
+	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
+	private Date createtime;//创建时间
 	
 	@Column(name = "lastlogintime")
 	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
-	private Date lastlogintime;
+	private Date lastlogintime;//最后登录时间
 
 	@Transient
-	private int subscribe;
+	private int subscribe;//是否关注公众号
 	
 	public int getId() {
 		return id;
@@ -69,11 +73,11 @@ public class Doctor {
 		this.name = name;
 	}
 
-	public String getHospitalid() {
+	public Integer getHospitalid() {
 		return hospitalid;
 	}
 
-	public void setHospitalid(String hospitalid) {
+	public void setHospitalid(Integer hospitalid) {
 		this.hospitalid = hospitalid;
 	}
 
@@ -85,7 +89,7 @@ public class Doctor {
 		this.phone = phone;
 	}
 
-	public String getPassword() {
+	public String fetchPassword() {
 		return password;
 	}
 
@@ -93,7 +97,7 @@ public class Doctor {
 		this.password = password;
 	}
 
-	public String getWxunionid() {
+	public String fetchWxunionid() {
 		return wxunionid;
 	}
 
@@ -101,7 +105,7 @@ public class Doctor {
 		this.wxunionid = wxunionid;
 	}
 
-	public Date getCreatetime() {
+	public Date fetchCreatetime() {
 		return createtime;
 	}
 
@@ -109,7 +113,7 @@ public class Doctor {
 		this.createtime = createtime;
 	}
 
-	public Date getLastlogintime() {
+	public Date fetchLastlogintime() {
 		return lastlogintime;
 	}
 
@@ -123,6 +127,14 @@ public class Doctor {
 
 	public void setSubscribe(int subscribe) {
 		this.subscribe = subscribe;
+	}
+
+	public String fetchPwdnonce() {
+		return pwdnonce;
+	}
+
+	public void setPwdnonce(String pwdnonce) {
+		this.pwdnonce = pwdnonce;
 	}
 	
 }

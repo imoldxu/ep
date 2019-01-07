@@ -12,7 +12,7 @@ import org.apache.ibatis.type.JdbcType;
 
 import tk.mybatis.mapper.annotation.ColumnType;
 
-@Table(name="t_salesrecord")
+@Table(name="t_sales_record")
 public class SalesRecord {
 	
 	@Id

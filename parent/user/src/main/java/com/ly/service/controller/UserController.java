@@ -30,6 +30,7 @@ import io.swagger.annotations.ApiParam;
 
 @RestController
 @Api("用户接口")
+@RequestMapping("/user")
 public class UserController{
 
 	@Autowired
@@ -208,6 +209,25 @@ public class UserController{
 		try{
 			int uid = SessionUtil.getUserId(request);
 			List<Patient> list = patientService.getMyPatientList(uid);
+			return Response.OK(list);	
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getAllUser", method = RequestMethod.GET)
+	@ApiOperation(value = "获取所有用户", notes = "获取所有用户")
+	public Response getAllUser(@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") Integer pageIndex,
+			@ApiParam(name = "pageSize", value = "每页最大数量") @RequestParam(name = "pageSize") Integer pageSize,
+			HttpServletRequest request, HttpServletResponse response) {
+		try{
+			SessionUtil.getManagerId(request);
+			
+			List<User> list = userService.getAllUser(pageIndex, pageSize);
 			return Response.OK(list);	
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());

@@ -2,6 +2,11 @@ package com.ly.service.context;
 
 import java.io.Serializable;
 
+/**
+ * 药品展示简要信息
+ * @author oldxu
+ *
+ */
 public class SimpleDrugInfo implements Serializable{
 
 	private static final long serialVersionUID = 1963727049542945062L;

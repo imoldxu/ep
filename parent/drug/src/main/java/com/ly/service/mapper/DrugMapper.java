@@ -26,8 +26,8 @@ public interface DrugMapper extends BaseMapper<Drug> {
 
 //    List<ShortDrugInfo> getCommonZyDrugByDoctor(@Param(value="doctorname")String doctorname, @Param(value="department")String department);
 
-    List<SimpleDrugInfo> getDrugByTag(@Param(value="category")String category);
+    List<SimpleDrugInfo> getDrugByTag(@Param(value="tag")String tag);
 
-    List<SimpleDrugInfo> getZyDrugByTag(@Param(value="category")String category);
+    List<SimpleDrugInfo> getZyDrugByTag(@Param(value="tag")String tag);
 
 }

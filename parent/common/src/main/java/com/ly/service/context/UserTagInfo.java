@@ -1,10 +1,10 @@
 package com.ly.service.context;
 
-public class TagInfo {
+public class UserTagInfo {
 
 	private Long id;
 
-	private Integer targetid;
+	private Integer uid;
 	
 	private Integer tagid;
 	
@@ -26,14 +26,6 @@ public class TagInfo {
 		this.id = id;
 	}
 	
-	public Integer getTargetid() {
-		return targetid;
-	}
-
-	public void setTargetid(Integer targetid) {
-		this.targetid = targetid;
-	}
-
 	public Integer getTagid() {
 		return tagid;
 	}
@@ -41,4 +33,14 @@ public class TagInfo {
 	public void setTagid(Integer tagid) {
 		this.tagid = tagid;
 	}
+
+	public Integer getUid() {
+		return uid;
+	}
+
+	public void setUid(Integer uid) {
+		this.uid = uid;
+	}
+
+
 }

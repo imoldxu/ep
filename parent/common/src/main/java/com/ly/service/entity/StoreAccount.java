@@ -10,7 +10,7 @@ import org.apache.ibatis.type.JdbcType;
 
 import tk.mybatis.mapper.annotation.ColumnType;
 
-@Table(name="t_storeaccount")
+@Table(name="t_store_account")
 public class StoreAccount {
 
 	@Id

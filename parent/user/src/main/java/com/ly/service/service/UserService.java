@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import com.ly.service.context.HandleException;
 import com.ly.service.entity.User;
 import com.ly.service.mapper.UserMapper;
 import com.ly.service.utils.IdCardUtil;
+import com.ly.service.utils.PasswordUtil;
 import com.ly.service.utils.RedissonUtil;
 import com.ly.service.utils.ValidDataUtil;
 import com.ly.service.utils.WxUtil;
@@ -118,7 +120,7 @@ public class UserService {
 		if(user == null){
 			throw new HandleException(ErrorCode.NORMAL_ERROR, "用户不存在");
 		}else{
-			if(user.getPassword().equals(password)){
+			if(PasswordUtil.isEqual(user.fetchPassword(), password, user.fetchPwdnonce())){
 				return user;
 			}else{
 				throw new HandleException(ErrorCode.NORMAL_ERROR, "密码错误");
@@ -139,8 +141,22 @@ public class UserService {
 		}else{
 			user = new User();
 			user.setPhone(phone);
-			user.setPassword(password);
+			
+			String nonce = PasswordUtil.generateNonce();
+			user.setPwdnonce(nonce);
+			
+			String newPwd = PasswordUtil.generatePwd(password, nonce);
+			user.setPassword(newPwd);
+			
 			userMapper.insertUseGeneratedKeys(user);
 		}
+	}
+
+	public List<User> getAllUser(Integer pageIndex, Integer pageSize) {
+		Example ex = new Example(User.class);
+		ex.setOrderByClause("id DESC");
+		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize,pageSize);
+		List<User> ret = userMapper.selectByExampleAndRowBounds(ex, rowBounds);
+		return ret;
 	}
 }

@@ -11,7 +11,7 @@ public class DefaultUserClient implements UserClient {
 
 	@Override
 	public Response addPatient(Integer uid, String name, String sex, String phone, int idcardtype, String idcardnum, String birthday) {		
-		return Response.Error(ErrorCode.MODULE_ERROR, "用户模块异常");
+		return Response.OK(null);
 	}
 
 }

@@ -53,7 +53,7 @@ public class Response {
 		this.data = data;
 	}
 
-	public Object getOKData(){
+	public Object fetchOKData(){
 		if(code ==  ErrorCode.OK){
 			return data;
 		}else{

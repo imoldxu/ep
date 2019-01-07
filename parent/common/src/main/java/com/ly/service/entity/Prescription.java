@@ -65,7 +65,7 @@ public class Prescription implements Serializable{
 	
 	@Column(name = "patientage")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private Integer patientage;//患者年龄
+	private String patientage;//患者年龄
 	
 	@Column(name = "patientsex")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -79,9 +79,9 @@ public class Prescription implements Serializable{
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String doctorname;//医生姓名
 	
-	@Column(name = "createdate")
-	@ColumnType(jdbcType = JdbcType.DATE)
-	private Date createdate;//开具日期
+	@Column(name = "createtime")
+	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
+	private Date createtime;//开具日期
 	
 	@Column(name = "zynum")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
@@ -162,11 +162,11 @@ public class Prescription implements Serializable{
 		this.patientname = patientname;
 	}
 
-	public Integer getPatientage() {
+	public String getPatientage() {
 		return patientage;
 	}
 
-	public void setPatientage(Integer patientage) {
+	public void setPatientage(String patientage) {
 		this.patientage = patientage;
 	}
 
@@ -194,12 +194,12 @@ public class Prescription implements Serializable{
 		this.doctorname = doctorname;
 	}
 
-	public Date getCreatedate() {
-		return createdate;
+	public Date getCreatetime() {
+		return createtime;
 	}
 
-	public void setCreatedate(Date createdate) {
-		this.createdate = createdate;
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
 	}
 
 	public Integer getType() {

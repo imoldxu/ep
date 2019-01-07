@@ -2,6 +2,11 @@ package com.ly.service.context;
 
 import java.io.Serializable;
 
+/**
+ * 交易药品信息
+ * @author oldxu
+ *
+ */
 public class TransactionDrug implements Serializable{
 
 	private static final long serialVersionUID = 584652859728361864L;
@@ -10,23 +15,23 @@ public class TransactionDrug implements Serializable{
 	
 	private int drugid;//药品id
 	
-	private String drugname;
+	private String drugname;//药品名称
 	
-	private int doctorid;//医生id
+	private int doctorid;//开药医生id
 
-	private String doctorname;
+	private String doctorname;//开药医生姓名
 	
-	private int hospitalid; //医院id
+	private int hospitalid; //来源医院id
 	
-	private String hospitalname;//销售名字
+	private String hospitalname;//医院名称
 	
 	private int sellerid;//关联的销售id
 	
 	private String sellername;//销售名字
 
-	private int num;//数量
+	private int num;//购买数量
 	
-	private int sellerfee;//推广费
+	private int sellerfee;//销售推广费
 
 
 	public int getNum() {

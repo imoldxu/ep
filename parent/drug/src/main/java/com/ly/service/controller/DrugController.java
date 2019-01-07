@@ -15,14 +15,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
 import com.ly.service.entity.Drug;
-import com.ly.service.entity.Tag;
+import com.ly.service.entity.DrugTag;
 import com.ly.service.service.DrugService;
 import com.ly.service.context.SimpleDrugInfo;
 import com.ly.service.utils.ExcelUtils;
 import com.ly.service.utils.JSONUtils;
+import com.ly.service.utils.SessionUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,13 +32,14 @@ import io.swagger.annotations.ApiParam;
 
 @RestController
 @Api(description = "药品接口")
+@RequestMapping("/drug")
 public class DrugController {
 	
 	@Autowired
 	DrugService drugService;
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getDrugsByKeys", method = RequestMethod.GET)
+	@RequestMapping(value = "/base/getDrugsByKeys", method = RequestMethod.GET)
 	@ApiOperation(value = "根据药品的拼音首字母缩写或药品名称搜索药品", notes = "根据药品的拼音首字母缩写或药品名称搜索药品")
 	public Response getDrugsByKeys(
 			@ApiParam(name = "keys", value = "拼音首字母索引或药品名称") @RequestParam(name = "keys") String keys,
@@ -58,7 +61,7 @@ public class DrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getDrugListByKeys", method = RequestMethod.GET)
+	@RequestMapping(value = "/base/getDrugListByKeys", method = RequestMethod.GET)
 	@ApiOperation(value = "根据药品的拼音缩写搜索药品", notes = "根据药品的拼音缩写搜索药品")
 	public Response getDrugListByKeys(
 			@ApiParam(name = "keys", value = "拼音首字母索引") @RequestParam(name = "keys") String keys,
@@ -79,7 +82,7 @@ public class DrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getDrugListByTag", method = RequestMethod.GET)
+	@RequestMapping(value = "/base/getDrugListByTag", method = RequestMethod.GET)
 	@ApiOperation(value = "根据标签搜索药品", notes = "根据标签搜索药品")
 	public Response getDrugListByTag(
 			@ApiParam(name = "tag", value = "标签") @RequestParam(name = "tag") String tag,
@@ -101,7 +104,7 @@ public class DrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getDrugByID", method = RequestMethod.GET)
+	@RequestMapping(value = "/base/getDrugByID", method = RequestMethod.GET)
 	@ApiOperation(value = "获取药品信息", notes = "获取药品信息")
 	public Response getDrugByID(
 			@ApiParam(name = "drugid", value = "药品id") @RequestParam(name = "drugid") Integer drugid,
@@ -126,9 +129,10 @@ public class DrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/uploadByExcel", method = RequestMethod.POST)
+	@RequestMapping(value = "/manager/uploadByExcel", method = RequestMethod.POST)
 	@ApiOperation(value = "新增上传药品信息", notes = "新增上传药品信息")
-	public Response uploadByExcel(@RequestPart(value="file") MultipartFile file,HttpServletRequest request,HttpServletResponse response) {
+	public Response uploadByExcel(@RequestPart(value="file") MultipartFile file,
+			HttpServletRequest request,HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "POST");
 		
@@ -147,6 +151,8 @@ public class DrugController {
 	    Response resp = null;
 	    
 	    try{
+	    	SessionUtil.getManagerId(request);
+	    	
 			ExcelUtils excelUtils = new ExcelUtils();
 	    	List<Drug> drugList = excelUtils.getExcelInfo(name, file);
 	    	drugService.uploadDrugList(drugList);
@@ -162,19 +168,21 @@ public class DrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/modifyDrug", method = RequestMethod.POST)
+	@RequestMapping(value = "/manager/modifyDrug", method = RequestMethod.POST)
 	@ApiOperation(value = "修改药品信息", notes = "{     \"id\": 23,     \"drugname\": \"硫酸亚铁片\",     \"standard\": \"0.3g*60片\",     \"category\": \"OTC\",     \"price\": 38,     \"unit\": \"盒\",     \"form\": \"片剂\",     \"singledose\": \"1\",     \"doseunit\": \"片\",     \"defaultusage\": \"饭前\",     \"frequency\": \"一天三次\",     \"fullkeys\": \"LSYTP\",     \"shortnamekeys\": \"LSYTP\"   }")
 	public Response modifyDrug(@RequestParam(value="drugInfo") String drugInfo,HttpServletRequest request,HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "POST");
 		Drug drug = null;
-		try{
+		try{			
 			drug = JSONUtils.getObjectByJson(drugInfo, Drug.class);
 		}catch (Exception e) {
-			return Response.Error(-1, "参数错误");
+			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
 		}
 		
 		try{
+			SessionUtil.getManagerId(request);
+			
 			if(drug.getId() != null){
 				int opRet = drugService.modify(drug);
 				if(opRet == 0){
@@ -183,7 +191,7 @@ public class DrugController {
 					return Response.OK(drug);    
 				}
 			}else{
-				return Response.NormalError("参数错误");
+				return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
 			}
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -194,12 +202,14 @@ public class DrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/delDrug", method = RequestMethod.POST)
-	@ApiOperation(value = "删除药品信息", notes = "{     \"id\": 23,     \"drugname\": \"硫酸亚铁片\",     \"standard\": \"0.3g*60片\",     \"category\": \"OTC\",     \"price\": 38,     \"unit\": \"盒\",     \"form\": \"片剂\",     \"singledose\": \"1\",     \"doseunit\": \"片\",     \"defaultusage\": \"饭前\",     \"frequency\": \"一天三次\",     \"fullkeys\": \"LSYTP\",     \"shortnamekeys\": \"LSYTP\"   }")
+	@RequestMapping(value = "/manager/delDrug", method = RequestMethod.POST)
+	@ApiOperation(value = "删除药品信息", notes ="" )
 	public Response delDrug(@RequestParam(value="drugid") int drugid, HttpServletRequest request,HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "POST");
 		try{
+			SessionUtil.getManagerId(request);
+			
 			Response resp = null;			
 			int optRet = drugService.del(drugid);	
 			if(optRet!=0){
@@ -257,31 +267,55 @@ public class DrugController {
 //	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getTags", method = RequestMethod.GET)
+	@RequestMapping(value = "/base/getTags", method = RequestMethod.GET)
 	@ApiOperation(value = "获取所有的tag", notes = "获取所有的tag")
 	public Response getTags(){
-		
-		List<Tag> taglist = drugService.getTags();
-		return Response.OK(taglist);
+		try{
+			List<DrugTag> taglist = drugService.getTags();
+			return Response.OK(taglist);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/addTag", method = RequestMethod.POST)
+	@RequestMapping(value = "/manager/addTag", method = RequestMethod.POST)
 	@ApiOperation(value = "添加药品标签", notes = "添加药品标签")
 	public Response addTag(@ApiParam(name = "drugid", value = "药品id") @RequestParam(value="drugid") int drugid,
-			@ApiParam(name="tagid", value="标签id") @RequestParam(value="tagid") int tagid,
-			@ApiParam(name="tag", value="标签名称") @RequestParam(value="tag") String tag){
-		
-		drugService.addTag(drugid, tagid, tag);
-		return Response.OK(null);
+			@ApiParam(name="tagid", value="标签id,传0则表示新建tag") @RequestParam(value="tagid") int tagid,
+			@ApiParam(name="tag", value="标签名称,只有tagid传0时才有效") @RequestParam(value="tag") String tag,
+			HttpServletRequest request,HttpServletResponse response){
+		try{
+			SessionUtil.getManagerId(request);
+			
+			drugService.addTag(drugid, tagid, tag);
+			return Response.OK(null);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}	
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/delTag", method = RequestMethod.POST)
+	@RequestMapping(value = "/manager/delTag", method = RequestMethod.POST)
 	@ApiOperation(value = "删除药品标签", notes = "删除药品标签")
-	public Response delTag(@ApiParam(name = "mapid", value = "药品id") @RequestParam(value="mapid") long mapid){
-		
-		drugService.delTag(mapid);
-		return Response.OK(null);
+	public Response delTag(@ApiParam(name = "mapid", value = "mapid") @RequestParam(value="mapid") long mapid,
+			HttpServletRequest request,HttpServletResponse response){
+		try{
+			SessionUtil.getManagerId(request);
+			
+			drugService.delTag(mapid);
+			return Response.OK(null);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}	
 	}
 }

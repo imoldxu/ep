@@ -9,27 +9,27 @@
 	    <result column="showname" property="showname" jdbcType="VARCHAR" />
   	</resultMap>
 
-	<select id="getDrugsByKeys" resultType="SimpleDrugInfo">
+	<select id="getDrugsByKeys" resultMap="SimpleDrugInfo">
 		SELECT id ,CONCAT(drugname,'--',standard,'--',company) as showname FROM t_drug WHERE iszy = 1 and (drugname LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
 	</select>
 	
-	<select id="getZyDrugsByKeys" resultType="SimpleDrugInfo">
+	<select id="getZyDrugsByKeys" resultMap="SimpleDrugInfo">
 		SELECT id ,CONCAT(drugname,'--',standard,'--',company) as showname FROM t_drug WHERE iszy = 2 and (drugname LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
 	</select>
 
-	<select id="getDrugsByKeysWithoutID" resultType="SimpleDrugInfo">
+	<select id="getDrugsByKeysWithoutID" resultMap="SimpleDrugInfo">
 		SELECT id ,CONCAT(drugname,'--',standard,'--',company) as showname FROM t_drug WHERE iszy = 1 and id != #{myid,jdbcType=INTEGER} AND (drugname LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
 	</select>
 	
-	<select id="getZyDrugsByKeysWithoutID" resultType="SimpleDrugInfo">
+	<select id="getZyDrugsByKeysWithoutID" resultMap="SimpleDrugInfo">
 		SELECT id ,CONCAT(drugname,'--',standard,'--',company) as showname FROM t_drug WHERE iszy = 2 and  id != #{myid,jdbcType=INTEGER} AND (drugname LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
 	</select>
 
-	<select id="getDrugByTag" resultType="SimpleDrugInfo">
-		SELECT t_drug.id, CONCAT(drugname,'--',standard,'--',company) as showname from t_drug LEFT JOIN t_tagmap ON t_drug.id = t_tagmap.tagetid LEFT JOIN t_tag ON t_tag.id = t_tagmap.tagid WHERE t_tag.tag = #{tag, jdbcType=VARCHAR} and iszy = 1;
+	<select id="getDrugByTag" resultMap="SimpleDrugInfo">
+		SELECT t_drug.id, CONCAT(drugname,'--',standard,'--',company) as showname from t_drug LEFT JOIN t_drug_tag_map ON t_drug.id = t_drug_tag_map.drugid LEFT JOIN t_drug_tag ON t_drug_tag.id = t_drug_tag_map.tagid WHERE t_drug_tag.tag = #{tag, jdbcType=VARCHAR} and iszy = 1;
 	</select>
 	
-	<select id="getZyDrugByTag" resultType="SimpleDrugInfo">
-		SELECT t_drug.id, CONCAT(drugname,'--',standard,'--',company) as showname from t_drug LEFT JOIN t_tagmap ON t_drug.id = t_tagmap.tagetid LEFT JOIN t_tag ON t_tag.id = t_tagmap.tagid WHERE t_tag.tag = #{tag, jdbcType=VARCHAR} and iszy = 2;
+	<select id="getZyDrugByTag" resultMap="SimpleDrugInfo">
+		SELECT t_drug.id, CONCAT(drugname,'--',standard,'--',company) as showname from t_drug LEFT JOIN t_drug_tag_map ON t_drug.id = t_drug_tag_map.drugid LEFT JOIN t_drug_tag ON t_drug_tag.id = t_drug_tag_map.tagid WHERE t_drug_tag.tag = #{tag, jdbcType=VARCHAR} and iszy = 2;
 	</select>
 </mapper>
