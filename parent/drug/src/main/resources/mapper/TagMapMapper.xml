@@ -11,7 +11,7 @@
 	    <result column="tagname" property="tagname" jdbcType="VARCHAR" />
   	</resultMap>
 
-	<select id="getTagsByTargetId" resultMap="TagInfo">
+	<select id="getTagsByDrugId" resultMap="TagInfo">
 		select  t_drug_tag_map.id, tagid ,drugid, tag as tagname from t_drug_tag_map LEFT JOIN t_drug_tag ON t_drug_tag_map.tagid = t_drug_tag.id where t_drug_tag_map.drugid = #{drugid,jdbcType=INTEGER}
 	</select>
 

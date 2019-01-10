@@ -29,8 +29,8 @@ public class OrderController{
 	OrderService orderService;
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/user/getPayToken", method = RequestMethod.POST)
-	@ApiOperation(value = "获取支付凭证", notes = "获取支付凭证")
+	@RequestMapping(value = "/getPayToken", method = RequestMethod.POST)
+	@ApiOperation(value = "获取支付凭证", notes = "用户接口")
 	public Response getPayToken(@ApiParam(name="payWay", value = "支付方式") @RequestParam(name="payWay") int payWay,
 			@ApiParam(name="oid", value = "订单id") @RequestParam(name="oid") Long oid,
 			HttpServletRequest request, HttpServletResponse resp) {
@@ -50,7 +50,7 @@ public class OrderController{
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/notify", method = RequestMethod.POST)
-	@ApiOperation(value = "创建支付通知", notes = "创建支付通知")
+	@ApiOperation(value = "创建支付通知", notes = "系统通用接口")
 	public void notify(@ApiParam(name="oid", value = "订单id") @RequestParam(name="oid") Long oid) {
 		try{
 			orderService.payOver(oid);
@@ -62,8 +62,8 @@ public class OrderController{
 	}
 
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/store/charge", method = RequestMethod.POST)
-	@ApiOperation(value = "店铺充值", notes = "店铺充值")
+	@RequestMapping(value = "/charge", method = RequestMethod.POST)
+	@ApiOperation(value = "店铺充值", notes = "药房接口")
 	public Response charge(@ApiParam(name="amount", value = "金额") @RequestParam(name="amount") int amount,
 			HttpServletRequest request, HttpServletResponse reps) {
 		try{

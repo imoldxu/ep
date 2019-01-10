@@ -1,6 +1,7 @@
 package com.ly.service.controller;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +51,10 @@ public class UserController{
 		} else {
 			try{
 				User user = userService.loginByWx(wxCode);
+				String sessionID = request.getSession().getId();
+				sessionID = Base64.getEncoder().encodeToString(sessionID.getBytes());
+				user.setSessionID(sessionID);
+				
 				SessionUtil.setUserId(request, user.getId());
 				return Response.OK(user);
 			}catch (IOException e) {
@@ -91,6 +96,10 @@ public class UserController{
 			HttpServletRequest request, HttpServletResponse response) {
 		try{
 			User user = userService.login(phone, password);
+			String sessionID = request.getSession().getId();
+			sessionID = Base64.getEncoder().encodeToString(sessionID.getBytes());
+			user.setSessionID(sessionID);
+			
 			SessionUtil.setUserId(request, user.getId());
 			return Response.OK(user);
 		}catch (HandleException e) {

@@ -102,7 +102,7 @@ public class DoctorService {
 		Example ex = new Example(Doctor.class);
 		ex.createCriteria().andEqualTo("phone", phone);
 		Doctor doctor = doctorMapper.selectOneByExample(ex);
-		if(doctor == null){
+		if(doctor == null){//用户不存在
 			doctor = doctorMapper.selectByPrimaryKey(doctorid);
 			if(doctor == null){
 				throw new HandleException(ErrorCode.ARG_ERROR, "参数错误");
@@ -116,8 +116,11 @@ public class DoctorService {
 				
 				doctorMapper.updateByPrimaryKey(doctor);
 			}
-		}else{
+		}else{//用户存在
 			Doctor wxDoctor = doctorMapper.selectByPrimaryKey(doctorid);
+			if(doctorid == doctor.getId()){//若是要绑定的id就是用户现在的id，则什么都不做
+				return doctor;
+			}
 			if(PasswordUtil.isEqual(doctor.fetchPassword(), password, doctor.fetchPwdnonce())){
 				doctor.setWxunionid(wxDoctor.fetchWxunionid());
 				doctorMapper.updateByPrimaryKey(doctor);

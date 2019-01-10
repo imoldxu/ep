@@ -1,6 +1,7 @@
 package com.ly.service.controller;
 
 import java.io.IOException;
+import java.util.Base64;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,9 @@ public class DoctorController {
 		
 		try {
 			Doctor doctor = doctorService.loginByWx(wxCode);
+			String sessionID = request.getSession().getId();
+			sessionID = Base64.getEncoder().encodeToString(sessionID.getBytes());
+			doctor.setSessionID(sessionID);
 			SessionUtil.setDoctorId(request, doctor.getId());
 			return Response.OK(doctor);
 		} catch (IOException e) {
@@ -54,9 +58,9 @@ public class DoctorController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(path="/login", method = RequestMethod.GET)
+	@RequestMapping(path="/login", method = RequestMethod.POST)
 	@ApiOperation(value = "账号登录", notes = "账号登录")
-	public Response Login(@ApiParam(name="phone", value="微信授权码") @RequestParam(name="phone") String phone,
+	public Response Login(@ApiParam(name="phone", value="账号") @RequestParam(name="phone") String phone,
 			@ApiParam(name="password", value="密码") @RequestParam(name="password") String password, HttpServletRequest request,
 			HttpServletResponse response){
 		try{
@@ -88,14 +92,13 @@ public class DoctorController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(path="/register", method = RequestMethod.POST)
-	@ApiOperation(value = "注册账户", notes = "注册账户")
+	@ApiOperation(value = "注册账户", notes = "医生调用")
 	public Response register(@ApiParam(name="phone", value="微信授权码") @RequestParam(name="phone") String phone,
 			@ApiParam(name="password", value="密码") @RequestParam(name="password") String password,
 			HttpServletRequest request, HttpServletResponse response){
 		try{
-			Doctor doctor = doctorService.register(phone, password);
+			doctorService.register(phone, password);
 			
-			//SessionUtil.setDoctorId(request, doctor.getId());
 			return Response.OK(null);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -130,7 +133,7 @@ public class DoctorController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(path="/bind", method = RequestMethod.POST)
 	@ApiOperation(value = "绑定已有的账户", notes = "绑定已经有的账户,或者新设置一个账号和密码")
-	public Response bind(@ApiParam(name="phone", value="微信授权码") @RequestParam(name="phone") String phone,
+	public Response bind(@ApiParam(name="phone", value="账号") @RequestParam(name="phone") String phone,
 			@ApiParam(name="password", value="密码") @RequestParam(name="password") String password,
 			 HttpServletRequest request, HttpServletResponse response){
 		try{

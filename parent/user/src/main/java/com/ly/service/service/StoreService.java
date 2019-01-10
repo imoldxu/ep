@@ -2,6 +2,7 @@ package com.ly.service.service;
 
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -97,5 +98,19 @@ public class StoreService {
 		storeMapper.insertUseGeneratedKeys(store);
 				
 		return store;
+	}
+
+	public List<Store> getStoreByName(String name, int pageIndex, int pageSize) {
+		Example ex = new Example(Store.class);
+		if(name != null && !name.isEmpty()){
+			ex.createCriteria().andLike("name", "%"+name+"%");
+		}
+		ex.setOrderByClause("id DESC");
+			
+		
+		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
+		List<Store> ret = storeMapper.selectByExampleAndRowBounds(ex, rowBounds);
+		
+		return ret;
 	}
 }

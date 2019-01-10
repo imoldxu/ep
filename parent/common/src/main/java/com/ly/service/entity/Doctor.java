@@ -57,6 +57,9 @@ public class Doctor {
 	@Transient
 	private int subscribe;//是否关注公众号
 	
+	@Transient
+	private String sessionID;
+	
 	public int getId() {
 		return id;
 	}
@@ -135,6 +138,14 @@ public class Doctor {
 
 	public void setPwdnonce(String pwdnonce) {
 		this.pwdnonce = pwdnonce;
+	}
+
+	public String getSessionID() {
+		return sessionID;
+	}
+
+	public void setSessionID(String sessionID) {
+		this.sessionID = sessionID;
 	}
 	
 }

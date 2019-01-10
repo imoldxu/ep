@@ -49,7 +49,7 @@ public class ManagerController {
 	}
 
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	@ApiOperation(value = "登录", notes = "登录")
 	public Response logout(HttpServletRequest request, HttpServletResponse response){
 		

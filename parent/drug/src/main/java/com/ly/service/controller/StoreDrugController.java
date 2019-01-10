@@ -31,8 +31,8 @@ public class StoreDrugController {
 	StoreDrugService drugService;
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/manager/add", method = RequestMethod.POST)
-	@ApiOperation(value = "为药店分配药品", notes = "为药店分配药品")
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	@ApiOperation(value = "为药店分配药品", notes = "管理接口")
 	public Response add(@ApiParam(name = "storeid", value = "药店编号") @RequestParam(name = "storeid") int storeid,
 			@ApiParam(name = "drugid", value = "药品id") @RequestParam(name = "drugid") int drugid,
 			@ApiParam(name = "drugName", value = "药品名称") @RequestParam(name = "drugName") String drugName,
@@ -56,15 +56,15 @@ public class StoreDrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/store/upDrug", method = RequestMethod.POST)
-	@ApiOperation(value = "上药", notes = "上药")
+	@RequestMapping(value = "/upDrug", method = RequestMethod.POST)
+	@ApiOperation(value = "上药", notes = "药房接口")
 	public Response upDrug(@ApiParam(name = "storedrugId", value = "药店药品id") @RequestParam(name = "storedrugId") Long storedrugId,
 			HttpServletRequest request, HttpServletResponse response){
 		
 		try{
 			Integer storeid = SessionUtil.getStoreId(request);
-			drugService.upDrug(storeid, storedrugId);
-			return Response.OK(null);
+			StoreDrug ret = drugService.upDrug(storeid, storedrugId);
+			return Response.OK(ret);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		} catch(Exception e){
@@ -74,14 +74,14 @@ public class StoreDrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/store/downDrug", method = RequestMethod.POST)
-	@ApiOperation(value = "下药", notes = "下药")
+	@RequestMapping(value = "/downDrug", method = RequestMethod.POST)
+	@ApiOperation(value = "下药", notes = "药房接口")
 	public Response downDrug(@ApiParam(name = "storedrugId", value = "药店药品id") @RequestParam(name = "storedrugId") Long storedrugId,
 			HttpServletRequest request, HttpServletResponse response){
 		try{
 			Integer storeid = SessionUtil.getStoreId(request);
-			drugService.downDrug(storeid, storedrugId);			
-			return Response.OK(null);
+			StoreDrug ret = drugService.downDrug(storeid, storedrugId);			
+			return Response.OK(ret);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		} catch(Exception e){
@@ -91,8 +91,8 @@ public class StoreDrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/manager/getAllStoreDrugList", method = RequestMethod.GET)
-	@ApiOperation(value = "获取所有药房的药品清单", notes = "获取所有药房的药品清单")
+	@RequestMapping(value = "/getAllStoreDrugList", method = RequestMethod.GET)
+	@ApiOperation(value = "获取所有药房的药品清单", notes = "管理接口")
 	public Response getAllStoreDrugList(@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
 			@ApiParam(name = "pageSize", value = "每页数量") @RequestParam(name = "pageSize")int pageSize,
 			HttpServletRequest request, HttpServletResponse response){
@@ -109,8 +109,8 @@ public class StoreDrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/store/getStoreDrugList", method = RequestMethod.GET)
-	@ApiOperation(value = "获取药房的药品清单", notes = "获取药房的药品清单")
+	@RequestMapping(value = "/getStoreDrugList", method = RequestMethod.GET)
+	@ApiOperation(value = "获取药房的药品清单", notes = "药房接口")
 	public Response getStoreDrugList(@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
 			@ApiParam(name = "pageSize", value = "每页数量") @RequestParam(name = "pageSize")int pageSize,
 			HttpServletRequest request, HttpServletResponse response){

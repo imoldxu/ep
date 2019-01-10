@@ -95,7 +95,7 @@ public class Hospital {
 		this.latitude = latitude;
 	}
 
-	public String getPwdnonce() {
+	public String fetchPwdnonce() {
 		return pwdnonce;
 	}
 

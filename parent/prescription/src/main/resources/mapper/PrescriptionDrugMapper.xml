@@ -2,59 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ly.service.mapper.StoreMapper" >
 		
-	<resultMap id="Store" type="com.ly.service.entity.Store" >
-	    <id column="id" property="id" jdbcType="INTEGER" />
-	    <result column="name" property="name" jdbcType="VARCHAR" />
-	    <result column="address" property="address" jdbcType="VARCHAR" />
-	    <result column="distance" property="distance" jdbcType="INTEGER" />
+	<resultMap id="PDrug" type="com.ly.service.entity.PrescriptionDrug" >
+	    <id column="id" property="id" jdbcType="BIGINT" />
+	    <result column="prescriptionid" property="prescriptionid" jdbcType="BIGINT" />
+	    <result column="sellerid" property="sellerid" jdbcType="INTEGER" />
+	    <result column="drugid" property="drugid" jdbcType="INTEGER" />
+	    <result column="drugname" property="drugname" jdbcType="VARCHAR" />
+	    <result column="standard" property="standard" jdbcType="VARCHAR" />
+	    <result column="category" property="category" jdbcType="VARCHAR" />
+	    <result column="unit" property="unit" jdbcType="VARCHAR" />
+	    <result column="num" property="num" jdbcType="INTEGER" />
+	    <result column="soldnumber" property="soldnumber" jdbcType="INTEGER" />
+	    <result column="singledose" property="singledose" jdbcType="VARCHAR" />
+	    <result column="myusage" property="myusage" jdbcType="VARCHAR" />
+	    <result column="frequency" property="frequency" jdbcType="VARCHAR" />
+	    <result column="sellfee" property="sellfee" jdbcType="INTEGER" />
   	</resultMap>
-
-	<select id="getStoreByDrug" resultType="Store">
-		SELECT t_store.id, t_store.name, t_store.address, ROUND(
-	        6378.138 * 2 * ASIN(
-	            SQRT(
-	                POW(
-	                    SIN(
-	                    	(
-	                          #{lat,jdbcType=DOUBLE} * PI() / 180 - t_store.latitude * PI() / 180
-	                        ) / 2
-	                    ),
-	                    2
-	                ) + COS( #{lat,jdbcType=DOUBLE} * PI() / 180) * COS( t_store.latitude * PI() / 180) * POW(
-	                    SIN(
-	                        (
-	                            #{lon,jdbcType=DOUBLE} * PI() / 180 - t_store.longitude * PI() / 180
-	                        ) / 2
-	                    ),
-	                    2
-	                )
-	            )
-	        ) * 1000
-	    ) AS distance FROM t_store LEFT JOIN t_store_drug ON t_store.id = t_store_drug.storeid WHERE t_store_drug.drugid = #{drugid,jdbcType=INTEGER} ORDER BY distance ASC
-	</select>
 	
-	<select id="getStoreByGPS" resultType="Store">
-		SELECT t_store.id, t_store.name, t_store.address, ROUND(
-	        6378.138 * 2 * ASIN(
-	            SQRT(
-	                POW(
-	                    SIN(
-	                    	(
-	                          #{lat,jdbcType=DOUBLE} * PI() / 180 - t_store.latitude * PI() / 180
-	                        ) / 2
-	                    ),
-	                    2
-	                ) + COS( #{lat,jdbcType=DOUBLE} * PI() / 180) * COS( t_store.latitude * PI() / 180) * POW(
-	                    SIN(
-	                        (
-	                            #{lon,jdbcType=DOUBLE} * PI() / 180 - t_store.longitude * PI() / 180
-	                        ) / 2
-	                    ),
-	                    2
-	                )
-	            )
-	        ) * 1000
-	    ) AS distance FROM t_store WHERE t_store.latitude BETWEEN #{lat,jdbcType=DOUBLE}-0.1 AND #{lat,jdbcType=DOUBLE}+0.1 AND t_store.longitude BETWEEN #{lon,jdbcType=DOUBLE}-0.1 AND #{lon,jdbcType=DOUBLE}+0.1 ORDER BY distance ASC LIMIT 10
+	<select id="getPrescriptDrugsByStore" resultMap="PDrug">
+		select t_prescription_drug.id, t_prescription_drug.prescriptionid, t_prescription_drug.sellerid, t_prescription_drug.drugid, t_prescription_drug.drugname,
+t_prescription_drug.standard, t_prescription_drug.category, t_prescription_drug.unit, t_sales_record.num as number, t_prescription_drug.soldnumber, t_prescription_drug.singledose,
+t_prescription_drug.myusage, t_prescription_drug.frequency, t_prescription_drug.sellfee from t_prescription_drug LEFT JOIN t_sales_record ON t_prescription_drug.drugid = t_sales_record.drugid AND t_prescription_drug.prescriptionid = t_sales_record.prescriptionid 
+WHERE t_prescription_drug.prescriptionid = #{pid,jdbcType=BIGINT} AND t_sales_record.storeid = #{storeID,jdbcType=INTEGER}
 	</select>
 	
 </mapper>

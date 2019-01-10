@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
 import com.ly.service.entity.Store;
-import com.ly.service.feign.client.DrugClient;
 import com.ly.service.service.StoreService;
+import com.ly.service.utils.JSONUtils;
 import com.ly.service.utils.SessionUtil;
 
 import io.swagger.annotations.Api;
@@ -34,7 +34,7 @@ public class StoreController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	@ApiOperation(value = "注册药店", notes = "注册药店")
+	@ApiOperation(value = "注册药店", notes = "由管理员调用,注册药店")
 	public Response register(@ApiParam(name = "name", value = "药店名") @RequestParam(name = "name") String name,
 			@ApiParam(name = "address", value = "地址") @RequestParam(name = "address")String address,
 			@ApiParam(name = "email", value = "邮箱") @RequestParam(name = "email")String email,
@@ -52,16 +52,16 @@ public class StoreController {
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		} catch(Exception e){
-			return Response.Error(-1, "系统异常");
+			return Response.SystemError();
 		}
 			
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	@ApiOperation(value = "登录", notes = "登录")
+	@ApiOperation(value = "登录", notes = "由药房自己调用登录")
 	public Response login(@ApiParam(name = "email", value = "邮箱") @RequestParam(name = "email")String email,
-			@ApiParam(name = "password", value = "密码") @RequestParam(name = "password") String password,
+			@ApiParam(name = "password", value = "密码需进过md5加密上传") @RequestParam(name = "password") String password,
 			HttpServletRequest request, HttpServletResponse response){
 		
 		try{
@@ -79,9 +79,9 @@ public class StoreController {
 
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/modifyPwd", method = RequestMethod.POST)
-	@ApiOperation(value = "登录", notes = "登录")
-	public Response modifyPwd(@ApiParam(name = "oldPassword", value = "密码") @RequestParam(name = "oldPassword") String oldPassword,
-			@ApiParam(name = "newPassword", value = "密码") @RequestParam(name = "newPassword") String newPassword,
+	@ApiOperation(value = "修改密码", notes = "由药房自己调用")
+	public Response modifyPwd(@ApiParam(name = "oldPassword", value = "旧密码") @RequestParam(name = "oldPassword") String oldPassword,
+			@ApiParam(name = "newPassword", value = "新密码") @RequestParam(name = "newPassword") String newPassword,
 			HttpServletRequest request, HttpServletResponse response){
 		
 		try{
@@ -100,7 +100,7 @@ public class StoreController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	@ApiOperation(value = "登出", notes = "登出")
+	@ApiOperation(value = "登出", notes = "由药房自己调用")
 	public Response logout(HttpServletRequest request, HttpServletResponse response){
 		
 		try{
@@ -116,10 +116,10 @@ public class StoreController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getStoreByDrug", method = RequestMethod.GET)
-	@ApiOperation(value = "根据药品获取附近的药店", notes = "根据药品获取附近的药店")
-	public Response getStoreByDrug(@ApiParam(name = "drugid", value = "药品id") @RequestParam(name = "drugid") int drugid,
-			@ApiParam(name = "latitude", value = "纬度") @RequestParam(name = "latitude") int latitude,
-			@ApiParam(name = "longitude", value = "经度") @RequestParam(name = "longitude") int longitude,
+	@ApiOperation(value = "根据单个药品获取附近的药店", notes = "由用户调用")
+	public Response getStoreByDrug(@ApiParam(name = "drugid", value = "药品id") @RequestParam(name = "drugid") Integer drugid,
+			@ApiParam(name = "latitude", value = "纬度") @RequestParam(name = "latitude") Double latitude,
+			@ApiParam(name = "longitude", value = "经度") @RequestParam(name = "longitude") Double longitude,
 			HttpServletRequest request, HttpServletResponse response){
 		try{
 			List<Store> list = storeService.getStoreByDrug(drugid, latitude, longitude);
@@ -135,13 +135,41 @@ public class StoreController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getStoreByGPS", method = RequestMethod.GET)
-	@ApiOperation(value = "根据药品获取附近的药店", notes = "根据药品获取附近的药店")
-	public Response getStoreByGPS(@ApiParam(name = "drugList", value = "药品清单") @RequestParam(name = "drugList") List<Integer> drugList,
-			@ApiParam(name = "latitude", value = "纬度") @RequestParam(name = "latitude") int latitude,
-			@ApiParam(name = "longitude", value = "经度") @RequestParam(name = "longitude") int longitude,
+	@ApiOperation(value = "根据药品获取附近的药店", notes = "由用户调用")
+	public Response getStoreByGPS(@ApiParam(name = "drugListStr", value = "药品清单") @RequestParam(name = "drugListStr") String drugListStr,
+			@ApiParam(name = "latitude", value = "纬度") @RequestParam(name = "latitude") Double latitude,
+			@ApiParam(name = "longitude", value = "经度") @RequestParam(name = "longitude") Double longitude,
 			HttpServletRequest request, HttpServletResponse response){
+		
+		
+		List<Integer> drugList = null;
+		try{
+			drugList  = JSONUtils.getObjectListByJson(drugListStr, Integer.class);
+		}catch (Exception e) {
+			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
+		}
+		
 		try{
 			List<Store> list = storeService.getStoreByGPS(latitude, longitude, drugList);
+			return Response.OK(list);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		} catch(Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getStoreByName", method = RequestMethod.GET)
+	@ApiOperation(value = "获取所有的药店", notes = "管理接口")
+	public Response getAllStore(@ApiParam(name = "name", value = "药房名称,传入空串则表示搜索所有药店") @RequestParam(name = "name") String name,
+			@ApiParam(name = "pageIndex", value = "页码1-n") @RequestParam(name = "pageIndex") int pageIndex,
+			@ApiParam(name = "pageSize", value = "每页最大数量") @RequestParam(name = "pageSize") int pageSize,
+			HttpServletRequest request, HttpServletResponse response){
+		
+		try{
+			List<Store> list = storeService.getStoreByName(name, pageIndex, pageSize);
 			return Response.OK(list);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());

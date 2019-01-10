@@ -34,8 +34,8 @@ public class AccountController {
 	AccountService accountService;
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/manager/getAllSellerAccount", method = RequestMethod.GET)
-	@ApiOperation(value = "获取所有销售的账户", notes = "获取所有销售的账户")
+	@RequestMapping(value = "/getAllSellerAccount", method = RequestMethod.GET)
+	@ApiOperation(value = "获取所有销售的账户", notes = "管理接口")
 	public Response getAllSellerAccount(@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
 			@ApiParam(name = "pageSize", value = "最大数") @RequestParam(name = "pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse resp) {
@@ -53,8 +53,8 @@ public class AccountController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/manager/getAllStoreAccount", method = RequestMethod.GET)
-	@ApiOperation(value = "获取所有销售的账户", notes = "获取所有销售的账户")
+	@RequestMapping(value = "/getAllStoreAccount", method = RequestMethod.GET)
+	@ApiOperation(value = "获取所有销售的账户", notes = "管理接口")
 	public Response getAllStoreAccount(@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
 			@ApiParam(name = "pageSize", value = "最大数") @RequestParam(name = "pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse resp) {
@@ -72,8 +72,8 @@ public class AccountController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/seller/getSellerBalance", method = RequestMethod.GET)
-	@ApiOperation(value = "获取销售的余额", notes = "获取销售的余额")
+	@RequestMapping(value = "/getSellerBalance", method = RequestMethod.GET)
+	@ApiOperation(value = "获取销售的余额", notes = "销售人员接口")
 	public Response getSellerBalance(HttpServletRequest request, HttpServletResponse resp) {
 		try{
 			int sellerid = SessionUtil.getSellerId(request);
@@ -88,8 +88,8 @@ public class AccountController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/seller/getSellerAccountRecord", method = RequestMethod.GET)
-	@ApiOperation(value = "获取销售的余额", notes = "获取销售的余额")
+	@RequestMapping(value = "/getSellerAccountRecord", method = RequestMethod.GET)
+	@ApiOperation(value = "获取销售的记录", notes = "销售人员接口")
 	public Response getSellerAccountRecord(@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
 			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse resp) {
@@ -106,8 +106,8 @@ public class AccountController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/store/getStoreBalance", method = RequestMethod.GET)
-	@ApiOperation(value = "获取销售的余额", notes = "获取销售的余额")
+	@RequestMapping(value = "/getStoreBalance", method = RequestMethod.GET)
+	@ApiOperation(value = "获取销售的余额", notes = "药房接口")
 	public Response getStoreBalance(HttpServletRequest request, HttpServletResponse resp) {
 		try{
 			int id = SessionUtil.getStoreId(request);
@@ -122,8 +122,8 @@ public class AccountController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/store/getStoreAccountRecord", method = RequestMethod.GET)
-	@ApiOperation(value = "获取店铺账户记录", notes = "获取店铺账户记录")
+	@RequestMapping(value = "/getStoreAccountRecord", method = RequestMethod.GET)
+	@ApiOperation(value = "获取店铺账户记录", notes = "药房接口")
 	public Response getStoreAccountRecord(@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
 			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse resp) {
@@ -140,8 +140,8 @@ public class AccountController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/manager/updateSellerBalance", method = RequestMethod.POST)
-	@ApiOperation(value = "调整销售的账户", notes = "调整销售的账户")
+	@RequestMapping(value = "/updateSellerBalance", method = RequestMethod.POST)
+	@ApiOperation(value = "调整销售的账户", notes = "管理接口")
 	public Response updateSellerBalance(@ApiParam(name = "sellerid", value = "销售的id") @RequestParam(name = "sellerid") int sellerid,
 			@ApiParam(name = "type", value = "1、add, 2、reduce") @RequestParam(name = "type") int type,
 			@ApiParam(name = "amount", value = "调整金额") @RequestParam(name = "amount") int amount,
@@ -160,8 +160,8 @@ public class AccountController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/manager/updateStoreBalance", method = RequestMethod.POST)
-	@ApiOperation(value = "调整销售的账户", notes = "调整销售的账户")
+	@RequestMapping(value = "/updateStoreBalance", method = RequestMethod.POST)
+	@ApiOperation(value = "调整销售的账户", notes = "管理接口")
 	public Response updateStoreBalance(@ApiParam(name = "storeid", value = "药房id") @RequestParam(name = "storeid") int storeid,
 			@ApiParam(name = "type", value = "1、add, 2、reduce") @RequestParam(name = "type") int type,
 			@ApiParam(name = "amount", value = "调整金额") @RequestParam(name = "amount") int amount,

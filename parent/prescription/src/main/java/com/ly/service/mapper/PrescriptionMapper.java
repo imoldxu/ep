@@ -10,8 +10,8 @@ import com.ly.service.entity.Prescription;
 
 public interface PrescriptionMapper extends BaseMapper<Prescription> {
 
-	List<Prescription> getStorePrescripts(@Param(value="storeid")Integer storeid,
+	List<Prescription> getStorePrescripts(@Param(value="storeId")Integer storeId,
 			@Param(value="offset")Integer offset,
-			@Param(value="size")Integer size);
+			@Param(value="pageSize")Integer pageSize);
 	
 }

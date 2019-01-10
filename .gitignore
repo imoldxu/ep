@@ -20,3 +20,21 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+zipkin/target/classes/META-INF/maven/com.ly/zipkin/pom.properties
+parent/user/target/classes/META-INF/maven/com.ly.service/user/pom.xml
+parent/user/target/classes/META-INF/maven/com.ly.service/user/pom.properties
+parent/user/target/classes/META-INF/MANIFEST.MF
+parent/user/target/classes/application.yml
+parent/user/target/classes/application.yml
+parent/user/target/classes/META-INF/MANIFEST.MF
+parent/user/target/classes/META-INF/maven/com.ly.service/user/pom.properties
+parent/user/target/classes/META-INF/maven/com.ly.service/user/pom.xml
+zipkin/target/classes/META-INF/maven/com.ly/zipkin/pom.properties
+parent/user/target/classes/application.yml
+parent/user/target/classes/META-INF/MANIFEST.MF
+parent/user/target/classes/META-INF/maven/com.ly.service/user/pom.properties
+parent/user/target/classes/META-INF/maven/com.ly.service/user/pom.xml
+zipkin/target/classes/META-INF/maven/com.ly/zipkin/pom.properties
+parent/user/target/classes/META-INF/MANIFEST.MF
+parent/user/target/classes/META-INF/maven/com.ly.service/user/pom.properties
+parent/user/target/classes/META-INF/maven/com.ly.service/user/pom.xml

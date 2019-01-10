@@ -93,6 +93,9 @@ public class User {
     @Transient
     private int subscribe;//是否关注微信公众号
 	
+    @Transient
+    private String sessionID;//是否关注微信公众号
+    
 	public int getAge() {
 		return age;
 	}
@@ -187,6 +190,14 @@ public class User {
 
 	public void setPwdnonce(String pwdnonce) {
 		this.pwdnonce = pwdnonce;
+	}
+
+	public String getSessionID() {
+		return sessionID;
+	}
+
+	public void setSessionID(String sessionID) {
+		this.sessionID = sessionID;
 	}
 	
 }

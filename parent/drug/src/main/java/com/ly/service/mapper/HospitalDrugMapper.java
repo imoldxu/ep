@@ -10,15 +10,15 @@ import com.ly.service.entity.HospitalDrug;
 
 public interface HospitalDrugMapper extends BaseMapper<HospitalDrug>{
 
-	 List<SimpleDrugInfo> getDrugsByKeys(@Param(value="mykeys")String mykeys);
+	 List<SimpleDrugInfo> getDrugsByKeys(@Param(value="hid")Integer hid, @Param(value="mykeys")String mykeys);
 	 
-	    List<SimpleDrugInfo> getZyDrugsByKeys(@Param(value="mykeys")String mykeys);
+	    List<SimpleDrugInfo> getZyDrugsByKeys(@Param(value="hid")Integer hid, @Param(value="mykeys")String mykeys);
 	    
-	    List<SimpleDrugInfo> getDrugsByKeysWithoutID(@Param(value="myid")Integer myid, @Param(value="mykeys")String mykeys);
+	    List<SimpleDrugInfo> getDrugsByKeysWithoutID(@Param(value="hid")Integer hid, @Param(value="myid")Integer myid, @Param(value="mykeys")String mykeys);
 	    
-	    List<SimpleDrugInfo> getZyDrugsByKeysWithoutID(@Param(value="myid")Integer myid, @Param(value="mykeys")String mykeys);
+	    List<SimpleDrugInfo> getZyDrugsByKeysWithoutID(@Param(value="hid")Integer hid, @Param(value="myid")Integer myid, @Param(value="mykeys")String mykeys);
 	    
-	    List<SimpleDrugInfo> getDrugByTag(@Param(value="tag")String tag);
+	    List<SimpleDrugInfo> getDrugByTag(@Param(value="hid")Integer hid, @Param(value="tag")String tag);
 
-	    List<SimpleDrugInfo> getZyDrugByTag(@Param(value="tag")String tag);
+	    List<SimpleDrugInfo> getZyDrugByTag(@Param(value="hid")Integer hid, @Param(value="tag")String tag);
 }

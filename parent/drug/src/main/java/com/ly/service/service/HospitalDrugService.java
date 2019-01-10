@@ -71,29 +71,29 @@ public class HospitalDrugService {
 		drugMapper.deleteByPrimaryKey(hdid);
 	}
 
-	public List<SimpleDrugInfo> getSimpleDrugListByKeys(int type, String keys) {
+	public List<SimpleDrugInfo> getSimpleDrugListByKeys(Integer hid, int type, String keys) {
 		List<SimpleDrugInfo> ret = new ArrayList<SimpleDrugInfo>();
 		
 		if(type == 1){
 			keys = keys.toUpperCase();
-			List<SimpleDrugInfo> matchList = drugMapper.getDrugsByKeys(keys);
+			List<SimpleDrugInfo> matchList = drugMapper.getDrugsByKeys(hid, keys);
 			if(matchList.isEmpty()){
-				ret = drugMapper.getDrugsByKeys("%"+keys+"%");	
+				ret = drugMapper.getDrugsByKeys(hid, "%"+keys+"%");	
 			}else{
 				ret.addAll(matchList);
 				Integer myid = matchList.get(0).getId();
-				List<SimpleDrugInfo> druglist = drugMapper.getDrugsByKeysWithoutID(myid, "%"+keys+"%");
+				List<SimpleDrugInfo> druglist = drugMapper.getDrugsByKeysWithoutID(hid, myid, "%"+keys+"%");
 				ret.addAll(druglist);
 			}
 		}else{
 			keys = keys.toUpperCase();
-			List<SimpleDrugInfo> matchList = drugMapper.getZyDrugsByKeys(keys);
+			List<SimpleDrugInfo> matchList = drugMapper.getZyDrugsByKeys(hid, keys);
 			if(matchList.isEmpty()){
-				ret = drugMapper.getZyDrugsByKeys("%"+keys+"%");	
+				ret = drugMapper.getZyDrugsByKeys(hid, "%"+keys+"%");	
 			}else{
 				ret.addAll(matchList);
 				Integer myid = matchList.get(0).getId();
-				List<SimpleDrugInfo> druglist = drugMapper.getZyDrugsByKeysWithoutID(myid, "%"+keys+"%");
+				List<SimpleDrugInfo> druglist = drugMapper.getZyDrugsByKeysWithoutID(hid, myid, "%"+keys+"%");
 				ret.addAll(druglist);
 			}
 		}
@@ -101,13 +101,13 @@ public class HospitalDrugService {
 		return ret;
 	}
 
-	public List<SimpleDrugInfo> getSimpleDrugListByTag(int type, String tag) {
+	public List<SimpleDrugInfo> getSimpleDrugListByTag(Integer hid, int type, String tag) {
 		List<SimpleDrugInfo> ret = null;
 		//先根据tag获取tag标签id，再获取该标签下的药品id,再根据药品id获取药品信息
 		if(type==1){
-			ret = drugMapper.getDrugByTag(tag);
+			ret = drugMapper.getDrugByTag(hid, tag);
 		}else{
-			ret = drugMapper.getDrugByTag(tag);	
+			ret = drugMapper.getZyDrugByTag(hid, tag);	
 		}
 		return ret;
 	}

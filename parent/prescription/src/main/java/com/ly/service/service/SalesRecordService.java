@@ -42,7 +42,7 @@ public class SalesRecordService {
 		Example ex = new Example(SalesRecord.class);
 		ex.createCriteria().andEqualTo("storeid", storeid);
 		ex.setOrderByClause("id DESC");
-		RowBounds rowBounds = new RowBounds(pageIndex*maxSize, maxSize);
+		RowBounds rowBounds = new RowBounds((pageIndex-1)*maxSize, maxSize);
 		List<SalesRecord> list = recordMapper.selectByExampleAndRowBounds(ex, rowBounds);
 		return list;
 	}

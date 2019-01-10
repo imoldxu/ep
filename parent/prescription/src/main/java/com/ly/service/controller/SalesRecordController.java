@@ -32,8 +32,8 @@ public class SalesRecordController {
 	SalesRecordService recordService;
 		
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/store/getRecordByStore", method = RequestMethod.GET)
-	@ApiOperation(value = "获取药房的销售记录", notes = "获取药房的销售记录")
+	@RequestMapping(value = "/getRecordByStore", method = RequestMethod.GET)
+	@ApiOperation(value = "获取药房的销售记录", notes = "药房接口")
 	public Response getRecordByStore(@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
 			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse response){
@@ -52,8 +52,8 @@ public class SalesRecordController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/seller/getRecordBySeller", method = RequestMethod.GET)
-	@ApiOperation(value = "获取销售的销售清单", notes = "获取销售的销售清单")
+	@RequestMapping(value = "/getRecordBySeller", method = RequestMethod.GET)
+	@ApiOperation(value = "获取销售的销售清单", notes = "销售接口")
 	public Response getRecordBySeller(@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
 			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse response){
@@ -71,8 +71,8 @@ public class SalesRecordController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/manager/getRecords", method = RequestMethod.GET)
-	@ApiOperation(value = "获取所有的销售清单", notes = "获取所有的销售清单")
+	@RequestMapping(value = "/getRecords", method = RequestMethod.GET)
+	@ApiOperation(value = "获取所有的销售清单", notes = "管理接口")
 	public Response getRecords(@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
 			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse response){

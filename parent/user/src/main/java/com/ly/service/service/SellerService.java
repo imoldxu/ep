@@ -2,14 +2,15 @@ package com.ly.service.service;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
-import com.ly.service.entity.Doctor;
 import com.ly.service.entity.Seller;
 import com.ly.service.mapper.SellerMapper;
 import com.ly.service.utils.PasswordUtil;
@@ -152,8 +153,12 @@ public class SellerService {
 //				
 //				sellerMapper.updateByPrimaryKey(seller);
 //			}
-		}else{
+		}else{	
+			if(sellerId == seller.getId()){//若绑定的账号与账户对应的账号相同，则不做任何处理
+				return seller;
+			}
 			Seller wxSeller = sellerMapper.selectByPrimaryKey(sellerId);
+			
 			if(PasswordUtil.isEqual(seller.fetchPassword(), password, seller.fetchPwdnonce())){
 				seller.setWxunionid(wxSeller.fetchWxunionid());
 				sellerMapper.updateByPrimaryKey(seller);
@@ -163,5 +168,14 @@ public class SellerService {
 			}
 		}
 		return seller;
+	}
+
+	public List<Seller> getAllSeller(Integer pageIndex, Integer pageSize) {
+		Example ex = new Example(Seller.class);
+		ex.setOrderByClause("id DESC");
+		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize,pageSize);
+		List<Seller> ret = sellerMapper.selectByExampleAndRowBounds(ex, rowBounds);
+		return ret;
+		
 	}
 }

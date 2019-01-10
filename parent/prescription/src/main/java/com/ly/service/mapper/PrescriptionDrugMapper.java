@@ -9,6 +9,6 @@ import com.ly.service.entity.PrescriptionDrug;
 
 public interface PrescriptionDrugMapper extends BaseMapper<PrescriptionDrug> {
    
-	List<PrescriptionDrug> getPrescriptDrugsByStore(@Param(value="storeid")Integer storeid,
+	List<PrescriptionDrug> getPrescriptDrugsByStore(@Param(value="storeID")Integer storeID,
 			@Param(value="pid")Long pid);
 }

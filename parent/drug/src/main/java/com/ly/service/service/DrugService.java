@@ -30,7 +30,7 @@ public class DrugService {
 	
 	public Drug getDrugById(Integer id){
 		Drug drug = drugMapper.selectByPrimaryKey(id);
-		List<DrugTagInfo> tags = getTagsByTargetId(drug.getId());
+		List<DrugTagInfo> tags = getTagsByDrugId(drug.getId());
 		drug.setTags(tags);
 		return drug;
 	}
@@ -60,7 +60,7 @@ public class DrugService {
 		if(type==1){
 			ret = drugMapper.getDrugByTag(tag);
 		}else{
-			ret = drugMapper.getDrugByTag(tag);	
+			ret = drugMapper.getZyDrugByTag(tag);	
 		}
 		//TODO 先根据tag获取tag标签id，再获取该标签下的药品id,再根据药品id获取药品信息，重新写联合查询的sql
 		return ret;
@@ -98,6 +98,7 @@ public class DrugService {
 	
 	public int modify(Drug drug){
 		int opRet = drugMapper.updateByPrimaryKey(drug);
+		//TODO:tag的更新处理，直接调用del和add，不在此处处理
 		return opRet;
 	}
 	
@@ -148,7 +149,7 @@ public class DrugService {
 		tagMapMapper.deleteByPrimaryKey(tagMapid);
 	}
 	
-	public List<DrugTagInfo> getTagsByTargetId(int targetid){
-		return tagMapMapper.getTagsByTargetId(targetid);
+	public List<DrugTagInfo> getTagsByDrugId(int targetid){
+		return tagMapMapper.getTagsByDrugId(targetid);
 	}
 }
