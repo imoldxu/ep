@@ -84,7 +84,7 @@ public class SalesRecord {
 
 	@Column(name = "createtime")
 	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
-	private Date createtime;//结算费
+	private Date createtime;//创建时间
 	
 	public Long getId() {
 		return id;

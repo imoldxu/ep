@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
-import com.ly.service.entity.Prescription;
 import com.ly.service.entity.SalesRecord;
 import com.ly.service.service.SalesRecordService;
 import com.ly.service.utils.SessionUtil;

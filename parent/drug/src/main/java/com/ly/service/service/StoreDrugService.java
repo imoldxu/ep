@@ -69,12 +69,12 @@ public class StoreDrugService {
 	public StoreDrug getDrugByStore(Integer storeid, Integer drugid) {
 		Example ex = new Example(StoreDrug.class);
 		ex.createCriteria().andEqualTo("storeid", storeid).andEqualTo("drugid", drugid);
-		StoreDrug store = storeDrugMapper.selectOneByExample(ex);
+		StoreDrug storeDrug = storeDrugMapper.selectOneByExample(ex);
 		
-		return store;
+		return storeDrug;
 	}
 
-	public StoreDrug add(int storeid, int drugid, String drugName, String stander ,String company, int price, int settlementPrice) {
+	public StoreDrug add(int storeid, int drugid, String drugName, String standard ,String company, int price, int settlementPrice) {
 		StoreDrug ret = getDrugByStore(storeid, drugid);
 		if(ret != null){
 			throw new HandleException(ErrorCode.NORMAL_ERROR, "该药品已经配置,无需重复配置");
@@ -84,7 +84,7 @@ public class StoreDrugService {
 		ret.setDrugcompany(company);
 		ret.setDrugid(drugid);
 		ret.setDrugname(drugName);
-		ret.setDrugstander(stander);
+		ret.setDrugstandard(standard);
 		ret.setPrice(price);
 		ret.setSettlementprice(settlementPrice);
 		ret.setState(StoreDrug.STATE_UP);
@@ -103,5 +103,16 @@ public class StoreDrugService {
 		List<StoreDrug> list= storeDrugMapper.selectByExampleAndRowBounds(ex, rowBounds);
 		
 		return list;
+	}
+
+	public StoreDrug modifyPrice(Integer storeid, Integer price, Long storedrugId) {
+		StoreDrug storeDrug = storeDrugMapper.selectByPrimaryKey(storedrugId);
+		if(storeDrug.getStoreid() != storeid){
+			throw new HandleException(ErrorCode.DOMAIN_ERROR, "你无权进行此操作");
+		}
+		storeDrug.setPrice(price);
+		storeDrugMapper.updateByPrimaryKey(storeDrug);
+		
+		return storeDrug;
 	}
 }

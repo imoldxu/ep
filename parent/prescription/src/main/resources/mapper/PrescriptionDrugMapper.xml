@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ly.service.mapper.StoreMapper" >
+<mapper namespace="com.ly.service.mapper.PrescriptionDrugMapper" >
 		
 	<resultMap id="PDrug" type="com.ly.service.entity.PrescriptionDrug" >
 	    <id column="id" property="id" jdbcType="BIGINT" />
@@ -16,13 +16,15 @@
 	    <result column="singledose" property="singledose" jdbcType="VARCHAR" />
 	    <result column="myusage" property="myusage" jdbcType="VARCHAR" />
 	    <result column="frequency" property="frequency" jdbcType="VARCHAR" />
-	    <result column="sellfee" property="sellfee" jdbcType="INTEGER" />
+	    <!--result column="sellfee" property="sellfee" jdbcType="INTEGER" /-->
+	    <result column="price" property="price" jdbcType="INTEGER" />
   	</resultMap>
 	
 	<select id="getPrescriptDrugsByStore" resultMap="PDrug">
 		select t_prescription_drug.id, t_prescription_drug.prescriptionid, t_prescription_drug.sellerid, t_prescription_drug.drugid, t_prescription_drug.drugname,
 t_prescription_drug.standard, t_prescription_drug.category, t_prescription_drug.unit, t_sales_record.num as number, t_prescription_drug.soldnumber, t_prescription_drug.singledose,
-t_prescription_drug.myusage, t_prescription_drug.frequency, t_prescription_drug.sellfee from t_prescription_drug LEFT JOIN t_sales_record ON t_prescription_drug.drugid = t_sales_record.drugid AND t_prescription_drug.prescriptionid = t_sales_record.prescriptionid 
+t_prescription_drug.myusage, t_prescription_drug.frequency, t_store_drug.price from t_prescription_drug LEFT JOIN t_sales_record ON t_prescription_drug.drugid = t_sales_record.drugid AND t_prescription_drug.prescriptionid = t_sales_record.prescriptionid 
+LEFT JOIN t_store_drug ON t_prescription_drug.drugid = t_store_drug.drugid AND t_sales_record.storeid = t_store_drug.storeid  
 WHERE t_prescription_drug.prescriptionid = #{pid,jdbcType=BIGINT} AND t_sales_record.storeid = #{storeID,jdbcType=INTEGER}
 	</select>
 	

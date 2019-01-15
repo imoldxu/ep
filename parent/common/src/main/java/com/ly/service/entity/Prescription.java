@@ -36,6 +36,10 @@ public class Prescription implements Serializable{
 	@ColumnType(jdbcType = JdbcType.INTEGER)
 	private Integer hospitalid;//医院号
 
+	@Column(name = "hospitalname")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String hospitalname;//医院名称
+	
 	@Column(name = "userid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
 	private Integer userid;//用户号
@@ -265,4 +269,13 @@ public class Prescription implements Serializable{
 	public void setUserid(Integer userid) {
 		this.userid = userid;
 	}
+
+	public String getHospitalname() {
+		return hospitalname;
+	}
+
+	public void setHospitalname(String hospitalname) {
+		this.hospitalname = hospitalname;
+	}
+	
 }

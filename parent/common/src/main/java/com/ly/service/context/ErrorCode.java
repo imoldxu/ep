@@ -24,4 +24,6 @@ public class ErrorCode {
 
 	public static final int DOMAIN_ERROR = 13;//权限异常
 
+	public static final int BALANCE_ERROR = 55;//余额不足
+
 }

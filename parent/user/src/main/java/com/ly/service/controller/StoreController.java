@@ -63,6 +63,8 @@ public class StoreController {
 	public Response login(@ApiParam(name = "email", value = "邮箱") @RequestParam(name = "email")String email,
 			@ApiParam(name = "password", value = "密码需进过md5加密上传") @RequestParam(name = "password") String password,
 			HttpServletRequest request, HttpServletResponse response){
+		response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+		response.setHeader("Access-Control-Allow-Methods", "GET, POST");
 		
 		try{
 			Store store = storeService.login(email, password);
@@ -72,7 +74,8 @@ public class StoreController {
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		} catch(Exception e){
-			return Response.Error(-1, "系统异常");
+			e.printStackTrace();
+			return Response.SystemError();
 		}
 			
 	}
@@ -93,7 +96,7 @@ public class StoreController {
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		} catch(Exception e){
-			return Response.Error(-1, "系统异常");
+			return Response.SystemError();
 		}
 			
 	}
@@ -109,7 +112,7 @@ public class StoreController {
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		} catch(Exception e){
-			return Response.Error(-1, "系统异常");
+			return Response.SystemError();
 		}
 			
 	}

@@ -161,7 +161,7 @@ public class AccountController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/updateStoreBalance", method = RequestMethod.POST)
-	@ApiOperation(value = "调整销售的账户", notes = "管理接口")
+	@ApiOperation(value = "调整药房的账户", notes = "管理接口")
 	public Response updateStoreBalance(@ApiParam(name = "storeid", value = "药房id") @RequestParam(name = "storeid") int storeid,
 			@ApiParam(name = "type", value = "1、add, 2、reduce") @RequestParam(name = "type") int type,
 			@ApiParam(name = "amount", value = "调整金额") @RequestParam(name = "amount") int amount,

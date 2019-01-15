@@ -55,11 +55,16 @@ public class StoreService {
 		List<Store> list = storeMapper.getStoreByGPS(lon, lat);
 		
 		String drugListStr = JSONUtils.getJsonString(drugList);
-		for(Store store: list){
+		for(int i=(list.size()-1); i>=0; i--){
+			Store store = list.get(i);
 			Response resp = drugClient.getDrugsInStore(store.getId(), drugListStr);
 			ObjectMapper om = new ObjectMapper();
 			List<StoreDrug> drugs = om.convertValue(resp.fetchOKData(), new TypeReference<List<StoreDrug>>() {});
-			store.setDruglist(drugs);
+			if(drugs.isEmpty()){
+				list.remove(store);//若是药房没有镀银的药则屏蔽掉该药房
+			}else{
+				store.setDruglist(drugs);
+			}
 		}
 		return list;
 	}
@@ -111,6 +116,14 @@ public class StoreService {
 		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
 		List<Store> ret = storeMapper.selectByExampleAndRowBounds(ex, rowBounds);
 		
+		return ret;
+	}
+
+	public Store getStore(Integer storeid) {
+		Store ret = storeMapper.selectByPrimaryKey(storeid);
+		if(ret == null){
+			throw new HandleException(ErrorCode.ARG_ERROR, "该药店不存在");
+		}
 		return ret;
 	}
 }

@@ -178,4 +178,12 @@ public class SellerService {
 		return ret;
 		
 	}
+
+	public Seller getSeller(Integer sellerid) {
+		Seller ret = sellerMapper.selectByPrimaryKey(sellerid);
+		if(ret == null){
+			throw new HandleException(ErrorCode.ARG_ERROR, "该销售不存在");
+		}
+		return ret;
+	}
 }

@@ -15,13 +15,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
-import com.ly.service.context.Response;
 import com.ly.service.context.SearchOption;
+import com.ly.service.entity.Doctor;
+import com.ly.service.entity.Hospital;
 import com.ly.service.entity.HospitalDrug;
 import com.ly.service.entity.Order;
 import com.ly.service.entity.Patient;
 import com.ly.service.entity.Prescription;
 import com.ly.service.entity.PrescriptionDrug;
+import com.ly.service.entity.Seller;
 import com.ly.service.entity.StoreDrug;
 import com.ly.service.feign.client.DrugClient;
 import com.ly.service.feign.client.UserClient;
@@ -57,7 +59,7 @@ public class PrescriptionService {
 		return 1;
 	}
 	
-	public int receive(int uid, Long pid){
+	public Prescription receive(int uid, Long pid){
 		Prescription p = getPrescriptionById(pid);
 		
 		if(p.getUserid() == null){
@@ -70,7 +72,7 @@ public class PrescriptionService {
 			throw new HandleException(ErrorCode.NORMAL_ERROR, "处方已经被领取，不可被重复领取");
 		}
 		
-		return 1;
+		return p;
 	}
 
 	private Prescription getPrescriptionById(Long pid) {
@@ -119,10 +121,10 @@ public class PrescriptionService {
 		return plist;
 	}
 	
-	public Prescription getPrescriptionDetail(Integer pid) throws HandleException{
+	public Prescription getPrescriptionDetail(Long pid) throws HandleException{
 		Prescription p = pMapper.selectByPrimaryKey(pid);
 		if(p == null){
-			throw new HandleException(-1, "处方不存在");
+			throw new HandleException(ErrorCode.ARG_ERROR, "处方不存在");
 		}
 		
 		Example ex = new Example(PrescriptionDrug.class);
@@ -152,17 +154,28 @@ public class PrescriptionService {
 		}
 		Date now = new Date();
 		perscription.setCreatetime(now);
-		perscription.setHospitalid(hospitalid);
-		perscription.setDoctorid(doctorid);
+		ObjectMapper om = new ObjectMapper();
+		//TODO:给处方设置医院名称
+		
 		//FIXME:医生的id，要根据医院、医生姓名、以及科室来提取，或者由医院传入医生的id
+		perscription.setDoctorid(doctorid);
+		Doctor doctor = om.convertValue(userClient.getDoctor(doctorid).fetchOKData(), Doctor.class);
+		perscription.setDoctorname(doctor.getName());
+		perscription.setDepartment(doctor.getDepartment());
+		perscription.setHospitalid(hospitalid);
+		Hospital hospital = om.convertValue(userClient.getHospital(hospitalid).fetchOKData(), Hospital.class);
+		perscription.setHospitalname(hospital.getName());
+		
 		pMapper.insertUseGeneratedKeys(perscription);
 		Long pid = perscription.getId();
 		
 		for(PrescriptionDrug pdrug : drugList){
 			pdrug.setPrescriptionid(pid);
-			ObjectMapper om = new ObjectMapper();
-			Response resp = drugClient.getHospitalDrug(pdrug.getDrugid(), perscription.getHospitalid());
-			HospitalDrug hospitalDrug = om.convertValue(resp.fetchOKData(), HospitalDrug.class);
+			HospitalDrug hospitalDrug = om.convertValue(drugClient.getHospitalDrug(pdrug.getDrugid(), perscription.getHospitalid()).fetchOKData(), HospitalDrug.class);
+			//FIXME:药名名称，规格从系统获取
+			pdrug.setSoldnumber(0);
+			pdrug.setDrugname(hospitalDrug.getDrugname());
+			pdrug.setStandard(hospitalDrug.getDrugstandard());
 			pdrug.setSellfee(hospitalDrug.getSellfee());
 			pdrug.setSellerid(hospitalDrug.getSellerid());
 		}
@@ -231,6 +244,7 @@ public class PrescriptionService {
 
 	@Transactional
 	public Order buyFromStore(Integer storeid, Long pid, List<TransactionDrug> transList) {
+		ObjectMapper om = new ObjectMapper();
 		Prescription p = null;
 		boolean islock = redissonUtil.tryLock("BUY_PRESCRIPTION_"+pid, TimeUnit.MILLISECONDS, 1000, 1500);
 		if(islock){
@@ -257,13 +271,17 @@ public class PrescriptionService {
 					    tDrug.setDoctorid(p.getDoctorid());
 					    tDrug.setDoctorname(p.getDoctorname());
 					    tDrug.setHospitalid(p.getHospitalid());
-					    //TODO:获取医院名称
-					    //tDrug.setHospitalname();
+					    //FIXME:获取医院名称
+					    Hospital hospital = om.convertValue(userClient.getHospital(p.getHospitalid()).fetchOKData(), Hospital.class);
+					    tDrug.setHospitalname(hospital.getName());
+					    
 					    tDrug.setDrugname(pDrug.getDrugname());
 					    tDrug.setSellerfee(pDrug.getSellfee());
 					    tDrug.setSellerid(pDrug.getSellerid());
-					    //TODO:获取销售胡名字
-					    //tDrug.setSellername(sellername);
+					    //FIXME:获取销售胡名字
+					    Seller seller = om.convertValue(userClient.getSeller(pDrug.getSellerid()).fetchOKData(), Seller.class);
+					    tDrug.setSellername(seller.getName());
+					    
 					    pDrug.setSoldnumber(pDrug.getSoldnumber()+tDrug.getNum());
 						isMatch = true;
 	
@@ -280,25 +298,36 @@ public class PrescriptionService {
 			throw new HandleException(ErrorCode.LOCK_ERROR, "系统异常");
 		}
 
-		Order order = orderService.createByStore(storeid, p.getUserid(), transList);
+		Order order = orderService.createByStore(storeid, transList);
 		return order;
 	}
 
 	public Prescription getPrescriptionDetailByStore(Integer storeid, Long pid) {
-		Prescription p = getPrescriptionById(pid);
+		Prescription p = getPrescriptionDetail(pid);
 		List<Integer> drugs = new ArrayList<Integer>();
 		List<PrescriptionDrug> drugList =  p.getDrugList();
 		for(PrescriptionDrug drug: drugList){
 			drugs.add(drug.getDrugid());
 		}
 		String drugsStr = JSONUtils.getJsonString(drugs);
-		Response resp = drugClient.getDrugsInStore(storeid, drugsStr);
 		ObjectMapper om = new ObjectMapper();
-		List<StoreDrug> storeDrugList = om.convertValue((String) resp.fetchOKData(), new TypeReference<List<StoreDrug>>() {});
+		List<StoreDrug> storeDrugList = om.convertValue(drugClient.getDrugsInStore(storeid, drugsStr).fetchOKData(), new TypeReference<List<StoreDrug>>() {});
 		
 		//药房显示的处方仅包含药房有的药品
-		for(PrescriptionDrug drug: drugList){
-			if(!storeDrugList.contains(drug.getDrugid())){
+		
+		for(int i=(drugList.size()-1); i>=0; i--){
+			PrescriptionDrug drug = drugList.get(i);
+//			if(!storeDrugList.contains(drug.getDrugid())){
+//				drugList.remove(drug);
+//			}
+			boolean isNeedRemove = true;
+			for(StoreDrug storeDrug : storeDrugList){
+				if(storeDrug.getDrugid().equals(drug.getDrugid())){
+					isNeedRemove = false;
+					break;
+				}
+			}
+			if(isNeedRemove){
 				drugList.remove(drug);
 			}
 		}
@@ -315,12 +344,30 @@ public class PrescriptionService {
 	}
 
 	public List<Prescription> getStorePrescriptions(Integer storeid, int pageIndex, int pageSize) {
-		
-		return null;
+		int offset = (pageIndex-1)*pageSize;
+		List<Prescription> ret = pMapper.getStorePrescripts(storeid, offset, pageSize);
+		return ret;
 	}
 	
-	public Prescription getStorePrescriptionDetail(Integer storeid, Long pid) {
+	public Prescription getStorePrescriptionDetail(Integer storeid, Long pid) {		
+		Prescription p = getPrescriptionById(pid);
+		if(p == null){
+			throw new HandleException(ErrorCode.ARG_ERROR, "参数错误");
+		}
+		List<PrescriptionDrug> ret = drugMapper.getPrescriptDrugsByStore(storeid, pid);
+		if(ret.isEmpty()){
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "该处方未在你的药店购药"); 
+		}
+		p.setDrugList(ret);
+		return p;
+	}
+
+	public Prescription getUserPrescriptionDetail(Integer uid, Long pid) {
 		
-		return null;
+		Prescription p = getPrescriptionDetail(pid);
+		if(p.getUserid() != uid){
+			throw new HandleException(ErrorCode.DOMAIN_ERROR, "你无权进行此操作");
+		}
+		return p;
 	}
 }

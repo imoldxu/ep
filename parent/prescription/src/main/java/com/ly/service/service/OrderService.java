@@ -1,7 +1,10 @@
 package com.ly.service.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,8 @@ public class OrderService {
 	
 	public Order create(int uid, int amount, List<TransactionDrug> transactionList){
 		Order order = new Order();
+		String sn = generateOrderSN(uid);
+		order.setSn(sn);
 		order.setInfo(JSONUtils.getJsonString(transactionList));
 		order.setTargettype(Order.TARGET_USER);
 		order.setTranscode(Order.CODE_TRANS);
@@ -78,20 +83,21 @@ public class OrderService {
 	}
 
 	@Transactional
-	public Order createByStore(int uid, int storeid, List<TransactionDrug> transactionList) {
+	public Order createByStore(int storeid, List<TransactionDrug> transactionList) {
 		Order order = new Order();
+
+		String sn = generateOrderSN(storeid);
+		order.setSn(sn);
 		order.setInfo(JSONUtils.getJsonString(transactionList));
-		order.setTargettype(Order.TARGET_USER);
-		order.setTargetid(uid);
-		order.setTranscode(Order.CODE_TRANS);
+		order.setTargettype(Order.TARGET_STORE);
+		order.setTargetid(storeid);             //商户
+		order.setTranscode(Order.CODE_TRANS);   //交易
 		order.setCreatetime(new Date());
 		order.setCompletetime(new Date());
 		order.setAmount(0);
-		order.setPayway(Order.PAY_OFFLINESTORE);
+		order.setPayway(Order.PAY_OFFLINESTORE);//线下
 		order.setState(Order.STATE_COMPLETE);
 		orderMapper.insertUseGeneratedKeys(order);
-		
-		//String orderStr = JSONUtils.getJsonString(order);
 		
 		salesRecordService.createByStore(storeid, order);//购药记录处理
 		
@@ -109,5 +115,26 @@ public class OrderService {
 		orderMapper.insertUseGeneratedKeys(order);
 		
 		return order;
+	}
+	
+	/**
+	 * 生成按日期的订单号
+	 * @param uid
+	 * @return
+	 */
+	private String generateOrderSN(Integer uid){
+		DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		Date date = new Date();
+        String sn = sdf.format(date);
+        
+        String uidStr = String.format("%06d", uid);
+        
+        Random r = new Random(date.getTime()+uid);
+        int number = r.nextInt(999999);
+		String randomStr = String.format("%06d", number);
+		
+		sn = uidStr+sn+randomStr;
+        
+        return sn;
 	}
 }

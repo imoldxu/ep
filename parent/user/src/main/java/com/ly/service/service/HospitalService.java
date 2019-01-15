@@ -61,4 +61,9 @@ public class HospitalService {
 		hospitalMapper.updateByPrimaryKeySelective(hospital);
 		return hospital;
 	}
+
+	public Hospital getHospital(Integer hid) {
+		Hospital ret = hospitalMapper.selectByPrimaryKey(hid);
+		return ret;
+	}
 }

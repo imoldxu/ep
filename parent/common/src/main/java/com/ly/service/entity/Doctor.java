@@ -30,6 +30,10 @@ public class Doctor {
 	@ColumnType(jdbcType = JdbcType.INTEGER)
 	private Integer hospitalid;//医院id
 	
+	@Column(name = "department")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String department;//部门
+	
 	@Column(name = "phone")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String phone;//电话
@@ -147,5 +151,14 @@ public class Doctor {
 	public void setSessionID(String sessionID) {
 		this.sessionID = sessionID;
 	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+	
 	
 }

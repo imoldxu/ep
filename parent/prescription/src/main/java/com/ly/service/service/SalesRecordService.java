@@ -1,3 +1,4 @@
+
 package com.ly.service.service;
 
 import java.util.ArrayList;
@@ -9,15 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
-import com.ly.service.context.Response;
 import com.ly.service.context.TransactionDrug;
 import com.ly.service.entity.Order;
-import com.ly.service.entity.Prescription;
 import com.ly.service.entity.SalesRecord;
+import com.ly.service.entity.Store;
 import com.ly.service.entity.StoreDrug;
 import com.ly.service.feign.client.DrugClient;
+import com.ly.service.feign.client.UserClient;
 import com.ly.service.mapper.SalesRecordMapper;
 import com.ly.service.utils.JSONUtils;
 import com.ly.service.utils.RedissonUtil;
@@ -31,8 +33,8 @@ public class SalesRecordService {
 	SalesRecordMapper recordMapper;
 	@Autowired
 	DrugClient drugClient;
-	//@Autowired
-	//AccountClient accountClient;
+	@Autowired
+	UserClient userClient;
 	@Autowired
 	AccountService accountService;
 	@Autowired
@@ -79,23 +81,23 @@ public class SalesRecordService {
 			record.setOrderid(order.getId());
 			record.setPrescriptionid(transdrug.getPrescriptionid());
 			
-			Response resp = drugClient.getDrugByStore(storeid, transdrug.getDrugid());
-			StoreDrug storeDrug = (StoreDrug) resp.fetchOKData();
+			ObjectMapper om = new ObjectMapper();
+			StoreDrug storeDrug = om.convertValue(drugClient.getDrugByStore(storeid, transdrug.getDrugid()).fetchOKData(), StoreDrug.class);
 			record.setSettlementprice(storeDrug.getSettlementprice());
 			record.setStoreid(storeid);
+			Store store = om.convertValue(userClient.getStore(storeid).fetchOKData(), Store.class);
+			record.setStorename(store.getName());
 			record.setNum(transdrug.getNum());
 			
 			recordList.add(record);
 		}
 
 		recordMapper.insertList(recordList);
-		
-		//String recordListStr = JSONUtils.getJsonString(recordList);
-		
+			
 		accountService.settleSalesRecords(recordList);//结算交易
-		//resp.getOKData();
 	}
 
+	@Transactional
 	public void createByOnlinePay(Order order) {
 		String transactionInfo =  order.getInfo();
 		
@@ -135,6 +137,8 @@ public class SalesRecordService {
 		}
 
 		recordMapper.insertList(recordList);
+		
+		
 	}
 	
 	public List<SalesRecord> getRecordBySeller(Integer sellerid, int pageIndex, int pageSize) {

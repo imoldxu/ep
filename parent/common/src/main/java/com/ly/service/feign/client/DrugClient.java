@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ly.service.context.ErrorCode;
 import com.ly.service.context.Response;
 import com.ly.service.feign.client.fallback.DefaultDrugClient;
 
@@ -21,11 +20,11 @@ public interface DrugClient {
 	public Response getHospitalDrug(@RequestParam(name = "drugid") int drugid, 
 			@RequestParam(name = "hospitalid") int hospitalid);
 	
-	@RequestMapping("/internal/getDrugsInStore")
+	@RequestMapping(value="/internal/getDrugsInStore", method = RequestMethod.GET)
 	public Response getDrugsInStore(@RequestParam(name = "storeid")Integer storeid,
 			@RequestParam(name = "drugListStr") String drugListStr);
 	
-	@RequestMapping("/internal/getDrugByStore")
+	@RequestMapping(value="/internal/getDrugByStore", method = RequestMethod.GET)
 	public Response getDrugByStore(@RequestParam(name = "storeid")Integer storeid,
 			@RequestParam(name = "drugid") Integer drugid);
 }

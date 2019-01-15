@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.ibatis.type.JdbcType;
 
@@ -49,10 +50,6 @@ public class PrescriptionDrug implements Serializable{
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String category;//分类
 
-//	@Column(name = "price")
-//	@ColumnType(jdbcType = JdbcType.INTEGER)
-//	private Integer price;//单价
-//	
 	@Column(name = "sellfee")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
 	private Integer sellfee;//推广费
@@ -67,7 +64,7 @@ public class PrescriptionDrug implements Serializable{
 	
 	@Column(name = "number")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer number;//数量
+	private Integer number;//数量,在药房处方上则是表示药房的销售数量
 	
 	@Column(name = "soldnumber")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
@@ -84,6 +81,17 @@ public class PrescriptionDrug implements Serializable{
 	@Column(name = "frequency")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String frequency;//频次
+
+	@Transient
+	private Integer price;//单价,来源于各个药店的信息
+	
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
 
 	public Long getId() {
 		return id;

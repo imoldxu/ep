@@ -14,4 +14,23 @@ public class DefaultUserClient implements UserClient {
 		return Response.OK(null);
 	}
 
+	@Override
+	public Response getDoctor(Integer doctorid) {
+		return Response.Error(ErrorCode.MODULE_ERROR, "用户模块服务异常");
+	}
+
+	@Override
+	public Response getHospital(Integer hid) {
+		return Response.Error(ErrorCode.MODULE_ERROR, "用户模块服务异常");
+	}
+
+	@Override
+	public Response getSeller(Integer sellerid) {
+		return Response.Error(ErrorCode.MODULE_ERROR, "用户模块服务异常");
+	}
+
+	@Override
+	public Response getStore(Integer storeid) {
+		return Response.Error(ErrorCode.MODULE_ERROR, "用户模块服务异常");
+	}
 }

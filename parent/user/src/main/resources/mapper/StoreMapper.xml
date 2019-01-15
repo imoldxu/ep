@@ -7,10 +7,12 @@
 	    <result column="name" property="name" jdbcType="VARCHAR" />
 	    <result column="address" property="address" jdbcType="VARCHAR" />
 	    <result column="distance" property="distance" jdbcType="INTEGER" />
+	    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+	    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
   	</resultMap>
 
 	<select id="getStoreByDrug" resultMap="Store">
-		SELECT t_store.id, t_store.name, t_store.address, ROUND(
+		SELECT t_store.id, t_store.name, t_store.address, t_store.longitude, t_store.latitude, ROUND(
 	        6378.138 * 2 * ASIN(
 	            SQRT(
 	                POW(
@@ -30,11 +32,11 @@
 	                )
 	            )
 	        ) * 1000
-	    ) AS distance FROM t_store LEFT JOIN t_store_drug ON t_store.id = t_store_drug.storeid WHERE t_store_drug.drugid = #{drugid,jdbcType=INTEGER} ORDER BY distance ASC
+	    ) AS distance FROM t_store LEFT JOIN t_store_drug ON t_store.id = t_store_drug.storeid WHERE t_store_drug.drugid = #{drugid,jdbcType=INTEGER} AND t_store.latitude BETWEEN #{lat,jdbcType=DOUBLE}-0.1 AND #{lat,jdbcType=DOUBLE}+0.1 AND t_store.longitude BETWEEN #{lon,jdbcType=DOUBLE}-0.1 AND #{lon,jdbcType=DOUBLE}+0.1 ORDER BY distance ASC
 	</select>
 	
 	<select id="getStoreByGPS" resultMap="Store">
-		SELECT t_store.id, t_store.name, t_store.address, ROUND(
+		SELECT t_store.id, t_store.name, t_store.address, t_store.longitude, t_store.latitude, ROUND(
 	        6378.138 * 2 * ASIN(
 	            SQRT(
 	                POW(

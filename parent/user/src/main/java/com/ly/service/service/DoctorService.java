@@ -167,5 +167,10 @@ public class DoctorService {
 		doctorMapper.updateByPrimaryKeySelective(doctor);
 		return doctor;
 	}
+
+	public Doctor getDoctor(Integer doctorid) {
+		Doctor ret = doctorMapper.selectByPrimaryKey(doctorid);
+		return ret;
+	}
 	
 }

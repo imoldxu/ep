@@ -31,9 +31,9 @@ public class StoreDrug {
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String drugname;//药品名称
 	
-	@Column(name = "drugstander")
+	@Column(name = "drugstandard")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String drugstander;//药品规格
+	private String drugstandard;//药品规格
 	
 	@Column(name = "drugcompany")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -68,14 +68,6 @@ public class StoreDrug {
 
 	public void setDrugname(String drugname) {
 		this.drugname = drugname;
-	}
-
-	public String getDrugstander() {
-		return drugstander;
-	}
-
-	public void setDrugstander(String drugstander) {
-		this.drugstander = drugstander;
 	}
 
 	public String getDrugcompany() {
@@ -125,4 +117,14 @@ public class StoreDrug {
 	public void setState(Integer state) {
 		this.state = state;
 	}
+
+	public String getDrugstandard() {
+		return drugstandard;
+	}
+
+	public void setDrugstandard(String drugstandard) {
+		this.drugstandard = drugstandard;
+	}
+	
+	
 }

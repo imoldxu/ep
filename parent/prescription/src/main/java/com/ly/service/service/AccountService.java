@@ -93,11 +93,11 @@ public class AccountService {
 				return account;
 			}else{
 				redissonUtil.unlock("STORE_ACCOUNT_"+storeid);
-				throw new HandleException(-1, "余额不足");
+				throw new HandleException(ErrorCode.BALANCE_ERROR, "余额不足");
 			}
 			
 		}else{
-			throw new HandleException(-1, "系统异常");
+			throw new HandleException(ErrorCode.SYSTEM_ERROR, "系统异常");
 		}
 	}
 
@@ -132,7 +132,7 @@ public class AccountService {
 			redissonUtil.unlock("STORE_ACCOUNT_"+storeid);
 			return account;
 		}else{
-			throw new HandleException(-1, "系统异常");
+			throw new HandleException(ErrorCode.SYSTEM_ERROR, "系统异常");
 		}
 	}
 
@@ -156,10 +156,10 @@ public class AccountService {
 				return account;
 			}else{
 				redissonUtil.unlock("SELLER_ACCOUNT_"+sellerid);
-				throw new HandleException(-1, "余额不足");
+				throw new HandleException(ErrorCode.BALANCE_ERROR, "余额不足");
 			}
 		}else{
-			throw new HandleException(-1, "系统异常");
+			throw new HandleException(ErrorCode.SYSTEM_ERROR, "系统异常");
 		}
 	}
 
