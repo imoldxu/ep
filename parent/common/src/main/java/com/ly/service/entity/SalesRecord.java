@@ -76,12 +76,20 @@ public class SalesRecord {
 	
 	@Column(name = "sellerfee")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer sellerfee;//推广费
+	private Integer sellerfee;//推广费单价
 
+	@Column(name = "totalsellerfee")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private Integer totalsellerfee;//推广费总价
+	
 	@Column(name = "settlementprice")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer settlementprice;//结算费
+	private Integer settlementprice;//结算费单价
 
+	@Column(name = "totalsettlementprice")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private Integer totalsettlementprice;//结算费总价
+	
 	@Column(name = "createtime")
 	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
 	private Date createtime;//创建时间
@@ -220,6 +228,22 @@ public class SalesRecord {
 
 	public void setCreatetime(Date createtime) {
 		this.createtime = createtime;
+	}
+
+	public Integer getTotalsellerfee() {
+		return totalsellerfee;
+	}
+
+	public void setTotalsellerfee(Integer totalsellerfee) {
+		this.totalsellerfee = totalsellerfee;
+	}
+
+	public Integer getTotalsettlementprice() {
+		return totalsettlementprice;
+	}
+
+	public void setTotalsettlementprice(Integer totalsettlementprice) {
+		this.totalsettlementprice = totalsettlementprice;
 	}
 
 }

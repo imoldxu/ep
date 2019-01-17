@@ -75,6 +75,7 @@ public class SalesRecordService {
 			record.setSellerid(transdrug.getSellerid());
 			record.setSellername(transdrug.getSellername());
 			record.setSellerfee(transdrug.getSellerfee());
+			record.setTotalsellerfee(transdrug.getSellerfee()*transdrug.getNum());
 			
 			record.setHospitalid(transdrug.getHospitalid());
 			record.setHospitalname(transdrug.getHospitalname());
@@ -85,6 +86,7 @@ public class SalesRecordService {
 			ObjectMapper om = new ObjectMapper();
 			StoreDrug storeDrug = om.convertValue(drugClient.getDrugByStore(storeid, transdrug.getDrugid()).fetchOKData(), StoreDrug.class);
 			record.setSettlementprice(storeDrug.getSettlementprice());
+			record.setTotalsettlementprice(storeDrug.getSettlementprice()*transdrug.getNum());
 			record.setStoreid(storeid);
 			Store store = om.convertValue(userClient.getStore(storeid).fetchOKData(), Store.class);
 			record.setStorename(store.getName());

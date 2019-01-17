@@ -31,7 +31,7 @@ public class TransactionDrug implements Serializable{
 
 	private int num;//购买数量
 	
-	private int sellerfee;//销售推广费
+	private int sellerfee;//销售推广费单价
 
 
 	public int getNum() {
