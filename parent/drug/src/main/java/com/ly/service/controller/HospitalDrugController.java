@@ -112,8 +112,6 @@ public class HospitalDrugController {
 			@ApiParam(name = "keys", value = "拼音首字母索引或药品名称") @RequestParam(name = "keys") String keys,
 			@ApiParam(name = "type", value = "西药为1，中药为2") @RequestParam(name = "type") int type,
 			HttpServletRequest request, HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
 			List<SimpleDrugInfo> ret = drugService.getSimpleDrugListByKeys(hid, type, keys);
 			
@@ -135,8 +133,6 @@ public class HospitalDrugController {
 			@ApiParam(name = "tag", value = "标签") @RequestParam(name = "tag") String tag,
 			@ApiParam(name = "type", value = "西药为1，中药为2") @RequestParam(name = "type") int type,
 			HttpServletRequest request, HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
 			List<SimpleDrugInfo> ret = drugService.getSimpleDrugListByTag(hid, type, tag);
 			
@@ -158,8 +154,8 @@ public class HospitalDrugController {
 			@ApiParam(name = "pageIndex", value = "页码1-n") @RequestParam(name = "pageIndex") int pageIndex,
 			@ApiParam(name = "pageSize", value = "每页最大数量") @RequestParam(name = "pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "GET");
+		//response.setHeader("Access-Control-Allow-Origin", "*");
+		//response.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
 			Integer sellerid = SessionUtil.getSellerId(request);
 			

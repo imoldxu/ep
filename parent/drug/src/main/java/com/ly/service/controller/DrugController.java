@@ -45,8 +45,8 @@ public class DrugController {
 			@ApiParam(name = "keys", value = "拼音首字母索引或药品名称") @RequestParam(name = "keys") String keys,
 			@ApiParam(name = "type", value = "西药为1，中药为2") @RequestParam(name = "type") int type,
 			HttpServletRequest request, HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "GET");
+		//response.setHeader("Access-Control-Allow-Origin", "*");
+		//response.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
 			List<SimpleDrugInfo> ret = drugService.getSimpleDrugListByKeys(type, keys);
 			
@@ -66,8 +66,8 @@ public class DrugController {
 	public Response getDrugListByKeys(
 			@ApiParam(name = "keys", value = "拼音首字母索引") @RequestParam(name = "keys") String keys,
 			HttpServletRequest request, HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "GET");
+		//response.setHeader("Access-Control-Allow-Origin", "*");
+		//response.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
 			List<Drug> ret = drugService.getDrugListByKeys(keys);
 			
@@ -88,8 +88,8 @@ public class DrugController {
 			@ApiParam(name = "tag", value = "标签") @RequestParam(name = "tag") String tag,
 			@ApiParam(name = "type", value = "西药为1，中药为2") @RequestParam(name = "type") int type,
 			HttpServletRequest request, HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "GET");
+		//response.setHeader("Access-Control-Allow-Origin", "*");
+		//response.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
 			List<SimpleDrugInfo> ret = drugService.getSimpleDrugListByTag(type, tag);
 			
@@ -109,8 +109,8 @@ public class DrugController {
 	public Response getDrugByID(
 			@ApiParam(name = "drugid", value = "药品id") @RequestParam(name = "drugid") Integer drugid,
 			HttpServletRequest request, HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "GET");
+		//response.setHeader("Access-Control-Allow-Origin", "*");
+		//response.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
 			Drug drug = drugService.getDrugById(drugid);
 			Response resp = null;
@@ -133,8 +133,8 @@ public class DrugController {
 	@ApiOperation(value = "新增上传药品信息", notes = "管理接口")
 	public Response uploadByExcel(@RequestPart(value="file") MultipartFile file,
 			HttpServletRequest request,HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "POST");
+		//response.setHeader("Access-Control-Allow-Origin", "*");
+		//response.setHeader("Access-Control-Allow-Methods", "POST");
 		
 		if(file==null){
 			return Response.NormalError("请求参数异常");
@@ -171,8 +171,8 @@ public class DrugController {
 	@RequestMapping(value = "/modifyDrug", method = RequestMethod.POST)
 	@ApiOperation(value = "修改药品信息", notes = "管理接口")
 	public Response modifyDrug(@ApiParam(name="drugInfo",value="{ \"id\": 23,     \"drugname\": \"硫酸亚铁片\",     \"standard\": \"0.3g*60片\",     \"category\": \"OTC\",     \"price\": 38,     \"unit\": \"盒\",     \"form\": \"片剂\",     \"singledose\": \"1\",     \"doseunit\": \"片\",     \"defaultusage\": \"饭前\",     \"frequency\": \"一天三次\",     \"fullkeys\": \"LSYTP\",     \"shortnamekeys\": \"LSYTP\"   }") @RequestParam(value="drugInfo") String drugInfo,HttpServletRequest request,HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "POST");
+		//response.setHeader("Access-Control-Allow-Origin", "*");
+		//response.setHeader("Access-Control-Allow-Methods", "POST");
 		Drug drug = null;
 		try{			
 			drug = JSONUtils.getObjectByJson(drugInfo, Drug.class);
@@ -205,8 +205,8 @@ public class DrugController {
 	@RequestMapping(value = "/delDrug", method = RequestMethod.POST)
 	@ApiOperation(value = "删除药品信息", notes ="管理接口" )
 	public Response delDrug(@RequestParam(value="drugid") int drugid, HttpServletRequest request,HttpServletResponse response) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "POST");
+		//response.setHeader("Access-Control-Allow-Origin", "*");
+		//response.setHeader("Access-Control-Allow-Methods", "POST");
 		try{
 			SessionUtil.getManagerId(request);
 			
