@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="css/css/login.css?ver={{cssVer}}">
+
+<div class="head">
+
+    <img src="img/bg.png" alt="" width="100%">
+
+    <img src="img/logo.png" width="152" class="logo">
+
+</div>
+
+<div class="group">
+
+	<div>
+		<input type="text" placeholder="请输入就诊号，就诊号如:OP123456789" ng-model="num">
+	</div>
+	<div>
+		<div class="submit" ng-click="login(1,num)">西药处方</div>
+		<div class="submit" ng-click="login(2,num)">中药处方</div>
+	</div>
+</div>
+<div class="group">
+	<p>无就诊号开方</p>
+
+    <div class="submit" ng-click="login(1,-1)">西药处方</div>
+	
+    <div class="submit" ng-click="login(2,-1)">中药处方</div>
+
+</div>

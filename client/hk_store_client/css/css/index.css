@@ -1,0 +1,151 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.head {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin-bottom: 38px;
+}
+.head .logo {
+  position: absolute;
+  left: 50%;
+  margin-left: -76px;
+  bottom: 34px;
+}
+
+.welcome {
+	margin: 38 auto;
+	font-size: 24px;
+	text-align: -webkit-center;
+}
+
+.group {
+  width: 100%;
+  margin: auto;
+  height: auto;
+  overflow: auto;
+  
+  text-align: -webkit-center;
+}
+
+.group  .imgbutton{
+  display: inline-block; 
+  margin: 0 30px
+}
+
+.group span {
+  display: block;
+  text-align: -webkit-center;
+  font-size: 18px;
+}
+
+.model {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.model .mod {
+  position: absolute;
+  width: 30%;
+  height: 240px;
+  left: 35%;
+  top: 60%;
+  margin-top: -275px;
+  background-color: #fff;
+}
+.model .mod .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.model .mod .modCon {
+  width: 80%;
+  margin: auto;
+  height: auto;
+  padding-top: 30px;
+}
+.model .mod .modCon .foot {
+  width: 100%;
+  border: none;
+  padding: 20px 0;
+}
+.model .mod .modCon .foot .button {
+  position: relative;
+  width: 142px;
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  color: #fff;
+  float: right;
+  border-radius: 5px;
+  cursor: pointer;
+  right: 0;
+  background: -webkit-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #12b5fd, #00d8e4);
+  /* 标准的语法 */
+}
+
+.model .mod .modCon .row {
+  width: 100%;
+  height: auto;
+  margin: 3px;
+  zoom: 1;
+}
+.model .mod .modCon .row:after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+.model .mod .modCon .row input {
+  width: 60%;
+  outline: none;
+  height: 30px;
+  padding: 0 5px;
+  margin: 3 10px;
+  border: 1px solid #93d3ff;
+}
+.model .mod .modCon .row p {
+  height: 35px;
+  line-height: 35px;
+  font-size: 12px;
+  color: #000;
+}
+.model .mod .modCon .row select {
+  width: 60%;
+  border: 1px solid #93d3ff;
+  height: 30px;
+  outline: none;
+  background-color: #fff;
+  border-radius: 0;
+}
+.model .mod .modCon .row .md {
+  width: 33%;
+  height: 35px;
+  line-height: 35px;
+  float: left;
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.model .mod .modCon .row .md span {
+  color: #000;
+}
+
+.model .mod .modCon .row .ls {
+  width: 2em;
+  display: inline-block;
+}

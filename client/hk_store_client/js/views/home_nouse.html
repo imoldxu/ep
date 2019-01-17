@@ -1,0 +1,445 @@
+
+<link rel="stylesheet" href="css/css/notUser.css?ver={{cssVer}}">
+
+
+<div class="head" ng-click="closeDiagnosisMode()">
+
+    <div class="logo">
+
+        <img src="img/logo2.png" alt="" width="54">
+
+        <span>电子处方系统</span>
+
+    </div>
+
+    <div class="goBack" ng-click="goLogin()">返回首页</div>
+
+</div>
+
+
+<div class="con" ng-click="closeDiagnosisMode()">
+
+    <div class="row">
+
+        <div class="iptGroup">
+
+            <label>就诊号</label><span>{{ipt.num}}号</span>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="iptGroup">
+
+            <label>诊断医生</label> <input type="text" ng-model="ipt.doctorname">
+
+        </div>
+
+        <div class="iptGroup">
+
+            <label>科<i class="ls"></i>室</label>            
+            <select  ng-model="ipt.department">
+                <option value="{{ipt.department}}">{{ipt.department}}</option>
+				<option value="急诊科">急诊科</option>
+				<option value="便民门诊">便民门诊</option>
+				<option value="中医内科">中医内科</option>
+				<option value="中医儿科">中医儿科</option>
+				<option value="皮肤科">皮肤科</option>
+				<option value="儿科">儿科</option>
+				<option value="儿科门诊">儿科门诊</option>
+				<option value="针灸科门诊">针灸科门诊</option>
+				<option value="康复科门诊">康复科门诊</option>
+				<option value="专科门诊">专科门诊</option>
+				<option value="男科">男科</option>
+				<option value="核医学科">核医学科</option>
+				<option value="眼▪耳鼻咽喉科门诊">眼▪耳鼻咽喉科门诊</option>
+				<option value="眼▪耳鼻咽喉科">眼▪耳鼻咽喉科</option>
+				<option value="内科">内科</option>
+				<option value="内科一">内科一</option>
+				<option value="内科二">内科二</option>
+				<option value="内科三">内科三</option>
+				<option value="内科四">内科四</option>
+				<option value="内科五">内科五</option>
+				<option value="内科六">内科六</option>
+				<option value="内科七">内科七</option>
+				<option value="心血管内科">心血管内科</option>
+				<option value="神经内科">神经内科</option>
+				<option value="肾病科">肾病科</option>
+				<option value="内分泌科">内分泌科</option>
+				<option value="肿瘤科">肿瘤科</option>
+				<option value="呼吸内科">呼吸内科</option>
+				<option value="消化内科">消化内科</option>
+				<option value="老年病科">老年病科</option>
+				<option value="外科">外科</option>
+				<option value="外科一门诊">外科一门诊</option>
+				<option value="外科二门诊">外科二门诊</option>
+				<option value="外科三门诊">外科三门诊</option>
+				<option value="外科四门诊">外科四门诊</option>
+				<option value="外科五门诊">外科五门诊</option>
+				<option value="外科一">外科一</option>
+				<option value="外科二">外科二</option>
+				<option value="外科三">外科三</option>
+				<option value="外科四">外科四</option>
+				<option value="外科五">外科五</option>
+				<option value="普外科">普外科</option>
+				<option value="肝胆外科">肝胆外科</option>
+				<option value="胸外科">胸外科</option>
+				<option value="神经外科">神经外科</option>
+				<option value="烧伤科">烧伤科</option>
+				<option value="泌尿外科">泌尿外科</option>
+				<option value="肛肠科">肛肠科</option>
+				<option value="肛肠科门诊">肛肠科门诊</option>
+				<option value="骨伤科">骨伤科</option>
+				<option value="骨伤科一门诊">骨伤科一门诊</option>
+				<option value="骨伤科二门诊">骨伤科二门诊</option>
+				<option value="骨伤科一">骨伤科一</option>
+				<option value="骨伤科二">骨伤科二</option>
+				<option value="妇科门诊">妇科门诊</option>
+				<option value="妇科病区">妇科病区</option>
+				<option value="口腔科">口腔科</option>
+				<option value="治未病科">治未病科</option>
+				<option value="重症医学科">重症医学科</option>
+				<option value="预防保健科">预防保健科</option>
+				<option value="精神病科">精神病科</option>		
+				<option value="麻醉科">麻醉科</option>
+			</select>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="iptGroup">
+
+            <label>患<i class="ls"></i>者</label> <input type="text" ng-model="ipt.patientname">
+
+        </div>
+
+        <div class="iptGroup">
+
+            <label>性<i class="ls"></i>别</label>
+            <select  ng-init="ipt.patientsex" ng-model="ipt.patientsex">
+            <!--<option value="1">{{ipt.patientsex}}</option>-->
+				<option value="男">男</option>
+                <option value="女">女</option>
+            </select>
+
+        </div>
+
+        <div class="iptGroup">
+
+            <label>年<i class="ls"></i>龄</label><input type="text" maxlength="3" style="width:40px" ng-model="ipt.patientage">岁
+
+        </div>
+
+        <div class="iptGroup">
+
+            <label>联系电话</label> <input type="text" maxlength="11" ng-model="ipt.patientphone">
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="con" ng-click="closeDiagnosisMode()">
+
+    <div class="row">
+
+        <div class="iptGroup langIpt">
+
+            <label>诊<i class="ls"></i>断</label>
+
+            <!--input type="text" ng-model="ipt.diagnosis"-->
+			<div class="optGroup">
+
+				<input type="text" ng-model="ipt.diagnosis" ng-change="getDiagnosisMsg(ipt.diagnosis)">
+
+				<div class="optMod" ng-if='diagnosisMod && diagnosisMsgListArry.length > 0'>
+
+					<div class="optList" ng-repeat="x in diagnosisMsgListArry" ng-click="selectDiagnosisMsg(x)">{{x}}</div>
+
+				</div>
+
+            </div>
+			<!--
+			<div class="optGroup">
+
+				<input type="text" ng-model="ipt.diagnosis" ng-change="optSerch(ipt.diagnosis,'diagnosis')">
+
+				<div class="optMod" ng-if='diagnosismod && optListArry.length > 0'>
+
+					<div class="optList" ng-repeat="x in optListArry" ng-click="checkOpt(x,'diagnosis')">{{x}}</div>
+
+				</div>
+
+            </div>
+			
+			<input type="text" ng-model="ipt.diagnosis" ng-change="getDiagonsis(ipt.diagnosis)">
+			
+			<div class="diagnosisMod" ng-if="diagnosisMod">
+
+                <div class="modOpt" ng-repeat="x in optArry" ng-click="selectDiagnosis(x)">{{x}}</div>
+
+            </div>
+			-->
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="con" ng-click="closeDiagnosisMode()">
+
+    <div class="row">
+
+        <div class="iptGroup">
+
+            <label>药<i class="ls"></i>品</label>
+
+        </div>
+
+    </div>
+
+
+    <table width="100%">
+
+        <tbody>
+
+            <tr ng-repeat=" x in drugTable">
+
+                <td>{{x.drugname}}</td>
+                <td>{{x.standard +'*' +x.number + x.unit}}</td>
+                <td>{{'sig:'+ x.myusage +','+ x.singledose +',' +x.frequency}}</td>
+                <td><img src="img/edit.png" ng-click="openModal($index)" width="16px"></td>
+                <td><img src="img/del.png" ng-click="delDrug($index)" width="16px" alt=""></td>
+
+            </tr>
+
+
+        </tbody>
+
+    </table>
+
+    <div class="add" ng-click="openModal(-1)"><img src="img/add.png"></div>
+
+</div>
+
+
+<div class="foot" ng-click="closeDiagnosisMode()">
+
+    <p>处方开具日期 : {{dateTime}}</p>
+
+    <div class="next"  ng-click="nextP()">下一步</div>
+
+
+</div>
+
+
+<div class="modal" ng-if="modal">
+
+    <div class="mod">
+	
+        <img class="closebutton" src="img/x.png" ng-click="closeModal()">
+
+        <div class="medicalArea">
+
+            <input type="text" ng-change="getDrugs(sel.keyValue)" ng-model="sel.keyValue" placeholder="{{placeholder}}">
+
+			<div class="fastSelect">
+				
+				<div class="keybutton" ng-click="getDrugsByDoctor(ipt.doctorname, ipt.department)">常用药品</div> 
+				
+				<div class="keybutton" ng-click="getDrugs('')">全部</div>
+				
+				<div class="keybutton" ng-click="getDrugsByCategory('抗生素')">抗生素</div>
+				<div class="keybutton" ng-click="getDrugsByCategory('输液')">输液</div>
+				<div class="keybutton" ng-click="getDrugsByCategory('心血管')">心血管</div>
+				<div class="keybutton" ng-click="getDrugsByCategory('呼吸')">呼吸</div>
+				<div class="keybutton" ng-click="getDrugsByCategory('消化')">消化</div>
+				<div class="keybutton" ng-click="getDrugsByCategory('神经')">神经</div>
+				<div class="keybutton" ng-click="getDrugsByCategory('内分泌')">内分泌</div>
+				<div class="keybutton" ng-click="getDrugsByCategory('解热镇痛')">解热镇痛</div>
+				<div class="keybutton" ng-click="getDrugsByCategory('维生素激素')">维生素激素</div>
+				<div class="keybutton" ng-click="getDrugsByCategory('外用')">外用</div>
+				<div class="keybutton" ng-click="getDrugsByCategory('中成药')">中成药</div>
+				<div class="keybutton" ng-click="getDrugsByCategory('滋补')">滋补</div>
+			</div>
+			
+            <div class="modSel">
+
+                <div class="modOpt" ng-repeat="x in optArry" ng-click="checkDrug(x.id)">{{x.showname}}</div>
+
+            </div>
+
+        </div>
+
+        <div class="modCon">
+
+            <div class="row">
+
+                <div class="fd">药<i class="ls"></i>品 : <span>{{drugArry.drugname}}</span></div>
+                <div class="fd">规<i class="ls"></i>格 : <span>{{drugArry.standard}}</span></div>
+                <div class="md">计价单位 : <span>{{drugArry.unit}}</span></div>
+                <div class="md">单<i class="ls"></i>价 : <span>{{drugArry.price}}</span>元</div>
+
+            </div>
+
+            <div class="row">
+
+				<div class="subrow">
+					<span>数<i class="ls"></i>量 :<span>
+					<select ng-init="sel.n = selNum[0]" ng-model="sel.n" ng-options="x for x in selNum">
+                    </select><span>{{drugArry.unit}}</span>
+                </div>
+
+                <div class="subrow"><span>单次计量 : </span><input type="text" ng-model="drugArry.singledose"></div>
+                <div class="selGroup">
+
+                    <span>频<i class="ls"></i>次 :</span>
+					<!--select ng-init="drugArry.frequency" ng-model="drugArry.frequency">
+						<option value="{{drugArry.frequency}}">{{drugArry.frequency}}</option>
+						<option value="每15分钟1次">每15分钟1次</option>
+						<option value="每30分钟1次">每30分钟1次</option>
+						<option value="每2小时(隔1小时)1次">每2小时(隔1小时)1次</option>
+						<option value="2小时1次">2小时1次</option>
+						<option value="3小时1次">3小时1次</option>
+						<option value="4小时1次">4小时1次</option>
+						<option value="6小时1次">6小时1次</option>
+						<option value="8小时1次">8小时1次</option>
+						<option value="每天1次">每天1次</option>
+						<option value="每天2次">每天2次</option>
+						<option value="每天3次">每天3次</option>
+						<option value="每天4次">每天4次</option>
+						<option value="每天早晨">每天早晨</option>
+						<option value="每天晚上">每天晚上</option>
+						<option value="每天晚上">每天晚上</option>
+						<option value="隔日">隔日</option>
+						<option value="3天1次">3天1次</option>
+						<option value="每半月1次">每半月1次</option>
+						<option value="每月1次">每月1次</option>
+						<option value="每季度1次">每季度1次</option>
+						<option value="遵医嘱">遵医嘱</option>
+					</select-->
+                    <div class="selMod">
+
+                        <input type="text" ng-model="sel.p" ng-change="optSerch(sel.p,'p')">
+
+                        <div class="optMod" ng-if='pMod && optListArry.length > 0'>
+
+                            <div class="optList" ng-repeat="x in optListArry" ng-click="checkOpt(x,'p')">{{x}}</div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="selGroup">
+
+                    <span>用<i class="ls"></i>法 :</span>
+					<!--select ng-init="drugArry.myusage" ng-model="drugArry.myusage">
+						<option value="{{drugArry.myusage}}">{{drugArry.myusage}}</option>
+						
+						<option value="0、3、7、14、28d肌注">0、3、7、14、28d肌注</option>
+						<option value="口服">口服</option>
+						<option value="外用">外用</option>
+						<option value="饭前">饭前</option>
+						<option value="饭后">饭后</option>
+						<option value="内服">内服</option>
+						<option value="早饭前">早饭前</option>
+						<option value="早饭后">早饭后</option>
+						<option value="上午">上午</option>
+						<option value="晚饭后">晚饭后</option>
+						<option value="晚饭前">晚饭前</option>
+						<option value="午饭前">午饭前</option>
+						<option value="午饭后">午饭后</option>
+						<option value="快">快</option>
+						<option value="皮试">皮试</option>
+						<option value="睡觉时，就寝时">睡觉时，就寝时</option>
+						<option value="睡觉时">睡觉时</option>
+						<option value="睡觉时服用">睡觉时服用</option>
+						<option value="皮下注射">皮下注射</option>
+						<option value="肌肉注射">肌肉注射</option>
+						<option value="经腹部给入">经腹部给入</option>
+						<option value="静脉注射">静脉注射</option>
+						<option value="静滴">静滴</option>
+						<option value="右眼">右眼</option>
+						<option value="左眼">左眼</option>
+						<option value="必要时">必要时</option>
+						<option value="需要时">需要时</option>
+						<option value="立刻">立刻</option>
+						<option value="保留灌肠">保留灌肠</option>
+						<option value="关节腔内注射">关节腔内注射</option>
+						<option value="冠脉内注射">冠脉内注射</option>
+						<option value="冲洗">冲洗</option>
+						<option value="口腔含化">口腔含化</option>
+						<option value="口腔吸入">口腔吸入</option>
+						<option value="含漱">含漱</option>
+						<option value="吸入">吸入</option>
+						<option value="吸入用">吸入用</option>
+						<option value="喷咽部">喷咽部</option>
+						<option value="喷患处">喷患处</option>
+						<option value="喷雾吸入">喷雾吸入</option>
+						<option value="喷鼻用">喷鼻用</option>
+						<option value="坐浴">坐浴</option>
+						<option value="外用肛塞">外用肛塞</option>
+						<option value="封闭用">封闭用</option>
+						<option value="微量汞">微量汞</option>
+						<option value="术中静注">术中静注</option>
+						<option value="椎管类注射">椎管类注射</option>
+						<option value="洗头">洗头</option>
+						<option value="涂抹患处">涂抹患处</option>
+						<option value="湿敷外用">湿敷外用</option>
+						<option value="滴眼用">滴眼用</option>
+						<option value="滴耳用">滴耳用</option>
+						<option value="滴鼻用">滴鼻用</option>
+						<option value="球结膜下注射">球结膜下注射</option>
+						<option value="管喂">管喂</option>
+						<option value="粘膜下注射">粘膜下注射</option>
+						<option value="经动脉鞘内注射">经动脉鞘内注射</option>
+						<option value="经腹腔灌注">经腹腔灌注</option>
+						<option value="续滴">续滴</option>
+						<option value="腹股沟皮下注射">腹股沟皮下注射</option>
+						<option value="膀胱灌注">膀胱灌注</option>
+						<option value="舍下含化">舍下含化</option>
+						<option value="血透用">血透用</option>
+						<option value="造影用">造影用</option>
+						<option value="遵医嘱">遵医嘱</option>
+						<option value="间隔使用">间隔使用</option>
+						<option value="阴道冲洗">阴道冲洗</option>
+						<option value="阴道用">阴道用</option>
+						<option value="雾化吸入">雾化吸入</option>
+						<option value="麻醉">麻醉</option>
+						<option value="鼻腔吸入">鼻腔吸入</option>
+					</select-->
+
+                    <div class="selMod">
+
+                        <input type="text" ng-model="sel.y" ng-change="optSerch(sel.y,'y')">
+
+                        <div class="optMod" ng-if="yMod && optListArry.length > 0">
+
+                            <div class="optList" ng-repeat="x in optListArry" ng-click="checkOpt(x,'y')">{{x}}</div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="foot">
+
+                <div class="next" ng-click="addDrugInfo()">确定</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

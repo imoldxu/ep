@@ -1,0 +1,209 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: #f4f4f5;
+}
+.head {
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  margin-bottom: 20px;
+  background: -webkit-linear-gradient(right, #0082bb, #1ae0c4);
+  /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #0082bb, #1ae0c4);
+  /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #0082bb, #1ae0c4);
+  /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #0082bb, #1ae0c4);
+  /* 标准的语法 */
+}
+.head .logo {
+  margin-left: 20px;
+  padding: 20px 0;
+  height: auto;
+  line-height: 54px;
+  color: #fff;
+  font-size: 24px;
+  float: left;
+}
+.head .logo img {
+  display: inline-block;
+  vertical-align: middle;
+}
+.head .goBack {
+  width: 100px;
+  height: 40px;
+  margin-top: 25px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 20px;
+  border: 1px solid #fff;
+  color: #fff;
+  margin-right: 40px;
+  float: right;
+  cursor: pointer;
+}
+.foot {
+  width: 794px;
+  margin: auto;
+  padding: 10px;
+  margin-top: 10px;
+}
+.foot p {
+  color: #999;
+}
+.foot .next {
+  position: relative;
+  padding: 0 20px;
+  height: 48px;
+  line-height: 48px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #fff;
+  float: right;
+  border-radius: 5px;
+  cursor: pointer;
+  right: -10px;
+  margin-left: 20px;
+  font-weight: 200;
+  background: -webkit-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #12b5fd, #00d8e4);
+  /* 标准的语法 */
+}
+.con {
+  width: 794px;
+  margin: auto;
+  border-top: 1px solid #000;
+  height: 559px;
+  background-color: #fff;
+}
+.con h3 {
+  text-align: center;
+  padding-top: 20px;
+}
+.con .conHead {
+  width: 90%;
+  margin: auto;
+  height: auto;
+  overflow: auto;
+  font-size: 16px;
+  border-bottom: 1px solid #000;
+}
+.con .conHead .row {
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  zoom: 1;
+}
+.con .conHead .row .dia {
+  width: 100%;
+}
+.con .conHead .row div {
+  width: 25%;
+  height: 25px;
+  line-height: 25px;
+  float: left;
+}
+.con .conHead .row:after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+.con .conInfo {
+  position: relative;
+  width: 90%;
+  margin: auto;
+  height: 240px;
+  padding: 10px 5px;
+  border-bottom: 1px solid #000;
+}
+.con .conInfo .r {
+  position: absolute;
+  left: 5px;
+  font-weight: bolder;
+  top: 0;
+  font-size: 12px;
+}
+.con .conInfo .infoList {
+  margin: 5px;
+  padding: 2px;
+  height: auto;
+  width: 22%;
+  overflow: auto;
+  font-size: 16px;
+  margin-bottom: 5px;
+  display: inline-block;
+  zoom: 1;
+}
+.con .conInfo .infoList:after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+.con .conInfo .infoList div {
+  margin: 5px
+  font-size: 14px;
+  float: left;
+  text-align: right;
+}
+.con .conInfo .infoList div:first-child {
+  text-align: left;
+}
+.con .conInfo .infoList p {
+  font-size: 12px;
+  text-indent: 2em;
+}
+
+.con .zyuseinfo {
+  position: relative;
+  width: 90%;
+  margin: auto;
+  border-bottom: 1px solid #000;
+}
+
+.con .zyuseinfo  div{
+  display: inline-block;
+  width:30%;
+  padding:5 0px;
+}
+
+.con .conFoot {
+  width: 90%;
+  margin: auto;
+  height: auto;
+  overflow: auto;
+  font-size: 12px;
+}
+.con .conFoot .row {
+  width: 100%;
+}
+.con .conFoot .row div {
+  font-size:16px;
+  width: 50%;
+  height: 40px;
+  line-height: 40px;
+  float: left;
+}
+.con .conFoot .row:after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+.con .conFoot p {
+  margin-top: 5px;
+  font-size: 12px;
+  font-weight: bolder;
+}

@@ -1,0 +1,125 @@
+
+<link rel="stylesheet" href="css/css/drug.css?ver={{cssVer}}">
+
+<div class="head">
+
+    <div class="logo">
+
+        <img src="img/logo2.png" alt="" width="54">
+
+        <span>药品管理</span>
+
+    </div>
+
+	<div class="goBack" ui-sref="index" >返回首页</div>
+	
+</div>
+
+<div class="con">
+
+    <div class="conHead">
+
+        <div class="group">
+
+            <input type="text" placeholder="请输入药品名称" ng-model="searchopt.key">
+
+			<label>状态</label><select ng-model="searchopt.state">
+				<option selected value="0">全部</option>
+				<option value="1">有货</option>
+				<option value="2">无货</option>
+			</select>
+			
+            <div class="submit" ng-click="getDrugsByFirstPage()">查询</div>
+
+
+        </div>
+    </div>
+
+    <div class="conBody">
+
+        <table>
+            <thead>
+				<tr>
+					<th>药品名称</th>
+					<th>药品规格</th>
+					<th>厂商</th>
+					<th>售价(元)</th>
+					<th>信息费(元)</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+            </thead>
+            <tbody>
+				<tr ng-repeat="x in drugList">
+					<td>{{x.drugname}}</td>
+					<td>{{x.drugstandard}}</td>
+					<td>{{x.drugcompany}}</td>
+					<td>{{f2y(x.price)}}</td>
+					<td>{{f2y(x.settlementprice)}}</td>
+					<td ng-if="x.state == 1">有货</td>
+					<td class="emptystate" ng-if="x.state == 2">无货</td>
+					<td><img src="img/edit.png" ng-click="openModal(x.id,$index)" width="16px"> <img src="img/down.png" ng-if="x.state == 1" ng-click="downdrug(x.id,$index)" width="16px"><img src="img/up.png" ng-if="x.state == 0" ng-click="updrug(x.id,$index)" width="16px"></td>
+				</tr>
+            </tbody>
+        </table>
+		<div>
+			<div class="button" ng-if="drugList.length==20 " ng-click="getDrugsByNextPage()">下一页</div>
+			<div class="button" ng-if="searchopt.pageindex!=1 && drugList.length!=0" ng-click="getDrugsByPrePage()">上一页</div>
+		<div>
+    </div>
+
+</div>
+
+
+<div class="modal" ng-if="modal">
+
+    <div class="mod">
+
+        <img src="img/x.png" ng-click="closeMod()" class="close">
+
+
+        <div class="modCon">
+
+            <div class="row">
+
+                <div class="md">药品名称 :{{drugInfo.drugname}}</div>
+             
+            </div>
+
+            <div class="row">
+
+                <div class="md">规<i class="ls"></i>格: {{drugInfo.drugstandard}}</div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="md">厂<i class="ls"></i>商 : {{drugInfo.drugcompany}}</div>
+
+            </div>
+
+			<div class="row">
+
+                <div class="md">信息费 : {{f2y(drugInfo.settlementprice)}}</div>
+
+            </div>
+			
+            <div class="row">
+
+                <div class="md">售<i class="ls"></i>价 : <input type="text" ng-init="drugInfo.showprice=f2y(drugInfo.price)" ng-model="drugInfo.showprice"/></div>
+
+            </div>        
+
+            <div class="foot">
+
+                <div class="next" ng-click="modifyDrugInfo()">确定</div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>

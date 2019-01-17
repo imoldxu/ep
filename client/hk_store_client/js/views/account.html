@@ -1,0 +1,72 @@
+
+<link rel="stylesheet" href="css/css/account.css?ver={{cssVer}}">
+
+<div class="head">
+
+    <div class="logo">
+
+        <img src="img/logo2.png" alt="" width="54">
+
+        <span>账户管理</span>
+
+    </div>
+
+	<div class="goBack" ui-sref="index" >返回首页</div>
+	
+</div>
+
+<div class="con">
+
+    <div class="conHead">
+
+		<div><label>账户余额：</label>{{f2y(balance)}}元<img src="img/refresh.png" ng-click="getBalance()" width="16px">
+		</div>
+		
+        <div class="group">
+			<div class="row">
+				<!--input type="text" placeholder="请输入诊断号" ng-model="searchopt.number" ng-keyup="enterEvent($event)"/-->
+				<!--input type="text" placeholder="请输入医生姓名" ng-model="searchopt.doctorname" />
+				<input type="text" placeholder="请输入患者姓名" ng-model="searchopt.patientname" /-->
+				<label>日期</label><input type="date" ng-model="searchopt.startdate" />
+				<label>-</label><input type="date" ng-model="searchopt.enddate" />
+				<!--label>状态</label><select ng-model="searchopt.state">
+					<option value="生成处方">生成处方</option>
+					<option value="已领药">已领药</option>
+				</select-->
+				<div class="submit" ng-click="getRecordsByFirstPage()">查询</div>
+			</div>
+        </div>
+    </div>
+
+    <div class="conBody">
+
+        <table>
+            <thead>
+            <tr>
+			    <th>流水号</th>
+                <th>交易类型</th>
+                <th>金额</th>
+                <th>交易内容</th>
+				<th>创建日期</th>
+            </tr>
+            </thead>
+            <tbody>
+			<tr ng-repeat="x in recordList">
+				<td>{{x.id}}</td>
+				<td ng-if="x.type==1">收入</td>
+				<td ng-if="x.type==2">支出</td>
+				<td>{{f2y(x.amount)}}元</td>
+				<td>{{x.msg}}</td>
+				<td>{{format(x.createtime,"yyyy-MM-dd HH:mm:ss")}}</td>
+            </tr>
+            </tbody>
+        </table>
+		<div>
+			<div class="button" ng-if="recordList.length==20" ng-click="getRecordsByNextPage()">下一页</div>
+			<div class="button" ng-if="searchopt.pageindex!=1 && recordList.length!=0" ng-click="getRecordsByPrePage()">上一页</div>
+		<div>
+    </div>
+
+</div>
+
+

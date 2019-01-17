@@ -1,0 +1,406 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: #f4f4f5;
+}
+.head {
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  margin-bottom: 10px;
+  background: -webkit-linear-gradient(right, #0082bb, #1ae0c4);
+  /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #0082bb, #1ae0c4);
+  /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #0082bb, #1ae0c4);
+  /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #0082bb, #1ae0c4);
+  /* 标准的语法 */
+}
+.head .logo {
+  margin-left: 20px;
+  padding: 20px 0;
+  height: auto;
+  line-height: 54px;
+  color: #fff;
+  font-size: 24px;
+  float: left;
+}
+.head .logo img {
+  display: inline-block;
+  vertical-align: middle;
+}
+.head .goBack {
+  width: 100px;
+  height: 40px;
+  margin-top: 25px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 20px;
+  border: 1px solid #fff;
+  color: #fff;
+  margin-right: 40px;
+  float: right;
+  cursor: pointer;
+}
+.foot {
+  width: 80%;
+  margin: auto;
+  border-top: 1px solid #d7e9f0;
+  padding: 15px;
+  margin-top: 10px;
+}
+.foot p {
+  color: #999;
+}
+.foot .next {
+  position: relative;
+  width: 142px;
+  height: 48px;
+  line-height: 48px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #fff;
+  float: right;
+  border-radius: 5px;
+  cursor: pointer;
+  right: -15px;
+  background: -webkit-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #12b5fd, #00d8e4);
+  /* 标准的语法 */
+}
+.con {
+  width: 80%;
+  padding: 15px;
+  height: auto;
+  margin: auto;
+  margin-top: 10px;
+  overflow: auto;
+  background-color: #fff;
+}
+.con table {
+  font-size: 16px;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.con table td {
+  border-top: 1px solid #d7e9f0;
+  height: 40px;
+  line-height: 40px;
+}
+.con table tr:last-child td {
+  border-bottom: 1px solid #d7e9f0;
+}
+.con .row {
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  zoom: 1;
+}
+.con .row:after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+.con .iptGroup {
+  padding: 10px 0;
+  font-size: 14px;
+  float: left;
+  margin-right: 20px;
+  height: auto;
+  overflow: auto;
+}
+.con .iptGroup label {
+  width: 5em;
+  display: inline-block;
+  color: #6c6c6c;
+}
+.con .iptGroup .ls {
+  width: 2em;
+  display: inline-block;
+}
+.con .iptGroup span {
+  color: #000;
+  padding: 5px;
+}
+.con .iptGroup select {
+  width: 100px;
+  height: 30px;
+  border: 1px solid #93d3ff;
+  outline: none;
+  background-color: #fff;
+}
+.con .iptGroup input {
+  width: 100px;
+  outline: none;
+  padding: 5px;
+  height: 30px;
+  border: 1px solid #93d3ff;
+}
+.con .langIpt {
+  width: 100%;
+}
+.con .langIpt input {
+  width: 80%;
+  padding: 5px;
+  border: 1px solid #93d3ff;
+}
+.con .add {
+  width: 36px;
+  cursor: pointer;
+  margin-top: 30px;
+}
+.con .add img {
+  width: 100%;
+}
+.modal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.modal .mod {
+  position: fixed;
+  display:-webkit-flex;
+  display:flex;
+  width: 800px;
+  left: 50%;
+  top: 50%;
+  margin-top: -240px;
+  margin-left: -400px;
+  background-color: #fff;
+}
+
+.modal .mod  .closebutton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+
+.modal .mod .medicalArea {
+  width: 50%;
+  height: 100%;
+  padding-top:26px;
+  display:flex;
+  flex-direction:column;
+  border-right: 2px solid #d7e9f0;
+}
+.modal .mod .medicalArea input {
+  width: 90%;
+  height: 30px;
+  margin: 0 auto;
+  padding: 3px 6px;
+  outline: none;
+  border: 1px solid #93d3ff;
+}
+
+.modal .mod .medicalArea .fastSelect{
+	width: 90%;
+	margin: 3 auto;
+	display:flex;
+	flex-wrap: wrap;
+}
+
+.modal .mod .medicalArea .fastSelect .keybutton{
+  width: 65px;
+  height: 30px;
+  font-size: 12px;
+  line-height: 30px;
+  margin: 3px;
+  text-align: center;
+  color: #fff;
+  border-radius: 2px;
+  cursor: pointer;
+  right: -15px;
+  background: #2196f3;
+}
+
+
+.modal .mod .medicalArea .modSel {
+  width: 90%;
+  height: 300px;
+  margin: 0 auto 15 auto;
+  padding-bottom: 15px;
+  border: 1px solid #93d3ff;
+  background-color: #fff;
+  overflow: auto;
+}
+.modal .mod .medicalArea .modSel div {
+  padding: 3px 10px;
+  line-height: 30px;
+  height: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.modal .mod .medicalArea .modSel div:hover {
+  background-color: #93d3ff;
+}
+.modal .mod .modCon {
+  width: 50%;
+  height: 100%;
+}
+.modal .mod .modCon .foot {
+  width: 100%;
+  border: none;
+  padding: 20px;
+}
+.modal .mod .modCon .foot .next {
+  position: absolute;
+  right: 20px;
+  /* margin: 20px; */
+  bottom: 10px;
+}
+.modal .mod .modCon .row {
+  width: 90%;
+  height: auto;
+  padding: 20 10px;
+  margin: 0 auto;
+  border-bottom: 1px solid #d7e9f0;
+  zoom: 1;
+}
+.modal .mod .modCon .row:after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+.modal .mod .modCon .row input {
+  width: 200px;
+  outline: none;
+  height: 30px;
+  margin: 10px;
+  padding: 0 5px;
+  border: 1px solid #93d3ff;
+}
+.modal .mod .modCon .row p {
+  height: 35px;
+  line-height: 35px;
+  margin: 10 auto;
+  font-size: 14px;
+  color: #999;
+}
+.modal .mod .modCon .row select {
+  width: 200px;
+  border: 1px solid #93d3ff;
+  height: 30px;
+  margin: 10px;
+  outline: none;
+  background-color: #fff;
+}
+.modal .mod .modCon .row span {
+  color: #999;
+  font-size: 14px;
+}
+
+.modal .mod .modCon .row .fd {
+  width: 100%;
+  height: 35px;
+  line-height: 35px;
+  float: left;
+  font-size: 14px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modal .mod .modCon .row .fd span {
+  color: #000;
+  font-size: 16px;
+}
+
+.modal .mod .modCon .row .md {
+  width: 50%;
+  height: 35px;
+  line-height: 35px;
+  float: left;
+  font-size: 14px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.modal .mod .modCon .row .md span {
+  color: #000;
+  font-size: 16px;
+}
+.modal .mod .modCon .row .ls {
+  width: 2em;
+  display: inline-block;
+}
+.selGroup {
+  width: 100%;
+  line-height: 35px;
+  zoom: 1;
+}
+.selGroup:after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+.selGroup p {
+  float: left;
+  vertical-align: middle;
+}
+.selGroup .selMod {
+  position: relative;
+  width: 200px;
+  display: inline-block;
+}
+.selGroup .selMod .optMod {
+  position: absolute;
+  width: 200px;
+  height: auto;
+  margin: 0 10px;
+  max-height: 100px;
+  overflow: auto;
+  background-color: #fff;
+  font-size: 14px;
+  top: 40px;
+  border: 1px solid #93d3ff;
+  z-index: 1111;
+}
+.selGroup .selMod .optMod .optList:hover {
+  background-color: #93d3ff;
+}
+
+.con .iptGroup .optGroup {
+  width: 90%;
+  display: inline-block;
+}
+.con .iptGroup .optGroup .optMod {
+  position: absolute;
+  width: 400px;
+  height: auto;
+  max-height: 200px;
+  overflow: auto;
+  background-color: #fff;
+  font-size: 14px;
+  border: 1px solid #93d3ff;
+  z-index: 1111;
+}
+.con .iptGroup .optGroup .optMod .optList:hover {
+  background-color: #93d3ff;
+}
+.con .iptGroup .optGroup .optMod  div {
+  line-height: 26px;
+  padding: 0 5px;
+}
