@@ -3,6 +3,8 @@ package com.ly.service.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
+import org.redisson.connection.balancer.RoundRobinLoadBalancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +51,16 @@ public class HospitalDrugService {
 		return hdrug;
 	}
 	
-	public List<HospitalDrug> getMyDrugList(int sellerid){
+	public List<HospitalDrug> getHospitalDrugListBySeller(int sellerid, String key, int pageIndex, int pageSize){
 		Example ex = new Example(HospitalDrug.class);
-		ex.createCriteria().andEqualTo("sellerid", sellerid);
-		List<HospitalDrug> list = drugMapper.selectByExample(ex);
+		if(key != null && !key.isEmpty()){
+			ex.createCriteria().andEqualTo("sellerid", sellerid).andLike("drugname", "%"+key+"%");		
+		}else{
+			ex.createCriteria().andEqualTo("sellerid", sellerid);	
+		}
+		ex.setOrderByClause("id DESC");
+		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize,pageSize);
+		List<HospitalDrug> list = drugMapper.selectByExampleAndRowBounds(ex, rowBounds);
 		return list;
 	}
 

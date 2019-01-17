@@ -80,6 +80,21 @@ public class SellerController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/logout", method = RequestMethod.GET)
+	@ApiOperation(value = "账号登出", notes = "销售人员调用")
+	public Response Logout(HttpServletRequest request, HttpServletResponse response){
+		try{
+			SessionUtil.setSellerId(request, null);
+			return Response.OK(null);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(path="/register", method = RequestMethod.POST)
 	@ApiOperation(value = "账号注册", notes = "由管理员调用")
 	public Response register(@ApiParam(name="name", value="姓名") @RequestParam(name="name") String name,

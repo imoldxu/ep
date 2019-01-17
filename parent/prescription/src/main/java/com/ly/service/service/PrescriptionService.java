@@ -343,9 +343,19 @@ public class PrescriptionService {
 		return plist;
 	}
 
-	public List<Prescription> getStorePrescriptions(Integer storeid, int pageIndex, int pageSize) {
+	public List<Prescription> getStorePrescriptions(Integer storeid, String startDate, String endDate, int pageIndex, int pageSize) {
 		int offset = (pageIndex-1)*pageSize;
-		List<Prescription> ret = pMapper.getStorePrescripts(storeid, offset, pageSize);
+		if(startDate==null || startDate.isEmpty()){
+			startDate = "1970-1-1";
+		}else{
+			startDate = DateUtils.UTCStringtODefaultString(startDate);
+		}
+		if(endDate==null || endDate.isEmpty()){
+			endDate = "2099-12-31";
+		}else{
+			endDate = DateUtils.UTCStringtODefaultString(endDate);
+		}
+		List<Prescription> ret = pMapper.getStorePrescripts(storeid, startDate, endDate, offset, pageSize);
 		return ret;
 	}
 	

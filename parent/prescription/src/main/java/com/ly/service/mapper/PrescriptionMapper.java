@@ -11,6 +11,8 @@ import com.ly.service.entity.Prescription;
 public interface PrescriptionMapper extends BaseMapper<Prescription> {
 
 	List<Prescription> getStorePrescripts(@Param(value="storeId")Integer storeId,
+			@Param(value="startDate")String startDate,
+			@Param(value="endDate")String endDate,
 			@Param(value="offset")Integer offset,
 			@Param(value="pageSize")Integer pageSize);
 	

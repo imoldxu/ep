@@ -286,14 +286,16 @@ public class PrescriptionController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getStorePrescriptions", method = RequestMethod.GET)
 	@ApiOperation(value = "获取药房已经销售的处方列表", notes = "药房接口")
-	public Response getStorePrescriptions(@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
+	public Response getStorePrescriptions(@ApiParam(name="startDate", value="开始日期") @RequestParam(name="startDate") String startDate,
+			@ApiParam(name="endDate", value="结束日期，可为null") @RequestParam(name="endDate") String endDate,
+			@ApiParam(name="pageIndex", value="页码1-n") @RequestParam(name="pageIndex") int pageIndex,
 			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse response){
 		
 		try{
 			Integer storeid = SessionUtil.getStoreId(request);
 			
-			List<Prescription> list = prescriptionService.getStorePrescriptions(storeid, pageIndex, pageSize);
+			List<Prescription> list = prescriptionService.getStorePrescriptions(storeid, startDate, endDate, pageIndex, pageSize);
 			return Response.OK(list);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());

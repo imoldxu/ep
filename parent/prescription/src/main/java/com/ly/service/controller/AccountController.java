@@ -90,12 +90,14 @@ public class AccountController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getSellerAccountRecord", method = RequestMethod.GET)
 	@ApiOperation(value = "获取销售的记录", notes = "销售人员接口")
-	public Response getSellerAccountRecord(@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
+	public Response getSellerAccountRecord(@ApiParam(name="startDate", value="开始日期") @RequestParam(name="startDate") String startDate,
+			@ApiParam(name="endDate", value="结束日期") @RequestParam(name="endDate") String endDate,
+			@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
 			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse resp) {
 		try{
 			int sellerid = SessionUtil.getSellerId(request);
-			List<SellerAccountRecord> list = accountService.getSellerAccountRecord(sellerid, pageIndex, pageSize);
+			List<SellerAccountRecord> list = accountService.getSellerAccountRecord(sellerid, startDate, endDate, pageIndex, pageSize);
 			return Response.OK(list);
 		} catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -124,12 +126,14 @@ public class AccountController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getStoreAccountRecord", method = RequestMethod.GET)
 	@ApiOperation(value = "获取店铺账户记录", notes = "药房接口")
-	public Response getStoreAccountRecord(@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
+	public Response getStoreAccountRecord(@ApiParam(name="startDate", value="开始日期") @RequestParam(name="startDate") String startDate,
+			@ApiParam(name="endDate", value="结束日期") @RequestParam(name="endDate") String endDate,
+			@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
 			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse resp) {
 		try{
 			int storeid = SessionUtil.getStoreId(request);
-			List<StoreAccountRecord> list = accountService.getStoreAccountRecord(storeid, pageIndex, pageSize);
+			List<StoreAccountRecord> list = accountService.getStoreAccountRecord(storeid, startDate, endDate, pageIndex, pageSize);
 			return Response.OK(list);
 		} catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());

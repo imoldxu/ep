@@ -129,12 +129,14 @@ public class StoreDrugController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getStoreDrugList", method = RequestMethod.GET)
 	@ApiOperation(value = "获取药房的药品清单", notes = "药房接口")
-	public Response getStoreDrugList(@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
+	public Response getStoreDrugList(@ApiParam(name = "key", value = "关键字") @RequestParam(name = "key") String key,
+			@ApiParam(name = "state", value = "状态") @RequestParam(name = "state") int state,
+			@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
 			@ApiParam(name = "pageSize", value = "每页数量") @RequestParam(name = "pageSize")int pageSize,
 			HttpServletRequest request, HttpServletResponse response){
 		try{
 			Integer storeid = SessionUtil.getStoreId(request);
-			List<StoreDrug> list= drugService.getStoreDrugList(storeid, pageIndex, pageSize);
+			List<StoreDrug> list= drugService.getStoreDrugList(storeid, key, state, pageIndex, pageSize);
 			return Response.OK(list);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());

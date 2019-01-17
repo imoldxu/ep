@@ -12,6 +12,7 @@ import com.ly.service.entity.StoreDrug;
 import com.ly.service.mapper.StoreDrugMapper;
 
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 
 @Service
 public class StoreDrugService {
@@ -48,9 +49,15 @@ public class StoreDrugService {
 		return drug;
 	}
 	
-	public List<StoreDrug> getStoreDrugList(int storeid, int pageIndex, int pageSize){
+	public List<StoreDrug> getStoreDrugList(int storeid, String key, int state, int pageIndex, int pageSize){
 		Example ex = new Example(StoreDrug.class);
-		ex.createCriteria().andEqualTo("storeid", storeid);
+		Criteria c = ex.createCriteria().andEqualTo("storeid", storeid);
+		if(key != null && !key.isEmpty()){
+			c = c.andLike("drugname", "%"+key+"%");
+		}
+		if(state!=0){
+			c = c.andEqualTo("state", state);
+		}
 		ex.setOrderByClause("id DESC");
 		//分页处理
 		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);

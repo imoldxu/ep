@@ -21,6 +21,7 @@ import com.ly.service.entity.StoreDrug;
 import com.ly.service.feign.client.DrugClient;
 import com.ly.service.feign.client.UserClient;
 import com.ly.service.mapper.SalesRecordMapper;
+import com.ly.service.utils.DateUtils;
 import com.ly.service.utils.JSONUtils;
 import com.ly.service.utils.RedissonUtil;
 
@@ -141,10 +142,23 @@ public class SalesRecordService {
 		
 	}
 	
-	public List<SalesRecord> getRecordBySeller(Integer sellerid, int pageIndex, int pageSize) {
-
+	public List<SalesRecord> getRecordBySeller(Integer sellerid, String doctorName, String startDate, String endDate, int pageIndex, int pageSize) {
+		if(startDate==null || startDate.isEmpty()){
+			startDate = "1970-1-1";
+		}else{
+			startDate = DateUtils.UTCStringtODefaultString(startDate);
+		}
+		if(endDate == null || endDate.isEmpty()){
+			endDate = "2099-12-31";
+		}else{
+			endDate = DateUtils.UTCStringtODefaultString(endDate);
+		}
 		Example ex = new Example(SalesRecord.class);
-		ex.createCriteria().andEqualTo("sellerid", sellerid);
+		if(doctorName==null || doctorName.isEmpty()){
+			ex.createCriteria().andEqualTo("sellerid", sellerid).andBetween("createtime", startDate, endDate);	
+		}else{
+			ex.createCriteria().andEqualTo("sellerid", sellerid).andBetween("createtime", startDate, endDate).andEqualTo("doctorname", doctorName);	
+		}
 		ex.setOrderByClause("id DESC");
 		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
 		List<SalesRecord> list = recordMapper.selectByExampleAndRowBounds(ex, rowBounds);

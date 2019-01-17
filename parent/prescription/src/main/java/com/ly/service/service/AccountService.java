@@ -17,6 +17,7 @@ import com.ly.service.entity.SellerAccountRecord;
 import com.ly.service.entity.StoreAccount;
 import com.ly.service.entity.StoreAccountRecord;
 import com.ly.service.mapper.*;
+import com.ly.service.utils.DateUtils;
 import com.ly.service.utils.RedissonUtil;
 
 import tk.mybatis.mapper.entity.Example;
@@ -195,17 +196,33 @@ public class AccountService {
 		return account.getBalance();
 	}
 
-	public List<SellerAccountRecord> getSellerAccountRecord(int sellerid, int pageIndex, int pageSize) {
+	public List<SellerAccountRecord> getSellerAccountRecord(int sellerid, String startDate, String endDate, int pageIndex, int pageSize) {
+		if(startDate==null || startDate.isEmpty()){
+			startDate = "1970-1-1";
+		}else{
+			startDate = DateUtils.UTCStringtODefaultString(startDate);
+		}
+		if(endDate == null || endDate.isEmpty()){
+			endDate = "2099-12-31";
+		}else{
+			endDate = DateUtils.UTCStringtODefaultString(endDate);
+		}
 		Example ex = new Example(SellerAccountRecord.class);
-		ex.createCriteria().andEqualTo("sellerid", sellerid);
+		ex.createCriteria().andEqualTo("sellerid", sellerid).andBetween("createtime", startDate, endDate);
 		ex.setOrderByClause("id DESC");
 		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
 		return sellerRecordMapper.selectByExampleAndRowBounds(ex, rowBounds);
 	}
 
-	public List<StoreAccountRecord> getStoreAccountRecord(int storeid, int pageIndex, int pageSize) {
+	public List<StoreAccountRecord> getStoreAccountRecord(int storeid,String startDate, String endDate, int pageIndex, int pageSize) {
+		if(startDate==null || startDate.isEmpty()){
+			startDate = "1970-1-1";
+		}
+		if(endDate == null || endDate.isEmpty()){
+			endDate = "2099-12-31";
+		}
 		Example ex = new Example(StoreAccountRecord.class);
-		ex.createCriteria().andEqualTo("storeid", storeid);
+		ex.createCriteria().andEqualTo("storeid", storeid).andBetween("createtime", startDate, endDate);
 		ex.setOrderByClause("id DESC");
 		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
 		return storeRecordMapper.selectByExampleAndRowBounds(ex, rowBounds);

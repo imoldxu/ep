@@ -29,7 +29,7 @@
 	<select id="getStorePrescripts" resultMap="myPrescription">
 		SELECT t_prescription.id, t_prescription.createtime, t_prescription.department, t_prescription.diagnosis, t_prescription.doctorid, t_prescription.doctorname, t_prescription.hospitalid, t_prescription.hospitalname, t_prescription.patientage,
    t_prescription.patientname, t_prescription.patientphone, t_prescription.patientsex, t_prescription.sn, t_prescription.type, t_prescription.userid, t_prescription.zyfrequence, t_prescription.zymode,
-t_prescription.zynum, t_prescription.zysingledose, t_prescription.zyusage FROM t_sales_record LEFT JOIN t_prescription ON t_sales_record.prescriptionid = t_prescription.id WHERE t_sales_record.storeid = #{storeId,jdbcType=INTEGER} GROUP BY t_prescription.id ORDER BY t_prescription.createtime LIMIT #{offset,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+t_prescription.zynum, t_prescription.zysingledose, t_prescription.zyusage FROM t_sales_record LEFT JOIN t_prescription ON t_sales_record.prescriptionid = t_prescription.id WHERE t_sales_record.storeid = #{storeId,jdbcType=INTEGER} AND t_prescription.createtime BETWEEN #{startDate,jdbcType=VARCHAR} AND #{endDate,jdbcType=VARCHAR} GROUP BY t_prescription.id ORDER BY t_prescription.createtime LIMIT #{offset,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
 	</select>
 	
 </mapper>
