@@ -1,0 +1,363 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: #f4f4f5;
+}
+.head {
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  margin-bottom: 20px;
+  background: -webkit-linear-gradient(right, #0082bb, #1ae0c4);
+  /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #0082bb, #1ae0c4);
+  /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #0082bb, #1ae0c4);
+  /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #0082bb, #1ae0c4);
+  /* 标准的语法 */
+}
+.head .logo {
+  margin-left: 20px;
+  padding: 20px 0;
+  height: auto;
+  line-height: 54px;
+  color: #fff;
+  font-size: 24px;
+  float: left;
+}
+.head .logo img {
+  display: inline-block;
+  vertical-align: middle;
+}
+.head .goBack {
+  width: 100px;
+  height: 40px;
+  margin-top: 25px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 20px;
+  border: 1px solid #fff;
+  color: #fff;
+  margin-right: 40px;
+  float: right;
+  cursor: pointer;
+}
+.con {
+  width: 100%;
+  height: auto;
+}
+.con .conHead {
+  width: 80%;
+  height: auto;
+  margin: auto;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #0bb5ff;
+}
+.con .conBody {
+  width: 80%;
+  height: auto;
+  margin: auto;
+}
+.con .conBody .putAL {
+  position: relative;
+  width: 100%;
+  height: 72px;
+}
+
+.con .conBody .putAL .download {
+  position: absolute;
+  right: 0px;
+  top: 22px;
+  width: 140px;
+  font-size: 12px;
+  height: 30px;
+  line-height: 28px;
+  text-align: center;
+  color: #fff;
+  border-radius: 3px;
+  cursor: pointer;
+  background: -webkit-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #12b5fd, #00d8e4);
+  /* 标准的语法 */
+}
+
+
+.con .conBody .putAL .add {
+  position: absolute;
+  right: 0;
+  top: 22px;
+  width: 140px;
+  font-size: 12px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  color: #fff;
+  border-radius: 3px;
+  background: -webkit-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #12b5fd, #00d8e4);
+  /* 标准的语法 */
+}
+.con .conBody table {
+  width: 100%;
+  text-align: center;
+  background-color: #fff;
+  font-size: 14px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: #000;
+}
+.con .conBody table thead {
+  color: #fff;
+  background-color: #00c8cd;
+}
+.con .conBody table tbody tr {
+  border-bottom: 1px solid #eee;
+}
+.con .conBody table tbody tr:last-child {
+  border: none;
+}
+.con .conBody table tbody tr:hover td {
+  background-color: #f6fdff;
+  cursor: pointer;
+}
+.con .conBody table th {
+  padding: 10px 20px;
+}
+.con .conBody table td {
+  padding: 10px 30px;
+}
+.con .conBody table td img{
+  padding: 2px;
+}
+.group {
+  position: relative;
+  width: 100%;
+  margin: auto;
+  height: auto;
+}
+.group .groupMod {
+  position: absolute;
+  width: 458px;
+  height: auto;
+  background-color: #fff;
+  overflow: auto;
+  left: 0;
+  top: 30px;
+  z-index: 1111111;
+}
+.group .groupMod p {
+  padding: 20px;
+  text-align: center;
+}
+.group .groupMod div {
+  padding: 10px 20px;
+  line-height: 30px;
+  height: 30px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.group .groupMod div:hover {
+  background-color: #93d3ff;
+}
+
+.group .row {
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  margin: 10 0px;
+  text-align:center;
+  zoom: 1;
+}
+
+.group input {
+  width: 130px;
+  height: 30px;
+  border: 1px solid #93d3ff;
+  outline: none;
+  font-size: 14px;
+  padding: 5px;
+  margin: 0 10px;
+}
+
+.group select {
+  width: 140px;
+  height: 30px;
+  border: 1px solid #93d3ff;
+  outline: none;
+  font-size: 14px;
+  padding: 5px;
+  margin: 0 10px;
+}
+
+.group .submit {
+  width: 120px;
+  height: 30px;
+  display: inline-block;
+  line-height: 30px;
+  text-align: center;
+  color: #fff;
+  border-radius: 3px;
+  cursor: pointer;
+  background: -webkit-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #12b5fd, #00d8e4);
+  /* 标准的语法 */
+}
+.group a {
+  margin-top: 14px;
+  color: #0bb5ff;
+  font-size: 14px;
+  float: left;
+}
+.modal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.modal .mod {
+  position: absolute;
+  width: 80%;
+  height: 550px;
+  left: 10%;
+  top: 50%;
+  margin-top: -275px;
+  background-color: #fff;
+}
+.modal .mod .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.modal .mod .modCon {
+  width: 80%;
+  margin: auto;
+  height: auto;
+  padding-top: 30px;
+}
+.modal .mod .modCon .foot {
+  width: 100%;
+  border: none;
+  padding: 20px 0;
+}
+.modal .mod .modCon .foot .next {
+  position: relative;
+  width: 142px;
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  color: #fff;
+  float: right;
+  border-radius: 5px;
+  cursor: pointer;
+  right: 0;
+  background: -webkit-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #12b5fd, #00d8e4);
+  /* 标准的语法 */
+}
+.modal .mod .modCon .bd {
+  padding-bottom: 36px;
+  border-bottom: 1px solid #d7e9f0;
+}
+.modal .mod .modCon .row {
+  width: 100%;
+  height: auto;
+  zoom: 1;
+}
+.modal .mod .modCon .row:after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+.modal .mod .modCon .row input {
+  width: 60%;
+  outline: none;
+  height: 20px;
+  padding: 0 5px;
+  border: 1px solid #93d3ff;
+}
+.modal .mod .modCon .row p {
+  height: 35px;
+  line-height: 35px;
+  font-size: 12px;
+  color: #000;
+}
+.modal .mod .modCon .row select {
+  width: 60%;
+  border: 1px solid #93d3ff;
+  height: 20px;
+  outline: none;
+  background-color: #fff;
+  border-radius: 0;
+}
+.modal .mod .modCon .row .md {
+  width: 33%;
+  height: 35px;
+  line-height: 35px;
+  float: left;
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.modal .mod .modCon .row .md span {
+  color: #000;
+}
+.modal .mod .modCon .row .ls {
+  width: 2em;
+  display: inline-block;
+}
+
+.button {
+  width: 90px;
+  height: 30px;
+  margin: 5px;
+  display: inline-block;
+  line-height: 30px;
+  text-align: center;
+  color: #fff;
+  border-radius: 3px;
+  float: right;
+  cursor: pointer;
+  background: -webkit-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(right, #12b5fd, #00d8e4);
+  /* Firefox 3.6 - 15 */
+  background: linear-gradient(to right, #12b5fd, #00d8e4);
+}
+
+.emptystate {
+	color: red;
+}

@@ -1,0 +1,76 @@
+
+<link rel="stylesheet" href="css/css/salesrecord.css?ver={{cssVer}}">
+
+<div class="head">
+
+    <div class="logo">
+
+        <img src="img/logo2.png" alt="" width="54">
+
+        <span>售药记录</span>
+
+    </div>
+
+	<div class="goBack" ui-sref="index" >返回首页</div>
+	
+</div>
+
+<div class="con">
+
+    <div class="conHead">
+
+        <div class="group">
+			<div class="row">
+				<input type="text" placeholder="请输入医生姓名" ng-model="searchopt.doctorname" />
+				<label>日期</label><input type="date" ng-model="searchopt.startdate" />
+				<label>-</label><input type="date" ng-model="searchopt.enddate" />
+				<!--label>状态</label><select ng-model="searchopt.state">
+					<option value="生成处方">生成处方</option>
+					<option value="已领药">已领药</option>
+				</select-->
+				<div class="submit" ng-click="getRecordsByFirstPage()">查询</div>
+			</div>
+        </div>
+    </div>
+
+    <div class="conBody">
+
+        <table>
+            <thead>
+            <tr>
+			    <th>流水号</th>
+				<th>处方编号</th>
+                <th>药品名称</th>
+				<th>推广单价(元)</th>
+                <th>售药数量</th>
+                <th>医院</th>
+                <th>医生</th>
+                <th>销售药房</th>
+				<th>推广费(元)</th>
+				<th>售药日期</th>
+            </tr>
+            </thead>
+            <tbody>
+			<tr ng-repeat="x in recordList">
+				<td>{{x.id}}</td>
+				<td>{{x.prescriptionid}}</td>
+				<td>{{x.drugname}}</td>
+				<td>{{f2y(x.sellerfee)}}</td>
+				<td>{{x.num}}</td>
+				<td>{{x.hospitalname}}</td>
+				<td>{{x.doctorname}}</td>
+				<td>{{x.storename}}</td>
+				<td>{{f2y(x.totalsellerfee)}}</td>
+				<td>{{format(x.createtime,"yyyy-MM-dd HH:mm:ss")}}</td>
+            </tr>
+            </tbody>
+        </table>
+		<div>
+			<div class="button" ng-if="recordList.length==20" ng-click="getRecordsByNextPage()">下一页</div>
+			<div class="button" ng-if="searchopt.pageindex!=1 && recordList.length!=0" ng-click="getRecordsByPrePage()">上一页</div>
+		<div>
+    </div>
+
+</div>
+
+

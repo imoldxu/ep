@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="css/css/index.css?ver={{cssVer}}">
+
+<div class="head">
+
+    <img src="img/bg.png" alt="" width="100%">
+
+    <img src="img/logo.png" width="152" class="logo">
+
+</div>
+
+<div class="welcome">欢迎{{storeInfo.name}}使用</div>
+
+<div class="group">
+
+	<div class="imgbutton">
+		<img src="img/prescription.png" ng-click="nextpage('salesrecord')"></img>
+		<span>售药记录</span>
+	</div>
+	<div class="imgbutton">
+		<img src="img/medical.png" ng-click="nextpage('drug')"></img>
+		<span>我的药品</span>
+	</div>
+	<div class="imgbutton">
+		<img src="img/account.png" ng-click="nextpage('account')"></img>
+		<span>账户管理</span>
+	</div>
+	<div class="imgbutton">
+		<img src="img/password.png" ng-click="openPwdModel()"></img>
+		<span>修改密码</span>
+	</div>
+	<div class="imgbutton">
+		<img src="img/logout.png" ng-click="logout()"></img>
+		<span>退出登录</span>
+	</div>
+</div>
+
+
+<div ng-if="pwdModel" class="model">
+	<div class="mod">
+		
+		<img src="img/x.png" ng-click="closePwdMod()" class="close">
+
+		<div class="modCon">
+		
+            <div class="row">
+				<label>原<i class="ls"></i>密码</label><input type="password" ng-model="oldpwd"/>
+			</div>
+			
+            <div class="row">
+				<label>新<i class="ls"></i>密码</label><input type="password" ng-model="newpwd"/>
+			</div>
+            <div class="row">
+				<label>再输入一次</label><input type="password" ng-model="newpwd2"/>
+			</div>
+            <div class="foot">
+				<div  class="button" ng-click="modifyPwd(oldpwd, newpwd, newpwd2)">提交</div>
+			</div>
+		</div>
+	</div>
+<div>

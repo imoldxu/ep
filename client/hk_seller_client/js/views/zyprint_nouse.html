@@ -1,0 +1,89 @@
+
+
+<link rel="stylesheet" href="css/css/zyprint.css?ver={{cssVer}}">
+
+
+<style media="print" type="text/css">
+    .noprint{display:none}
+</style>
+
+<div class="head noprint">
+
+    <div class="logo">
+
+        <img src="img/logo2.png" alt="" width="54">
+
+        <span>电子处方系统</span>
+
+    </div>
+
+    <div class="goBack" ui-sref="welcome" >返回首页</div>
+
+</div>
+
+<div class="con">
+
+    <h3>处方签</h3>
+
+    <div class="conHead">
+
+        <div class="row">
+
+            <div>门诊号:{{userArry.num}}</div>
+            <div>科室:{{userArry.department}}</div>
+            <div></div>
+            <div>费别:\</div>
+            <div>姓名:{{userArry.patientname}}</div>
+            <div>性别:{{userArry.patientsex}}</div>
+            <div>年龄:{{userArry.patientage}}</div>
+            <div>开具日期:{{dateTime}}</div>
+            <div class="dia">诊断:{{userArry.diagnosis}}</div>
+
+        </div>
+
+    </div>
+
+    <div class="conInfo">
+
+        <span class="r">R.</span>
+
+        <div class="infoList" ng-repeat="x in drugArry">
+            <div>{{x.drugname}}</div>
+            <div>{{x.number + '' +x.unit+x.myusage}}</div>
+        </div>
+
+    </div>
+
+	<!--中药处方的用法说明-->
+	<div class="zyuseinfo">
+		<div>总剂数:{{userArry.zynum}}</div>
+		<div>每日剂量:{{userArry.zyfrequence}}</div>
+		<div>一次用量:{{userArry.zysingledose}}</div>
+		<div>方式:{{userArry.zymode}}</div>
+		<div>用法:{{userArry.zyusage}}</div>
+	</div>
+	
+    <div class="conFoot">
+
+        <div class="row">
+
+            <div>医师:{{userArry.doctorname}}</div>
+            <div>金额:{{price | number : 2}}元</div>
+            <div>药师(审核,核对,发药):</div>
+            <div>药师/士(调配):</div>
+
+        </div>
+
+        <p>特别提示:按卫生部,国家中医药管理局卫医发[2002]24号文件规定:为保证患者用药安全,药品一经发出,不得退换.</p>
+
+    </div>
+
+</div>
+
+<div class="foot noprint">
+
+    <div class="next"  ng-click="commit()">确认并提交</div>
+
+    <div class="next" ng-click="goBack()">返回上一步</div>
+
+</div>

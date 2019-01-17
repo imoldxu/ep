@@ -1,0 +1,60 @@
+
+<link rel="stylesheet" href="css/css/drug.css?ver={{cssVer}}">
+
+<div class="head">
+
+    <div class="logo">
+
+        <img src="img/logo2.png" alt="" width="54">
+
+        <span>药品管理</span>
+
+    </div>
+
+	<div class="goBack" ui-sref="index" >返回首页</div>
+	
+</div>
+
+<div class="con">
+
+    <div class="conHead">
+
+        <div class="group">
+
+            <input type="text" placeholder="请输入药品名称" ng-model="searchopt.key">
+
+            <div class="submit" ng-click="getDrugsByFirstPage()">查询</div>
+
+
+        </div>
+    </div>
+
+    <div class="conBody">
+
+        <table>
+            <thead>
+				<tr>
+					<th>药品名称</th>
+					<th>药品规格</th>
+					<th>厂商</th>
+					<th>推广医院</th>
+					<th>推广费(元)</th>
+				</tr>
+            </thead>
+            <tbody>
+				<tr ng-repeat="x in drugList">
+					<td>{{x.drugname}}</td>
+					<td>{{x.drugstandard}}</td>
+					<td>{{x.drugcompany}}</td>
+					<td>{{x.hospitalname}}</td>
+					<td>{{f2y(x.sellfee)}}</td>
+				</tr>
+            </tbody>
+        </table>
+		<div>
+			<div class="button" ng-if="drugList.length==20 " ng-click="getDrugsByNextPage()">下一页</div>
+			<div class="button" ng-if="searchopt.pageindex!=1 && drugList.length!=0" ng-click="getDrugsByPrePage()">上一页</div>
+		<div>
+    </div>
+
+</div>
