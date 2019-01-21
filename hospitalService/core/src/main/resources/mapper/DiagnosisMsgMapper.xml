@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yyg.eprescription.mapper.DiagnosisMsgMapper" >
+		
+	<select id="getMsgByKeys" resultType="String">
+		SELECT diagnosis FROM t_diagnosismsg WHERE (diagnosis LIKE #{mykeys,jdbcType=VARCHAR} OR shortkeys LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR}) LIMIT 50; 	
+	</select>
+	
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yyg.eprescription.mapper.DrugMapper" >
+		
+	<resultMap id="ShortDrugInfo" type="com.yyg.eprescription.entity.ShortDrugInfo" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="showname" property="showname" jdbcType="VARCHAR" />
+  	</resultMap>
+
+	<select id="getDrugsByKeys" resultType="ShortDrugInfo">
+		SELECT id ,CONCAT(drugname,'--',standard,'--',company) as showname FROM t_drug WHERE state = 1 and category not like '中药' and (drugname LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
+	</select>
+	
+	<select id="getZyDrugsByKeys" resultType="ShortDrugInfo">
+		SELECT id ,CONCAT(drugname,'--',standard,'--',company) as showname FROM t_drug WHERE state = 1 and category like '中药' and (drugname LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
+	</select>
+
+	<select id="getDrugsByKeysWithoutID" resultType="ShortDrugInfo">
+		SELECT id ,CONCAT(drugname,'--',standard,'--',company) as showname FROM t_drug WHERE state = 1 and category not like '中药' and id != #{myid,jdbcType=INTEGER} AND (drugname LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
+	</select>
+	
+	<select id="getZyDrugsByKeysWithoutID" resultType="ShortDrugInfo">
+		SELECT id ,CONCAT(drugname,'--',standard,'--',company) as showname FROM t_drug WHERE state = 1 and category like '中药' and  id != #{myid,jdbcType=INTEGER} AND (drugname LIKE #{mykeys,jdbcType=VARCHAR} OR fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
+	</select>
+
+	<select id="getDrugBySubCategory" resultType="ShortDrugInfo">
+		select id ,CONCAT(drugname,'--',standard,'--',company) as showname from t_drug where state = 1 and subcategory like #{category, jdbcType=VARCHAR} and category not like '中药';
+	</select>
+	
+	<select id="getZyDrugBySubCategory" resultType="ShortDrugInfo">
+		select id ,CONCAT(drugname,'--',standard,'--',company) as showname from t_drug where state = 1 and subcategory like #{category, jdbcType=VARCHAR} and category like '中药';
+	</select>
+</mapper>

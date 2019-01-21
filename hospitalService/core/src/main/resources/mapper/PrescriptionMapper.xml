@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yyg.eprescription.mapper.PrescriptionMapper" >
+	<resultMap id="CountPrescriptionInfo" type="com.yyg.eprescription.entity.CountPrescriptionInfo" >
+	    <result column="drugname" property="drugname" jdbcType="VARCHAR" />
+	    <result column="doctorname" property="doctorname" jdbcType="VARCHAR" />
+	    <result column="department" property="department" jdbcType="VARCHAR" />
+	    <result column="countnumber" property="countnumber" jdbcType="VARCHAR" />
+	    <result column="drugunit" property="drugunit" jdbcType="VARCHAR"/>
+  	</resultMap>
+
+	<select id="countPrescription" resultType="CountPrescriptionInfo">
+	       select drugname, doctorname, department, sum(t_prescriptiondrugs.number*t_prescription.zynum) as countnumber, t_prescriptiondrugs.unit as drugunit from t_prescriptiondrugs LEFT JOIN t_prescription ON t_prescriptiondrugs.prescriptionid = t_prescription.id WHERE t_prescription.state like '已领药' AND t_prescription.createtime BETWEEN #{startdate,jdbcType=VARCHAR} and #{enddate,jdbcType=VARCHAR} GROUP BY drugname, doctorname ORDER BY drugname
+	</select>
+
+
+</mapper>
