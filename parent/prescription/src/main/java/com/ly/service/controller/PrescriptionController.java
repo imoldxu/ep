@@ -63,7 +63,7 @@ public class PrescriptionController {
 	}
 
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/commitByHosiptal", method = RequestMethod.POST)
+	@RequestMapping(value = "/commitByHospital", method = RequestMethod.POST)
 	@ApiOperation(value = "从医院处方系统传入处方", notes = "医院接口")
 	public Response commit(@ApiParam(name = "doctorid", value = "医生") @RequestParam(name = "doctorid") int doctorid,
 			@ApiParam(name = "hospitalid", value = "医院编号") @RequestParam(name = "hospitalid") int hospitalid,
@@ -82,8 +82,8 @@ public class PrescriptionController {
 			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
 		}
 		try{
-			prescriptionService.commit(doctorid, hospitalid, p, list);
-			return Response.OK(null);
+			Prescription ret = prescriptionService.commit(doctorid, hospitalid, p, list);
+			return Response.OK(ret);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {

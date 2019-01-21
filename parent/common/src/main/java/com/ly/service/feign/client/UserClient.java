@@ -1,5 +1,8 @@
 package com.ly.service.feign.client;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,4 +35,9 @@ public interface UserClient {
 	
 	@RequestMapping(value = "/internal/getStore", method = RequestMethod.GET)
 	public Response getStore(@RequestParam(name = "storeid") Integer storeid);
+
+	@RequestMapping(value = "/internal/getStoreByGPS", method = RequestMethod.GET)
+	Response getStoreByGPS(@RequestParam(name = "drugListStr") String drugListStr,
+			@RequestParam(name = "latitude")Double latitude,
+			@RequestParam(name = "longitude")Double longitude);
 }

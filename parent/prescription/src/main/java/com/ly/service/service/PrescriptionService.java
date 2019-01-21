@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.naming.Reference;
+
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ import com.ly.service.entity.Patient;
 import com.ly.service.entity.Prescription;
 import com.ly.service.entity.PrescriptionDrug;
 import com.ly.service.entity.Seller;
+import com.ly.service.entity.Store;
 import com.ly.service.entity.StoreDrug;
 import com.ly.service.feign.client.DrugClient;
 import com.ly.service.feign.client.UserClient;
@@ -137,7 +140,7 @@ public class PrescriptionService {
 	}
 
 	@Transactional
-	public void commit(int doctorid, int hospitalid, Prescription perscription, List<PrescriptionDrug> drugList) {	
+	public Prescription commit(int doctorid, int hospitalid, Prescription perscription, List<PrescriptionDrug> drugList) {	
 		//检查是否有相同编号的处方签
 		Example ex = new Example(Prescription.class);
 		ex.createCriteria().andEqualTo("sn", perscription.getSn()).andEqualTo("hospitalid", hospitalid);
@@ -169,6 +172,7 @@ public class PrescriptionService {
 		pMapper.insertUseGeneratedKeys(perscription);
 		Long pid = perscription.getId();
 		
+		List<Integer> drugidList = new ArrayList<Integer>();
 		for(PrescriptionDrug pdrug : drugList){
 			pdrug.setPrescriptionid(pid);
 			HospitalDrug hospitalDrug = om.convertValue(drugClient.getHospitalDrug(pdrug.getDrugid(), perscription.getHospitalid()).fetchOKData(), HospitalDrug.class);
@@ -178,8 +182,17 @@ public class PrescriptionService {
 			pdrug.setStandard(hospitalDrug.getDrugstandard());
 			pdrug.setSellfee(hospitalDrug.getSellfee());
 			pdrug.setSellerid(hospitalDrug.getSellerid());
+			
+			drugidList.add(pdrug.getDrugid());
 		}
 		drugMapper.insertList(drugList);
+		
+		String drugListStr = JSONUtils.getJsonString(drugidList);
+		List<Store> storeList = om.convertValue(userClient.getStoreByGPS(drugListStr, hospital.getLatitude(), hospital.getLongitude()).fetchOKData(), new TypeReference<List<Store>>() {});
+		
+		perscription.setStoreList(storeList);
+		
+		return perscription;
 	}
 
 	@Transactional

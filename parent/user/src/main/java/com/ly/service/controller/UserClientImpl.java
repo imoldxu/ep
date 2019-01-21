@@ -1,5 +1,7 @@
 package com.ly.service.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
 import com.ly.service.entity.Doctor;
@@ -19,6 +22,7 @@ import com.ly.service.service.HospitalService;
 import com.ly.service.service.PatientService;
 import com.ly.service.service.SellerService;
 import com.ly.service.service.StoreService;
+import com.ly.service.utils.JSONUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -116,6 +120,32 @@ public class UserClientImpl implements UserClient{
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@Override
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getStoreByGPS", method = RequestMethod.GET)
+	@ApiOperation(value = "根据药品获取附近的药店", notes = "由用户调用")
+	public Response getStoreByGPS(@ApiParam(name = "drugListStr", value = "药品清单") @RequestParam(name = "drugListStr") String drugListStr,
+			@ApiParam(name = "latitude", value = "纬度") @RequestParam(name = "latitude") Double latitude,
+			@ApiParam(name = "longitude", value = "经度") @RequestParam(name = "longitude") Double longitude){
+		
+		List<Integer> drugList = null;
+		try{
+			drugList  = JSONUtils.getObjectListByJson(drugListStr, Integer.class);
+		}catch (Exception e) {
+			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
+		}
+		
+		try{
+			List<Store> list = storeService.getStoreByGPS(latitude, longitude, drugList);
+			return Response.OK(list);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		} catch(Exception e){
 			e.printStackTrace();
 			return Response.SystemError();
 		}
