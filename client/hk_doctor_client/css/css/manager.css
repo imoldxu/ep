@@ -1,0 +1,37 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.head {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin-bottom: 38px;
+}
+.head .logo {
+  position: absolute;
+  left: 50%;
+  margin-left: -76px;
+  bottom: 34px;
+}
+
+.group {
+  width: 590px;
+  margin: auto;
+  height: auto;
+  overflow: auto;
+  
+  text-align: -webkit-center;
+}
+
+.group  .imgbutton{
+  display: inline-block; 
+  margin: 0 30px
+}
+
+.group span {
+  display: block;
+  text-align: -webkit-center
+  font-size: 18px;
+}
+
