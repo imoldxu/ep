@@ -3,6 +3,7 @@ package com.yyg.eprescription.proxy;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.yyg.eprescription.context.HandleException;
 import com.yyg.eprescription.context.Response;
 import com.yyg.eprescription.entity.Prescription;
 import com.yyg.eprescription.util.HttpClientUtil;
@@ -10,7 +11,7 @@ import com.yyg.eprescription.util.JSONUtils;
 
 public class CommonHospitalProxy {
 
-	public static Prescription getHospitalInfo(String number) throws Exception {
+	public static Prescription getHospitalInfo(String number) {
 		HttpClientUtil h = new HttpClientUtil();
 		Prescription ret = null;
 		try {
@@ -31,14 +32,14 @@ public class CommonHospitalProxy {
 				}else{
 					JsonNode msgNode = respNode.get("msg");
 					String msg = msgNode.asText();
-					throw new Exception(msg);
+					throw new HandleException(4, msg);
 				}
 			}else{
-				throw new Exception("系统异常，请联系管理员,status="+status);
+				throw new HandleException(4, "网络请求异常,status="+status);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new Exception("系统异常，请联系管理员");
+			throw new HandleException(4, "网络异常");
 		} finally {
 			h.close();
 		}

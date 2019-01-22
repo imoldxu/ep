@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.yyg.eprescription.context.HandleException;
 import com.yyg.eprescription.context.Response;
 import com.yyg.eprescription.entity.CountPrescriptionInfo;
 import com.yyg.eprescription.entity.DiagnosisMsg;
@@ -82,10 +83,11 @@ public class PrescriptionController {
 			Prescription ret = prescriptionService.init(hospitalNum);
 			Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
 			return resp;
-		}catch(Exception e){
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
+		}catch (Exception e) {
 			e.printStackTrace();
-			Response resp = new Response(Response.ERROR, null, e.getMessage());
-			return resp;
+			return Response.SystemError();
 		}
 	}
 	
@@ -101,10 +103,11 @@ public class PrescriptionController {
 			Prescription ret = prescriptionService.init(type, hospitalNum);
 			Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
 			return resp;
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			Response resp = new Response(Response.ERROR, null, e.getMessage());
-			return resp;
+			return Response.SystemError();
 		}
 	}
 	
@@ -126,10 +129,11 @@ public class PrescriptionController {
 			
 			resp = new Response(Response.SUCCESS, plist, "成功");		
 			return resp;
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
 		}catch (Exception e) {
-			System.out.println("arg option is====>"+option);
 			e.printStackTrace();
-			return new Response(Response.ERROR, null, "系统异常");		
+			return Response.SystemError();
 		}
 	}
 	
@@ -145,8 +149,11 @@ public class PrescriptionController {
 		try{
 			Prescription ret = prescriptionService.getPrescriptionByID(id); 		
 			return new Response(Response.SUCCESS, ret, "成功");
-		}catch(Exception e){
-			return new Response(Response.ERROR, null, e.getMessage());
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
 		}
 	}
 	
@@ -180,12 +187,11 @@ public class PrescriptionController {
 			
 			resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
 			return resp;
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
 		}catch (Exception e) {
-			System.out.println("prescription is ====>"+prescriptionInfo);
-			System.out.println("drugLis is ====>"+ drugList);
 			e.printStackTrace();
-			resp = new Response(Response.ERROR, null, "系统异常");
-			return resp;
+			return Response.SystemError();
 		}
 	}
 

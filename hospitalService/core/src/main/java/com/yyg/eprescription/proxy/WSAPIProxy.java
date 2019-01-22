@@ -17,6 +17,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import com.google.gxp.org.apache.xerces.impl.dv.util.Base64;
+import com.yyg.eprescription.context.HandleException;
 import com.yyg.eprescription.entity.Prescription;
 
 
@@ -37,7 +38,7 @@ public class WSAPIProxy {
 	 * @throws Exception 
      * @throws UnsupportedEncodingException 
      */
-	private static String sendGet(String url, String param) throws Exception {
+	private static String sendGet(String url, String param) {
 		String result = "";
         BufferedReader in = null;
         try {
@@ -60,7 +61,7 @@ public class WSAPIProxy {
                 result += line;
             }
         } catch (IOException e) {
-            throw new Exception("网络请求异常");
+            throw new HandleException(4, "网络异常");
         }
         // 使用finally块来关闭输入流
         finally {
@@ -152,23 +153,27 @@ public class WSAPIProxy {
 		//String result = "<ROOT> <STATE><![CDATA[T]]></STATE> <DATAPARAM><![CDATA[4gx2xeyFVVAD+TJe22Yu2MN77MTPoaBbg15Eus56JJ9eInLZV/uCWjfyzAXBoAksCWi0egGlx/cYms7l5vPT/fJY37wme7CDZRmWONIirGWUgKvcyaAopEw9y92uuWVEy/D1sk/xyLBQXfFecMCaM3LjHNTpHbtO2lZDKQ/cX2HXbQlQJ8AnEypvTYnvs1VN5uG587zOGbL19GQqxHHNEcf2n9BNEL8rly2Xvcb4PSyZ7nYbU0yX9CeGpa8CGTwT39XzpZ8CvtoU06acPYxESwieOC+Wia0DfKW2yF+D8XsLDMogbwQzK2qXNxLhdkqgNWNgooNojekeOPRAUGNGM3FSve9i0Aykxv9TRI70t4odrTjcVjTFpWflF+9vbe1NOOedjm7ryPVeTgTc+DkOnw==]]></DATAPARAM> </ROOT>";
 		if(result.contains("ERROR")){
 			System.out.println("请求 ===>"+sqlwhere+",响应错误===>"+result);
-     		throw new Exception("HIS接口响应错误");
+     		throw new HandleException(4, "HIS接口响应错误");
      	}else{
      		result=result.substring(result.indexOf("<DATAPARAM>")+11,result.indexOf("</DATAPARAM>")).replace("<![CDATA[","").replace("]]>","");
      	}
      	String xml= Decrypt(result,secretkey);
      	if(xml.startsWith("<OUTPUT/>")){
      		System.out.println("请求===>"+sqlwhere+"===>门诊号不存在或有误");
-     		throw new Exception("门诊/住院号不存在或有误");
+     		throw new HandleException(4, "门诊/住院号不存在或有误");
      	}
      	return xml;
    }
    
-   public static Prescription getHospitalInfo(String type, String number) throws Exception{
-	   String sqlwhere = "<type>"+type+"</type><num>"+number+"</num>"; //1806190791
-	   String xml = ReturnXml("bianm.get.byMZH", sqlwhere);
-	   Prescription ret = xml2Prescription(number, xml);
-	   return ret;
+   public static Prescription getHospitalInfo(String type, String number) {
+	   try{
+		   String sqlwhere = "<type>"+type+"</type><num>"+number+"</num>"; //1806190791
+		   String xml = ReturnXml("bianm.get.byMZH", sqlwhere);
+		   Prescription ret = xml2Prescription(number, xml);
+		   return ret;
+	   }catch (Exception e) {
+		   throw new HandleException(4, e.getMessage());
+	   }
    }
    
    
@@ -216,11 +221,11 @@ public class WSAPIProxy {
 	    } catch (JDOMException e) {
 	    	System.out.println("his return error xml =====>"+xml);
 	        //e.printStackTrace();
-	    	throw new Exception("医院HIS返回信息异常,请使用无诊断号开方");
+	    	throw new HandleException(4, "医院HIS返回信息异常,请使用无诊断号开方");
 	    } catch (IOException e) { 
 	    	System.out.println("his return error xml =====>"+xml);
 	    	//e.printStackTrace(); 
-	    	throw new Exception("医院HIS返回信息异常,请使用无诊断号开方");
+	    	throw new HandleException(4, "医院HIS返回信息异常,请使用无诊断号开方");
 	    } 
 	   return ret;
    }

@@ -3,6 +3,7 @@ package com.yyg.eprescription.proxy;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.yyg.eprescription.context.HandleException;
 import com.yyg.eprescription.context.Response;
 import com.yyg.eprescription.entity.Doctor;
 import com.yyg.eprescription.util.HttpClientUtil;
@@ -19,7 +20,7 @@ public class PlatformProxy {
 	private static final String URL2 = "http://127.0.0.1:9202";
 	private static final String URL3 = "http://127.0.0.1:9203";
 	
-	public static Doctor login(String phone, String pwd) throws Exception {
+	public static Doctor login(String phone, String pwd) {
 		HttpClientUtil h = new HttpClientUtil();
 		Doctor ret = null;
 		try {
@@ -40,21 +41,21 @@ public class PlatformProxy {
 				}else{
 					JsonNode msgNode = respNode.get("msg");
 					String msg = msgNode.asText();
-					throw new Exception(msg);
+					throw new HandleException(4, msg);
 				}
 			}else{
-				throw new Exception("网络请求异常,status="+status);
+				throw new HandleException(4, "网络请求异常,status="+status);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new Exception("系统异常，请联系管理员");
+			throw new HandleException(4, "网络异常");
 		} finally {
 			h.close();
 		}
 		return ret;
     }
 	
-	public static String commit2Server(Integer doctorid, Integer hospitalid, String prescriptionInfo, String drugListStr) throws Exception {
+	public static String commit2Server(Integer doctorid, Integer hospitalid, String prescriptionInfo, String drugListStr) {
 		HttpClientUtil h = new HttpClientUtil();
 		try {
 			h.open(URL3+"/prescription/commitByHospital", "post");
@@ -62,7 +63,8 @@ public class PlatformProxy {
 			h.addParameter("hospitalid", hospitalid.toString());
 			h.addParameter("perscription", prescriptionInfo);
 			h.addParameter("drugList", drugListStr);
-			//h.setRequestHeader("Cookie", "Language=zh_CN;UserAgent=PC");
+			
+			h.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 			int status = h.send();
 			if(status==200){
 				String resp = h.getResponseBodyAsString("utf-8");
@@ -76,14 +78,14 @@ public class PlatformProxy {
 				}else{
 					JsonNode msgNode = respNode.get("msg");
 					String msg = msgNode.asText();
-					throw new Exception(msg);
+					throw new HandleException(4,msg);
 				}
 			}else{
-				throw new Exception("网络请求异常,status="+status);
+				throw new HandleException(4,"网络请求异常,status="+status);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new Exception("系统异常，请联系管理员");
+			throw new HandleException(4, "网络异常");
 		} finally {
 			h.close();
 		}

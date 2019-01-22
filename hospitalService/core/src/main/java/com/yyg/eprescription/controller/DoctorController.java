@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yyg.eprescription.context.HandleException;
 import com.yyg.eprescription.context.Response;
 import com.yyg.eprescription.entity.Doctor;
 import com.yyg.eprescription.proxy.PlatformProxy;
@@ -33,8 +34,11 @@ public class DoctorController {
 		try {
 			Doctor doctor = PlatformProxy.login(phone, password);
 			return new Response(Response.SUCCESS, doctor, Response.SUCCESS_MSG);
-		} catch (Exception e) {
-			return new Response(Response.ERROR, null, e.getMessage());
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
 		}
 		
 	}

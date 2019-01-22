@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yyg.eprescription.context.HandleException;
 import com.yyg.eprescription.entity.CountPrescriptionInfo;
 import com.yyg.eprescription.entity.Prescription;
 import com.yyg.eprescription.entity.PrescriptionDrugs;
@@ -40,7 +41,7 @@ public class PrescriptionService {
 	@Autowired
 	DiagnosisService diagnosisService;
 	
-	public Prescription init(String hospitalNum) throws Exception {
+	public Prescription init(String hospitalNum) {
 		if(hospitalNum.equalsIgnoreCase("-1")){
 			Prescription p = new Prescription();
 			p.setSn(generateSN());
@@ -52,12 +53,12 @@ public class PrescriptionService {
 				p.setSn(generateSN());
 				return p;
 			}else{
-				throw new Exception("诊断号错误，请检查就诊号信息");
+				throw new HandleException(2, "诊断号错误，请检查就诊号信息");
 			}
 		}
 	}
 	
-	public Prescription init(String type, String hospitalnumber) throws Exception {
+	public Prescription init(String type, String hospitalnumber) {
 		if(hospitalnumber.equalsIgnoreCase("-1")){
 			Prescription p = new Prescription();
 			p.setSn(generateSN());
@@ -68,14 +69,13 @@ public class PrescriptionService {
 				p.setSn(generateSN());
 				return p;
 			}else{
-				throw new Exception("诊断号错误，请检查就诊号信息");
+				throw new HandleException(2, "诊断号错误，请检查就诊号信息");
 			}
 		}
 	}
 	
 	@Transactional
-	public String open(Integer doctorid, Integer hopspitalid, String prescriptionInfo, String drugList, Prescription p, List<PrescriptionDrugs> drugs)
-			throws Exception {
+	public String open(Integer doctorid, Integer hopspitalid, String prescriptionInfo, String drugList, Prescription p, List<PrescriptionDrugs> drugs){
 		Date now = new Date();
 		p.setCreatetime(now);
 		
@@ -85,7 +85,7 @@ public class PrescriptionService {
 		List<Prescription> pList = prescriptionMapper.selectByExample(ex);
 		if(!pList.isEmpty()){
 			//相同的处方，先删除，再插入
-			throw new Exception("处方已存在，不可重复提交");
+			throw new HandleException(2, "处方已存在，不可重复提交");
 		}	
 		prescriptionMapper.insert(p);
 		Long pid = p.getId();
@@ -105,11 +105,11 @@ public class PrescriptionService {
 		return PlatformProxy.commit2Server(doctorid, hopspitalid, prescriptionInfo ,drugList);
 	}
 	
-	public Prescription getPrescriptionByID(Integer id) throws Exception {
+	public Prescription getPrescriptionByID(Integer id) {
 		Prescription p = prescriptionMapper.selectByPrimaryKey(id);
 		
 		if(p == null){
-			throw new Exception("请求的处方不存在");
+			throw new HandleException(2, "请求的处方不存在");
 		}
 		
 		Example ex = new Example(PrescriptionDrugs.class);

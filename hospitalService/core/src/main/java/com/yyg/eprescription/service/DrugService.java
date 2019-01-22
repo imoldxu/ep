@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yyg.eprescription.context.HandleException;
 import com.yyg.eprescription.entity.DoctorDrugs;
 import com.yyg.eprescription.entity.Drug;
 import com.yyg.eprescription.entity.ShortDrugInfo;
@@ -92,15 +93,15 @@ public class DrugService {
 		
 		Drug drug = drugMapper.selectByPrimaryKey(drugid);
 		if(drug==null){
-			throw new Exception("请求的药品不存在或已下架");
+			throw new HandleException(2, "请求的药品不存在或已下架");
 		}
 		return drug;
 	}
 	
-	public List<Drug> uploadByExcel(MultipartFile file) throws Exception {
+	public List<Drug> uploadByExcel(MultipartFile file) {
 		
 		if(file==null){
-			throw new Exception("请求参数异常");
+			throw new HandleException(3, "请求参数异常");
 		}
 		
 		//获取文件名
@@ -108,7 +109,7 @@ public class DrugService {
 	    //进一步判断文件是否为空（即判断其大小是否为0或其名称是否为null）
 	    long size=file.getSize();
 	    if(name == null || ("").equals(name) && size==0){
-	    	throw new Exception("文件不存在或没有内容");
+	    	throw new HandleException(2, "文件不存在或没有内容");
 	    }
 	    //批量导入。参数：文件名，文件。
 	    ExcelUtils excelUtils = new ExcelUtils();
@@ -119,10 +120,10 @@ public class DrugService {
 			drugMapper.insertList(drugList);
 	    	return drugList;    
 	    }catch(IOException ioe){
-	    	throw new Exception(ioe.getMessage());
+	    	throw new HandleException(2, ioe.getMessage());
 	    }catch (Exception e) {
 	    	e.printStackTrace();
-	    	throw new Exception("导入失败");
+	    	throw new HandleException(2, "导入失败");
 	    }
 	}
 	

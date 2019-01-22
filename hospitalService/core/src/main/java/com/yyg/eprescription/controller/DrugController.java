@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yyg.eprescription.context.HandleException;
 import com.yyg.eprescription.context.Response;
 import com.yyg.eprescription.entity.Drug;
 import com.yyg.eprescription.entity.ShortDrugInfo;
@@ -43,10 +44,16 @@ public class DrugController {
 			@ApiParam(name = "type", value = "西药为1，中药为2") @RequestParam(name = "type") int type,
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Methods", "GET");
-		
-		List<ShortDrugInfo> ret = drugService.getDrugsByKeys(keys, type);
-		Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
-		return resp;
+		try{
+			List<ShortDrugInfo> ret = drugService.getDrugsByKeys(keys, type);
+			Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
+			return resp;
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
+		}
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
@@ -56,11 +63,17 @@ public class DrugController {
 			@ApiParam(name = "keys", value = "拼音首字母索引") @RequestParam(name = "keys") String keys,
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Methods", "GET");
-		
-		List<Drug> ret = drugService.getDrugInfoListByKeys(keys);
-		
-		Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
-		return resp;
+		try{
+			List<Drug> ret = drugService.getDrugInfoListByKeys(keys);
+			
+			Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
+			return resp;
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
+		}
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
@@ -71,11 +84,17 @@ public class DrugController {
 			@ApiParam(name = "type", value = "西药为1，中药为2") @RequestParam(name = "type") int type,
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Methods", "GET");
-		
-		List<ShortDrugInfo> ret = drugService.getDrugBySubCategory(category, type);
-		
-		Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
-		return resp;
+		try{
+			List<ShortDrugInfo> ret = drugService.getDrugBySubCategory(category, type);
+			
+			Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
+			return resp;
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
+		}
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
@@ -84,14 +103,19 @@ public class DrugController {
 	public Response getMyDrugInfoList(
 			@ApiParam(name = "doctorid", value = "医生编号") @RequestParam(name = "doctorid") Integer doctorid,
 			@ApiParam(name = "type", value = "西药为1，中药为2") @RequestParam(name = "type") int type,
-			HttpServletRequest request, HttpServletResponse response) {
-		
+			HttpServletRequest request, HttpServletResponse response) {	
 		response.setHeader("Access-Control-Allow-Methods", "GET");
-		
-		List<ShortDrugInfo> ret = drugService.getMyDrugInfoList(doctorid, type);
-		
-		Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
-		return resp;
+		try{
+			List<ShortDrugInfo> ret = drugService.getMyDrugInfoList(doctorid, type);
+			
+			Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
+			return resp;
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
+		}
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
@@ -105,8 +129,11 @@ public class DrugController {
 		try{
 			Drug drug = drugService.getDrugByID(drugid);
 			return new Response(Response.SUCCESS, drug, Response.SUCCESS_MSG);
-		}catch(Exception e){
-			return new Response(Response.ERROR, null, e.getMessage());
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
 		}
 	}
 	
@@ -119,11 +146,12 @@ public class DrugController {
 		try{
 	    	List<Drug> drugList =  drugService.uploadByExcel(file);
 	    	return new Response(Response.SUCCESS, drugList, Response.SUCCESS_MSG);    
-	    }catch (Exception e) {
-	    	e.printStackTrace();
-	        return new Response(Response.ERROR,null, e.getMessage());
-	    }
-
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
+		}
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
@@ -143,8 +171,11 @@ public class DrugController {
 		try{
 			drugService.modifyDrug(drug);
 			return new Response(Response.SUCCESS, drug, Response.SUCCESS_MSG);    
-		}catch(Exception e){
-			return new Response(Response.ERROR, null, e.getMessage());
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
 		}
 	}
 	
@@ -154,16 +185,15 @@ public class DrugController {
 	public Response delDrug(@RequestParam(value="drugid") int drugid, HttpServletRequest request,HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Methods", "POST");
 		
-		Response resp = null;	
-		
 		try{
 			drugService.delDrug(drugid);
-			resp = new Response(Response.SUCCESS, null, "删除成功");
+			return new Response(Response.SUCCESS, null, "删除成功");
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
 		}catch (Exception e) {
-			resp = new Response(Response.ERROR, null, e.getMessage());
+			e.printStackTrace();
+			return Response.SystemError();
 		}
-		
-		return resp;
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
@@ -175,8 +205,11 @@ public class DrugController {
 		try{
 			drugService.downDrug(drugid);
 			return new Response(Response.SUCCESS, null, Response.SUCCESS_MSG);
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
 		}catch (Exception e) {
-			return new Response(Response.ERROR, null, e.getMessage());
+			e.printStackTrace();
+			return Response.SystemError();
 		}
 	}
 	
@@ -189,8 +222,11 @@ public class DrugController {
 		try{
 			drugService.upDrug(drugid);
 			return new Response(Response.SUCCESS, null, Response.SUCCESS_MSG);
+		}catch(HandleException e){	
+			return new Response(e.getErrorCode(), null, e.getMessage());
 		}catch (Exception e) {
-			return new Response(Response.ERROR, null, e.getMessage());
+			e.printStackTrace();
+			return Response.SystemError();
 		}
 	}
 }
