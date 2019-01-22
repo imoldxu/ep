@@ -45,6 +45,12 @@ define(['app','angularAMD'], function(app,angularAMD){
             controllerUrl: "js/controllers/printCtrl.js"
 
         }))
+		.state('result',angularAMD.route({
+            url: '/result',
+            templateUrl: 'js/views/result.html?ver='+ver,
+            controllerUrl: "js/controllers/resultCtrl.js"
+
+        }))
 
 
         .state('drug',angularAMD.route({

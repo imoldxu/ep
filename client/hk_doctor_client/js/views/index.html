@@ -8,21 +8,21 @@
 
 </div>
 
+<div class="welcome"><span>欢迎{{doctor.name}}使用，</span><span class="logout" ng-click="logout()">退出</span></div>
 <div class="group">
-	<div>欢迎{{doctor.name}}使用，</div><div ng-click="logout()">退出</div>
 	<div>
-		<input type="text" placeholder="请输入就诊号，就诊号如:OP123456789" ng-model="num">
+		<input type="text" placeholder="请输入医院就诊号，如:OP123456789。不输入可直接开处方" ng-model="num">
 	</div>
 	<div>
 		<div class="submit" ng-click="init(1,num)">西药处方</div>
 		<div class="submit" ng-click="init(2,num)">中药处方</div>
 	</div>
 </div>
-<div class="group">
+<!--div class="group">
 	<p>无就诊号开方</p>
 
     <div class="submit" ng-click="init(1,-1)">西药处方</div>
 	
     <div class="submit" ng-click="init(2,-1)">中药处方</div>
 
-</div>
+</div-->

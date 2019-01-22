@@ -42,31 +42,22 @@ define(['angular','layer'], function(angular,layer){
 					drugList: JSON.stringify($scope.drugList)
 				}
 			})
-			.success(function(data){
+			.success(function(resp){
 				
 				$rootScope.myloader = false;
 
-				if (data.code == 1){
-			
-					
-					var docArray = {
+				if (resp.code == 1){
 
-						doctorname : $scope.prescriptionObj.doctorname,
-
-						department : $scope.prescriptionObj.department
-
-					}
-
-					dataVer.put('docArray',docArray);
+					dataVer.put('resultInfo', resp.data);
 
 					alert("提交成功");
 					
-					$state.go('welcome');
+					$state.go('result');
 				}else{
 				
-					alert(data.msg);
+					alert(resp.msg);
 
-					console.log(data)
+					console.log(resp);
 				}
 			
 			})

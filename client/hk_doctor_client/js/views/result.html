@@ -1,10 +1,12 @@
 
 
-<link rel="stylesheet" href="css/css/print.css?ver={{cssVer}}">
+<link rel="stylesheet" href="css/css/result.css?ver={{cssVer}}">
 
 
 <style media="print" type="text/css">
     .noprint{display:none}
+	
+	.printinfo{display:block}
 </style>
 
 <div class="head noprint">
@@ -21,64 +23,49 @@
 
 </div>
 
-<div class="con">
+<div class="con noprint">
 
-    <qrcode value="qrcode"></qrcode>
+    <qrcode data="http://www.163.com" version="2" error-correction-level="Q" size="200"></qrcode>
 
-	<iobarcode></iobarcode>
-    <div class="conHead">
-
-        <div class="row">
-
-            <div>门诊号:{{prescriptionObj.sn}}</div>
-            <div>科室:{{prescriptionObj.department}}</div>
-            <div></div>
-            <div>费别:\</div>
-            <div>姓名:{{prescriptionObj.patientname}}</div>
-            <div>性别:{{prescriptionObj.patientsex}}</div>
-            <div>年龄:{{prescriptionObj.patientage}}</div>
-            <div>开具日期:{{dateTime}}</div>
-            <div class="dia">诊断:{{prescriptionObj.diagnosis}}</div>
-
-        </div>
-
-    </div>
-
-    <div class="conInfo">
-
-        <span class="r">R.</span>
-
-        <div class="infoList" ng-repeat="x in drugList">
-            <div>{{x.drugname}}</div>
-            <div>{{x.standard +'*' +x.number + '' +x.unit}}</div>
-            <p>{{'sig:'+ x.myusage +','+ x.singledose +',' +x.frequency}}</p>
-        </div>
-
-
-
-    </div>
-
-    <div class="conFoot">
-
-        <div class="row">
-
-            <div>医师:{{prescriptionObj.doctorname}}</div>
-            <div></div>
-            <div>药师(审核,核对,发药):</div>
-            <div>药师/士(调配):</div>
-
-        </div>
-
-        <p>特别提示:按卫生部,国家中医药管理局卫医发[2002]24号文件规定:为保证患者用药安全,药品一经发出,不得退换.</p>
-
-    </div>
-
-</div>
+	<div>微信扫码获取处方</div>
+	
+</div>	
 
 <div class="foot noprint">
 
-    <div class="next"  ng-click="commit()">确认并提交</div>
+    <div class="next"  ng-click="print()">打印取药单</div>
 
-    <div class="next" ng-click="goBack()">返回上一步</div>
+</div>
+
+<div class="printinfo">
+	<div class="header">
+		<div class="title">取药单</div>
+		<io-barcode code="{{prescriptionObj.id}}" type="CODE128B"></io-barcode>
+		<div>处方码:{{prescriptionObj.id}}</div>
+	</div>
+	
+	<div class="baseinfo">
+		<div class="leftcontent">{{prescriptionObj.patientname + '   ' +prescriptionObj.patientsex + '   ' + prescriptionObj.patientage + '岁'}}</div>
+		<div class="rightcontent">医生:{{prescriptionObj.doctorname}}</div>
+	</div>
+	
+	<div class="info" ng-repeat="x in storeList">
+		<div>{{x.name}}</div>
+		<div>{{x.address}}</div>
+		<div><span>距离医院：</span>{{x.distance}}<span>米</span></div>
+		<div>药品目录:</div>
+		<div ng-repeat="y in x.drugList">
+			<div>{{y.drugname}}</div>
+		</div>
+	</div>
+	
+	<div class="info">
+		<div>药品信息由xxx提供</div>
+	</div>
+	
+	<div class="foot">
+		<div></div>
+		<div>就诊时间：{{nowTime}}</div>
+	</div>
 
 </div>

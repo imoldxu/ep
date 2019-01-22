@@ -3,9 +3,9 @@
  */
 
 
-define(['angular','ng-route','ng-cookies'], function (angular) {
+define(['angular','ng-route','ng-cookies','io-barcode','angular-qrcode'], function (angular) {
 
-    var app = angular.module('fnApp', ['ui.router','ngCookies','Encrypt'])
+    var app = angular.module('fnApp', ['ui.router','ngCookies','Encrypt','monospaced.qrcode','io-barcode'])
 	.config(['$httpProvider', function($httpProvider) {
 		$httpProvider.defaults.withCredentials = true;  //设置允许跨域传Cookie
 		//更改 Content-Type

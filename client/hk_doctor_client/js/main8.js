@@ -21,13 +21,16 @@ require.config({
         'ng-route':"libs/angular-ui-router",
         'ng-cookies': 'libs/angular-cookies',
         'fn-route':"route/route",
+	    'io-barcode':'libs/angular-io-barcode',
         "app" : "controllers/app",
         'angularAMD':'libs/angularAMD',
         'data':'services/data',
         'layer':'libs/layer/layer',
-		'loader':'directives/loader',
-		'encrypt':'libs/encrypt'
-
+	    'loader':'directives/loader',
+	    'encrypt':'libs/encrypt',
+		'qrcode':'libs/qrcode',
+		'utf8-qrcode':'libs/qrcode_UTF8',
+        'angular-qrcode':'libs/angular-qrcode'
     },
     shim:{
         "angular":{
@@ -41,9 +44,15 @@ require.config({
         'ng-cookies': ['angular'],
         "picturecut":{
             exports:"picturecut"       
-		},
+	    },
 		"encrypt": {
 			deps: ["angular"]
+		},
+		"utf8-qrcode": {
+			deps: ["qrcode"]
+		},
+		"angular-qrcode": {
+			deps: ["angular","utf8-qrcode"]
 		}
     },
 
@@ -54,7 +63,7 @@ require.config({
 
 
 
-require(['jquery','angular','ng-route','app','fn-route','angularAMD','data','loader','encrypt'],function($,angular){
+require(['jquery','angular','ng-route','app','fn-route','angularAMD','data','loader','encrypt','io-barcode','qrcode','utf8-qrcode','angular-qrcode'],function($,angular){
     $(function () {
         angular.bootstrap(document,["fnApp"]);
 

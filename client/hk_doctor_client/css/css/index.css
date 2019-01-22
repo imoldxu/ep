@@ -14,6 +14,19 @@
   margin-left: -76px;
   bottom: 34px;
 }
+
+.welcome{
+  width: 80%;
+  margin: 5px auto;
+  height: auto;
+  /*border: solid 1px #8d8d8d;*/
+  text-align: -webkit-center;
+}
+
+.welcome .logout{
+  color: red;
+}
+
 .group {
   width: 590px;
   margin: 5px auto;
@@ -22,6 +35,7 @@
   padding: 10 30px;
   text-align: -webkit-center;
 }
+
 .group input {
   display: block;
   width: 100%;

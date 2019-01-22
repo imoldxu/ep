@@ -9,8 +9,7 @@ define([], function(){
         $scope.init = function(type, num){
 
             if (num == '' || num == undefined){
-                alert('请输入诊断号')
-				return false;
+                num = -1;
             }
 			//if (num != -1){
 			//    alert('该功能暂未开放，敬请期待')
@@ -32,7 +31,7 @@ define([], function(){
 
                 if (resp.code == 1){
 
-                    dataVer.put('drugInfo','');//重置drug信息？
+                    dataVer.put('drugList',[]);//重置drugList信息
 
                     dataVer.put('prescriptionInfo',resp.data);
 
