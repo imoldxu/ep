@@ -39,5 +39,6 @@ public interface UserClient {
 	@RequestMapping(value = "/internal/getStoreByGPS", method = RequestMethod.GET)
 	Response getStoreByGPS(@RequestParam(name = "drugListStr") String drugListStr,
 			@RequestParam(name = "latitude")Double latitude,
-			@RequestParam(name = "longitude")Double longitude);
+			@RequestParam(name = "longitude")Double longitude,
+			@RequestParam(name = "size") int size);
 }

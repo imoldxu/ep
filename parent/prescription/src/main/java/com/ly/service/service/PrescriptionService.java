@@ -188,10 +188,10 @@ public class PrescriptionService {
 		drugMapper.insertList(drugList);
 		
 		String drugListStr = JSONUtils.getJsonString(drugidList);
-		List<Store> storeList = om.convertValue(userClient.getStoreByGPS(drugListStr, hospital.getLatitude(), hospital.getLongitude()).fetchOKData(), new TypeReference<List<Store>>() {});
+		List<Store> storeList = om.convertValue(userClient.getStoreByGPS(drugListStr, hospital.getLatitude(), hospital.getLongitude(), 3).fetchOKData(), new TypeReference<List<Store>>() {});
 		
 		perscription.setStoreList(storeList);
-		
+		perscription.setDrugList(drugList);
 		return perscription;
 	}
 

@@ -56,7 +56,7 @@
 	                )
 	            )
 	        ) * 1000
-	    ) AS distance FROM t_store WHERE t_store.latitude BETWEEN #{lat,jdbcType=DOUBLE}-0.1 AND #{lat,jdbcType=DOUBLE}+0.1 AND t_store.longitude BETWEEN #{lon,jdbcType=DOUBLE}-0.1 AND #{lon,jdbcType=DOUBLE}+0.1 ORDER BY distance ASC LIMIT 10
+	    ) AS distance FROM t_store WHERE t_store.latitude BETWEEN #{lat,jdbcType=DOUBLE}-0.1 AND #{lat,jdbcType=DOUBLE}+0.1 AND t_store.longitude BETWEEN #{lon,jdbcType=DOUBLE}-0.1 AND #{lon,jdbcType=DOUBLE}+0.1 ORDER BY distance ASC LIMIT #{size,jdbcType=INTEGER}
 	</select>
 	
 </mapper>

@@ -131,7 +131,8 @@ public class UserClientImpl implements UserClient{
 	@ApiOperation(value = "根据药品获取附近的药店", notes = "由用户调用")
 	public Response getStoreByGPS(@ApiParam(name = "drugListStr", value = "药品清单") @RequestParam(name = "drugListStr") String drugListStr,
 			@ApiParam(name = "latitude", value = "纬度") @RequestParam(name = "latitude") Double latitude,
-			@ApiParam(name = "longitude", value = "经度") @RequestParam(name = "longitude") Double longitude){
+			@ApiParam(name = "longitude", value = "经度") @RequestParam(name = "longitude") Double longitude,
+			@ApiParam(name = "size", value = "数量") @RequestParam(name = "size") int size){
 		
 		List<Integer> drugList = null;
 		try{
@@ -141,7 +142,7 @@ public class UserClientImpl implements UserClient{
 		}
 		
 		try{
-			List<Store> list = storeService.getStoreByGPS(latitude, longitude, drugList);
+			List<Store> list = storeService.getStoreByGPS(latitude, longitude, drugList,size);
 			return Response.OK(list);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());

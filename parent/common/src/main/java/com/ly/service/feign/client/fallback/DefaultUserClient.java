@@ -35,7 +35,7 @@ public class DefaultUserClient implements UserClient {
 	}
 
 	@Override
-	public Response getStoreByGPS(String drugListStr, Double latitude, Double longitude) {
+	public Response getStoreByGPS(String drugListStr, Double latitude, Double longitude, int size) {
 		return Response.Error(ErrorCode.MODULE_ERROR, "用户模块服务异常");
 	}
 }

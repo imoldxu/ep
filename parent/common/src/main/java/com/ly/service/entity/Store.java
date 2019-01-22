@@ -54,14 +54,14 @@ public class Store {
 	private int distance;
 
 	@Transient
-	private List<StoreDrug> druglist;
+	private List<StoreDrug> drugList;
 	
-	public List<StoreDrug> getDruglist() {
-		return druglist;
+	public List<StoreDrug> getDrugList() {
+		return drugList;
 	}
 
-	public void setDruglist(List<StoreDrug> druglist) {
-		this.druglist = druglist;
+	public void setDrugList(List<StoreDrug> drugList) {
+		this.drugList = drugList;
 	}
 
 	public int getDistance() {

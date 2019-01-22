@@ -50,9 +50,9 @@ public class StoreService {
 		return list;
 	}
 	
-	public List<Store> getStoreByGPS(double lat, double lon, List<Integer> drugList){
+	public List<Store> getStoreByGPS(double lat, double lon, List<Integer> drugList, int size){
 		
-		List<Store> list = storeMapper.getStoreByGPS(lon, lat);
+		List<Store> list = storeMapper.getStoreByGPS(lon, lat, size);
 		
 		String drugListStr = JSONUtils.getJsonString(drugList);
 		for(int i=(list.size()-1); i>=0; i--){
@@ -63,7 +63,7 @@ public class StoreService {
 			if(drugs.isEmpty()){
 				list.remove(store);//若是药房没有镀银的药则屏蔽掉该药房
 			}else{
-				store.setDruglist(drugs);
+				store.setDrugList(drugs);
 			}
 		}
 		return list;

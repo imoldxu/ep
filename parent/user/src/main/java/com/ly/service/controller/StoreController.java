@@ -142,6 +142,7 @@ public class StoreController {
 	public Response getStoreByGPS(@ApiParam(name = "drugListStr", value = "药品清单") @RequestParam(name = "drugListStr") String drugListStr,
 			@ApiParam(name = "latitude", value = "纬度") @RequestParam(name = "latitude") Double latitude,
 			@ApiParam(name = "longitude", value = "经度") @RequestParam(name = "longitude") Double longitude,
+			@ApiParam(name = "size", value = "获取数量") @RequestParam(name = "size") int size,
 			HttpServletRequest request, HttpServletResponse response){
 		
 		
@@ -153,7 +154,7 @@ public class StoreController {
 		}
 		
 		try{
-			List<Store> list = storeService.getStoreByGPS(latitude, longitude, drugList);
+			List<Store> list = storeService.getStoreByGPS(latitude, longitude, drugList, size);
 			return Response.OK(list);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
