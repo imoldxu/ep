@@ -1,0 +1,97 @@
+
+<link rel="stylesheet" href="css/css/pm.css?ver={{cssVer}}">
+
+<div class="head">
+
+    <div class="logo">
+
+        <img src="img/logo2.png" alt="" width="54">
+
+        <span>电子处方药房管理系统</span>
+
+    </div>
+
+	<div class="goBack" ui-sref="manager" >返回首页</div>
+	
+</div>
+
+<div class="con">
+
+    <div class="conHead">
+
+        <div class="group">
+			<div class="row">
+				<input type="text" placeholder="请输入诊断号" ng-model="searchopt.number" ng-keyup="enterEvent($event)"/>
+				<input type="text" placeholder="请输入医生姓名" ng-model="searchopt.doctorname" />
+				<input type="text" placeholder="请输入患者姓名" ng-model="searchopt.patientname" />
+				<label>日期</label><input type="date" ng-model="searchopt.startdate" />
+				<label>-</label><input type="date" ng-model="searchopt.enddate" />
+				<label>状态</label><select ng-model="searchopt.state">
+					<option value="生成处方">生成处方</option>
+					<option value="已领药">已领药</option>
+				</select>
+			</div>
+			<div class="row">
+				<div class="submit" ng-click="getPrescriptionByFirstPage()">查询</div>
+			</div>
+        </div>
+    </div>
+
+    <div class="conBody">
+
+        <div class="putAL">
+
+			<div class="download" ng-click="downloadExcel()">统计上月处方</div>
+
+       </div>
+		
+        <table>
+            <thead>
+            <tr>
+			    <th>诊断号</th>
+                <th>患者姓名</th>
+                <th>患者性别</th>
+                <th>年龄</th>
+                <th>患者手机号</th>
+                <th>医生姓名</th>
+                <th>医生科室</th>
+                <th>开方日期</th>
+				<th>状态</th>
+				<th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+			<tr ng-repeat="x in optArry">
+				<td ng-if="x.state == '已领药'">{{x.num}}</td>
+				<td class="emptystate" ng-if="x.state == '生成处方'">{{x.num}}</td>
+				<td ng-if="x.state == '已领药'">{{x.patientname}}</td>
+				<td class="emptystate" ng-if="x.state == '生成处方'">{{x.patientname}}</td>
+				<td ng-if="x.state == '已领药'">{{x.patientsex}}</td>
+				<td class="emptystate" ng-if="x.state == '生成处方'">{{x.patientsex}}</td>
+				<td ng-if="x.state == '已领药'">{{x.patientage}}</td>
+				<td class="emptystate" ng-if="x.state == '生成处方'">{{x.patientage}}</td>
+				<td ng-if="x.state == '已领药'">{{x.patientphone}}</td>
+				<td class="emptystate" ng-if="x.state == '生成处方'">{{x.patientphone}}</td>
+				<td ng-if="x.state == '已领药'">{{x.doctorname}}</td>
+				<td class="emptystate" ng-if="x.state == '生成处方'">{{x.doctorname}}</td>
+				<td ng-if="x.state == '已领药'">{{x.department}}</td>
+				<td class="emptystate" ng-if="x.state == '生成处方'">{{x.department}}</td>
+				<td ng-if="x.state == '已领药'">{{format(x.createdate,"yyyy-MM-dd")}}</td>
+				<td class="emptystate" ng-if="x.state == '生成处方'">{{format(x.createdate,"yyyy-MM-dd")}}</td>
+				<td ng-if="x.state == '已领药'">{{x.state}}</td>
+				<td class="emptystate" ng-if="x.state == '生成处方'">{{x.state}}</td>
+                <td><img src="img/print.png" ng-click="print(x.id,$index)" width="16px">
+				<img ng-if="x.state == '生成处方'" src="img/complete.png" ng-click="complete(x.id,$index)" width="16px">
+				<img ng-if="x.state == '已领药'" src="img/cancel.png" ng-click="cancel(x.id,$index)" width="16px"></td>
+            </tr>
+            </tbody>
+        </table>
+		<div>
+			<div class="button" ng-if="optArry.length!=0" ng-click="getPrescriptionByNextPage()">下一页</div>
+			<div class="button" ng-if="searchopt.pageindex!=0 && optArry.length!=0" ng-click="getPrescriptionByPrePage()">上一页</div>
+		<div>
+    </div>
+
+</div>
+
+

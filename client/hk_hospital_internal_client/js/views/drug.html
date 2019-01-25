@@ -1,0 +1,258 @@
+
+<link rel="stylesheet" href="css/css/drug.css?ver={{cssVer}}">
+
+<div class="head">
+
+    <div class="logo">
+
+        <img src="img/logo2.png" alt="" width="54">
+
+        <span>电子处方药房管理系统</span>
+
+    </div>
+
+	<div class="goBack" ui-sref="manager" >返回首页</div>
+	
+</div>
+
+<div class="con">
+
+    <div class="conHead">
+
+        <div class="group">
+
+            <input type="text" placeholder="请输入药品拼音简称" ng-model="ipt.drug" ng-change="closeMod()">
+
+            <div class="submit" ng-click="getDrugs(ipt.drug)">查询</div>
+
+
+        </div>
+    </div>
+
+    <div class="conBody">
+
+        <div class="putAL">
+		
+            <div class="add">导入新药品</div>
+            <input type="file" id="file" ng-model="ipt.file" ng-change="save(ipt.file)">
+
+       </div>
+		
+        <table>
+            <thead>
+            <tr>
+                <th>药品名称</th>
+                <th>药品规格</th>
+                <th>剂型</th>
+                <th>处方药</th>
+                <th>计价单位</th>
+                <th>价格</th>
+				<th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="x in optArry">
+                <td>{{x.drugname}}</td>
+                <td>{{x.standard}}</td>
+                <td>{{x.form}}</td>
+                <td>{{x.category}}</td>
+                <td>{{x.unit}}</td>
+                <td>{{x.price}}</td>
+				<td ng-if="x.state == 1">有货</td>
+				<td class="emptystate" ng-if="x.state == 0">无货</td>
+                <td><img src="img/edit.png" ng-click="openModal(x.id,$index)" width="16px"> <img src="img/down.png" ng-if="x.state == 1" ng-click="downdrug(x.id,$index)" width="16px"><img src="img/up.png" ng-if="x.state == 0" ng-click="updrug(x.id,$index)" width="16px"> <img src="img/del.png" ng-click="deldrug(x.id,$index)" width="16px"></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+
+<div class="modal" ng-if="modal">
+
+    <div class="mod">
+
+        <img src="img/x.png" ng-click="closeMod()" class="close">
+
+
+        <div class="modCon">
+
+            <div class="row">
+
+                <div class="md">药品名称 : <input type="text" ng-model="modalArry.drugname"/></div>
+                <div class="md">拼音缩写 : <input type="text" ng-model="modalArry.fullkeys"/></div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="md">药品简称 : <input type="text" ng-model="modalArry.shortname"/></div>
+                <div class="md">拼音缩写 : <input type="text" ng-model="modalArry.shortnamekeys"/></div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="md">规<i class="ls"></i>格 : <input type="text" ng-model="modalArry.standard"/></div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="md">单<i class="ls"></i>价 : <input type="text" ng-model="modalArry.price"/></div>
+                <div class="md">单<i class="ls"></i>位 :
+                    <select ng-init="modalArry.unit" ng-model="modalArry.unit">
+
+                        <!--option value="{{modalArry.unit}}">{{modalArry.unit}}</option-->
+						<option value="盒">盒</option>
+						<option value="袋">袋</option>
+						<option value="支">支</option>
+						<option value="瓶">瓶</option>
+						<option value="g">g</option>
+						<option value="kg">kg</option>
+                    </select>
+                </div>
+                <div class="md">剂<i class="ls"></i>型 :
+
+                    <select ng-init="modalArry.form" ng-model="modalArry.form">
+
+						 <!--option value="{{modalArry.form}}">{{modalArry.form}}</option-->
+						 <option value="搽剂">搽剂</option>
+						 <option value="肠溶片">肠溶片</option>
+						 <option value="滴剂">滴剂</option>
+						 <option value="滴丸剂">滴丸剂</option>
+						 <option value="滴眼液">滴眼液</option>
+						 <option value="分散片">分散片</option>
+						 <option value="粉剂">粉剂</option>
+						 <option value="粉针剂">粉针剂</option>
+						 <option value="干混悬剂">干混悬剂</option>
+						 <option value="膏剂">膏剂</option>
+						 <option value="膏药">膏药</option>
+						 <option value="含漱液">含漱液</option>
+						 <option value="合剂">合剂</option>
+						 <option value="糊剂">糊剂</option>
+						 <option value="混悬剂">混悬剂</option>
+						 <option value="胶囊剂">胶囊剂</option>
+						 <option value="酒剂">酒剂</option>
+						 <option value="颗粒剂">颗粒剂</option>
+						 <option value="口服溶液">口服溶液</option>
+						 <option value="口服液">口服液</option>
+						 <option value="凝胶剂">凝胶剂</option>
+						 <option value="浓缩丸">浓缩丸</option>
+						 <option value="喷剂">喷剂</option>
+						 <option value="喷雾剂">喷雾剂</option>
+						 <option value="喷雾剂(鼻用)">喷雾剂(鼻用)</option>
+						 <option value="片剂">片剂</option>
+						 <option value="片剂(薄膜衣)">片剂(薄膜衣)</option>
+						 <option value="气雾剂">气雾剂</option>
+						 <option value="器械">器械</option>
+						 <option value="器械(二类)">器械(二类)</option>
+						 <option value="溶液">溶液</option>
+						 <option value="溶液剂">溶液剂</option>
+						 <option value="软膏剂">软膏剂</option>
+						 <option value="软胶囊">软胶囊</option>
+						 <option value="散剂">散剂</option>
+						 <option value="栓">栓</option>
+						 <option value="栓剂">栓剂</option>
+						 <option value="糖浆剂">糖浆剂</option>
+						 <option value="涂剂">涂剂</option>
+						 <option value="外用">外用</option>
+						 <option value="丸剂">丸剂</option>
+						 <option value="洗液">洗液</option>
+						 <option value="硬胶囊">硬胶囊</option>
+						 <option value="中药饮片">中药饮片</option>
+						 <option value="注射剂">注射剂</option>
+						 <option value="注射液">注射液</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="md">分<i class="ls"></i>类 :
+
+                    <select ng-init="modalArry.category" ng-model="modalArry.category">                        
+						<option value="OTC">OTC</option>
+						<option value="处方药">处方药</option>
+						<option value="耗材">耗材</option>
+						<option value="特殊膳食">特殊膳食</option>
+						<option value="保健品">保健品</option>
+						<option value="保健食品">保健食品</option>
+						<option value="营养膳食">营养膳食</option>
+						<option value="消毒用品">消毒用品</option>
+						<option value="饮片">饮片</option>
+						<option value="外用">外用</option>
+						<option value="中药">中药</option>
+                    </select>
+
+                </div>
+				
+				<div class="md">子<i class="ls"></i>类 : 
+					<select ng-init="modalArry.subcategory"  ng-model="modalArry.subcategory">
+						<option value="抗生素">抗生素</option>
+						<option value="输液">输液</option>
+						<option value="心血管">心血管</option>
+						<option value="呼吸">呼吸</option>
+						<option value="消化">消化</option>
+						<option value="神经">神经</option>
+						<option value="内分泌">内分泌</option>
+						<option value="解热镇痛">解热镇痛</option>
+						<option value="维生素激素">维生素激素</option>
+						<option value="外用">外用</option>
+						<option value="中成药">中成药</option>
+						<option value="滋补">滋补</option>
+					</select>
+				</div>
+            </div>
+
+            
+
+			    
+			<div class="row bd">
+			
+			    <div class="md">厂<i class="ls"></i>家 : <input type="text" ng-model="modalArry.company"/></div>
+
+			</div>
+            <div class="row">
+
+                <p>默认设置</p>
+
+            </div>
+
+            <div class="row">
+
+                <div class="md">单次计量 : <input type="text" ng-model="modalArry.singledose"/></div>
+                <!--div class="md">单<i class="ls"></i>位 : <input type="text" ng-model="modalArry.unit"/></div-->
+            </div>
+
+            <div class="row">
+
+                <div class="md">频<i class="ls"></i>次 : <input type="text" ng-model="modalArry.frequency"/></div>
+
+            </div>
+
+            <div class="row bd">
+
+                <div class="md">用<i class="ls"></i>发 : <input type="text" ng-model="modalArry.defaultusage"/></div>
+
+            </div>
+
+            <div class="foot">
+
+                <div class="next" ng-click="addDrugInfo()">确定</div>
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+</div>
