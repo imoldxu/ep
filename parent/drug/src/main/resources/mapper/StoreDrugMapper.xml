@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ly.service.mapper.StoreDrugMapper" >
+		
+	<resultMap id="StoreAndDrugInfo" type="com.ly.service.context.StoreAndDrugInfo" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+  	    <result column="address" property="address" jdbcType="VARCHAR" />
+  	    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+  	    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+  	    <result column="distance" property="distance" jdbcType="INTEGER" />
+  	    <result column="drugListStr" property="drugListStr" jdbcType="VARCHAR" />
+  	</resultMap>
+
+	<select id="getStoreByDrugs" resultMap="StoreAndDrugInfo">
+		SELECT t_store.id, t_store.name, t_store.address, t_store.longitude, t_store.latitude, ROUND(
+	        6378.138 * 2 * ASIN(
+	            SQRT(
+	                POW(
+	                    SIN(
+	                    	(
+	                          #{lat,jdbcType=DOUBLE} * PI() / 180 - t_store.latitude * PI() / 180
+	                        ) / 2
+	                    ),
+	                    2
+	                ) + COS( #{lat,jdbcType=DOUBLE} * PI() / 180) * COS( t_store.latitude * PI() / 180) * POW(
+	                    SIN(
+	                        (
+	                            #{lon,jdbcType=DOUBLE} * PI() / 180 - t_store.longitude * PI() / 180
+	                        ) / 2
+	                    ),
+	                    2
+	                )
+	            )
+	        ) * 1000
+	    ) AS distance, CONCAT("[",GROUP_CONCAT(CONCAT("\"",t_drug.drugname," ",t_drug.standard,"\"")),"]") AS drugListStr FROM t_drug LEFT JOIN t_store_drug ON t_store_drug.drugid = t_drug.id LEFT JOIN t_store ON t_store_drug.storeid = t_store.id WHERE t_drug.id in ${drugids} AND (t_store_drug.state = 1 OR t_store_drug.id is NULL) AND (t_store.id is NULL OR (t_store.latitude BETWEEN #{lat,jdbcType=DOUBLE}-0.1 AND #{lat,jdbcType=DOUBLE}+0.1 AND t_store.longitude BETWEEN #{lon,jdbcType=DOUBLE}-0.1 AND #{lon,jdbcType=DOUBLE}+0.1)) GROUP BY t_store_drug.storeid ORDER BY distance ASC LIMIT #{size,jdbcType=INTEGER}
+	</select>
+	
+</mapper>

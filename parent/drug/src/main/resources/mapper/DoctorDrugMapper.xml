@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ly.service.mapper.DoctorDrugMapper" >
+		
+	<resultMap id="SimpleDrugInfo" type="com.ly.service.context.SimpleDrugInfo" >
+	    <id column="drugid" property="id" jdbcType="INTEGER" />
+	    <result column="showname" property="showname" jdbcType="VARCHAR" />
+  	</resultMap>
+
+	<select id="getDrugsByDoctor" resultMap="SimpleDrugInfo">
+		SELECT t_doctor_drug.drugid, CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) AS showname FROM t_doctor_drug LEFT JOIN t_hospital_drug ON t_doctor_drug.drugid = t_hospital_drug.drugid AND t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} LEFT JOIN t_drug ON t_doctor_drug.drugid = t_drug.id WHERE t_doctor_drug.doctorid = #{doctorid, jdbcType=INTEGER} AND t_drug.iszy = 1 AND t_hospital_drug.id IS NOT NULL;
+	</select>
+	
+	<select id="getZyDrugsByDoctor" resultMap="SimpleDrugInfo">
+		SELECT t_doctor_drug.drugid, CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) AS showname FROM t_doctor_drug LEFT JOIN t_hospital_drug ON t_doctor_drug.drugid = t_hospital_drug.drugid AND t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} LEFT JOIN t_drug ON t_doctor_drug.drugid = t_drug.id WHERE t_doctor_drug.doctorid = #{doctorid, jdbcType=INTEGER} AND t_drug.iszy = 2 AND t_hospital_drug.id IS NOT NULL;
+	</select>
+
+</mapper>

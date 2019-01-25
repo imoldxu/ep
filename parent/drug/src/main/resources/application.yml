@@ -1,6 +1,7 @@
 server:
   port : 9202
   tomcat:
+#    uri-encoding: UTF-8
     max-http-header-size: 8192  
   
 spring:
@@ -8,8 +9,8 @@ spring:
     name: drug-service
   cloud:
     consul:
-      host: 192.168.6.103
-      #host: 127.0.0.1
+      #host: 192.168.6.103
+      host: 127.0.0.1
       port: 8500
       discovery:
         healthCheckInterval: 15s
@@ -46,6 +47,11 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
+#  http:
+#    encoding:
+#      force: true
+#      charset: UTF-8
+#      enable: true
 #  redis:  #redis 配置
 #    database: 0    # Redis数据库索引（默认为0）
 #    host-name: 127.0.0.1
@@ -63,10 +69,10 @@ spring:
 
 #redisson
 redisson:
-  address: redis://192.168.6.103:6379
-  password: oldxu
-  #address: redis://39.108.253.177:6379
-  #password: zm666
+  #address: redis://192.168.6.103:6379
+  #password: oldxu
+  address: redis://39.108.253.177:6379
+  password: zm666
 
 #hystrix
 #feign:

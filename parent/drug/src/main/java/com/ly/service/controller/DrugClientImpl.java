@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
+import com.ly.service.context.StoreAndDrugInfo;
 import com.ly.service.entity.Drug;
 import com.ly.service.entity.HospitalDrug;
 import com.ly.service.entity.StoreDrug;
 import com.ly.service.feign.client.DrugClient;
+import com.ly.service.service.DoctorDrugService;
 import com.ly.service.service.DrugService;
 import com.ly.service.service.HospitalDrugService;
 import com.ly.service.service.StoreDrugService;
@@ -32,6 +34,8 @@ public class DrugClientImpl implements DrugClient {
 	DrugService drugService;
 	@Autowired
 	HospitalDrugService hospitaldrugService;
+	@Autowired
+	DoctorDrugService doctorDrugService;
 	@Autowired
 	StoreDrugService storeDrugService;
 	
@@ -96,6 +100,34 @@ public class DrugClientImpl implements DrugClient {
 
 	@Override
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getStoresByDrugs", method = RequestMethod.GET)
+	@ApiOperation(value = "根据药品清单获取药房信息", notes = "通用接口")
+	public Response getStoresByDrugs(@ApiParam(name = "drugidListStr", value = "id数组[1,2,3]") @RequestParam(name = "drugidListStr") String drugidListStr,
+			@ApiParam(name = "latitude", value = "纬度") @RequestParam(name = "latitude") double latitude,
+			@ApiParam(name = "longitude", value = "经度") @RequestParam(name = "longitude") double longitude,
+			@ApiParam(name = "size", value = "数量") @RequestParam(name = "size")int size){
+		
+		List<Integer> drugidList = null;
+		try{
+			drugidList = JSONUtils.getObjectListByJson(drugidListStr, Integer.class);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
+		}
+		
+		try{
+			List<StoreAndDrugInfo> list= storeDrugService.getStoreByDrugs(drugidList, latitude, longitude, size);
+			return Response.OK(list);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		} catch(Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@Override
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(path="/getDrugsByKeys", method = RequestMethod.GET)
 	@ApiOperation(value = "根据关键字获取药品", notes = "根据关键字获取药品")
 	public Response getDrugsByKeys(@ApiParam(name = "keys", value = "关键字") @RequestParam(name = "keys")String keys,
@@ -103,6 +135,31 @@ public class DrugClientImpl implements DrugClient {
 		try{
 			List<Drug> ret = drugService.getDrugListByKeys(keys);
 			return Response.OK(ret);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@Override
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/addDoctorDrugs", method = RequestMethod.POST)
+	@ApiOperation(value = "添加医生的常用药品", notes = "添加医生的常用药品")
+	public Response addDoctorDrugs(@ApiParam(name = "drugidListStr", value = "药品id列表") @RequestParam(name = "drugidListStr")String drugidListStr,
+			@ApiParam(name = "doctorid", value = "医生id") @RequestParam(name = "doctorid")Integer doctorid) {
+		List<Integer> drugidList = null;
+		try{
+			drugidList = JSONUtils.getObjectListByJson(drugidListStr, Integer.class);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
+		}
+		
+		try{
+			doctorDrugService.addDoctorDrugs(doctorid, drugidList);
+			return Response.OK(null);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {

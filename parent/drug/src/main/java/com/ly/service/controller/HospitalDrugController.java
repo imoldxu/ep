@@ -17,6 +17,7 @@ import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
 import com.ly.service.context.SimpleDrugInfo;
 import com.ly.service.entity.HospitalDrug;
+import com.ly.service.service.DoctorDrugService;
 import com.ly.service.service.HospitalDrugService;
 import com.ly.service.utils.JSONUtils;
 import com.ly.service.utils.SessionUtil;
@@ -32,11 +33,13 @@ public class HospitalDrugController {
 
 	@Autowired
 	HospitalDrugService drugService;
+	@Autowired
+	DoctorDrugService doctorDrugService;
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(path="/add", method = RequestMethod.POST)
 	@ApiOperation(value = "设置医院销售的药品", notes = "管理接口")
-	public Response add(@ApiParam(name="sellerid", value="销售编号") @RequestParam(name="sellerid") int sellerid,
+	public Response add(@ApiParam(name="sellerid", value="销售编号") @RequestParam(name="sellerid") Integer sellerid,
 			@ApiParam(name="sellername", value="销售名称") @RequestParam(name="sellername") String sellername,
 			@ApiParam(name="drugid", value="药名id") @RequestParam(name="drugid") int drugid,
 			@ApiParam(name="drugname", value="药品名称") @RequestParam(name="drugname") String drugname,
@@ -87,7 +90,7 @@ public class HospitalDrugController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(path="/del", method = RequestMethod.POST)
-	@ApiOperation(value = "更新销售的药品", notes = "管理接口")
+	@ApiOperation(value = "删除医院投放的药品", notes = "管理接口")
 	public Response del(@RequestParam(name="hdid") Long hdid,
 			HttpServletRequest request, HttpServletResponse response){
 		
@@ -135,6 +138,27 @@ public class HospitalDrugController {
 			HttpServletRequest request, HttpServletResponse response) {
 		try{
 			List<SimpleDrugInfo> ret = drugService.getSimpleDrugListByTag(hid, type, tag);
+			
+			Response resp = Response.OK(ret);
+			return resp;
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getDrugsByDoctor", method = RequestMethod.GET)
+	@ApiOperation(value = "根据医生获取其常用药品", notes = "面向医院的通用的接口")
+	public Response getDrugsByDoctor(
+			@ApiParam(name = "hid", value = "医院ID") @RequestParam(name = "hid") Integer hid,
+			@ApiParam(name = "doctorid", value = "医生ID") @RequestParam(name = "doctorid") Integer doctorid,
+			@ApiParam(name = "type", value = "西药为1，中药为2") @RequestParam(name = "type") int type,
+			HttpServletRequest request, HttpServletResponse response) {
+		try{
+			List<SimpleDrugInfo> ret = doctorDrugService.getDrugsByDoctor(hid, doctorid, type);
 			
 			Response resp = Response.OK(ret);
 			return resp;

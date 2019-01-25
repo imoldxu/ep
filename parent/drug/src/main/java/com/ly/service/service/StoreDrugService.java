@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
+import com.ly.service.context.StoreAndDrugInfo;
 import com.ly.service.entity.StoreDrug;
 import com.ly.service.mapper.StoreDrugMapper;
 
@@ -121,5 +122,29 @@ public class StoreDrugService {
 		storeDrugMapper.updateByPrimaryKey(storeDrug);
 		
 		return storeDrug;
+	}
+	
+	public List<StoreAndDrugInfo> getStoreByDrugs(List<Integer> drugidList, double lat, double lon, int size){
+		int moreSize = size+1;
+		StringBuffer idsBuffer = new StringBuffer();
+		idsBuffer.append("(");
+		for(int i=0; i<drugidList.size(); i++){
+			if(i!=0){
+				idsBuffer.append(",");
+			}
+			idsBuffer.append(drugidList.get(i));
+		}
+		idsBuffer.append(")");
+		
+		String drugids = idsBuffer.toString();
+		List<StoreAndDrugInfo> ret = storeDrugMapper.getStoreByDrugs(drugids, lat, lon, moreSize);
+		if(!ret.isEmpty()){
+			if(ret.get(0).getId() != null && ret.size() > size){
+				ret.remove(ret.size()-1); //若所有药品都找到对应的药店,则移除多搜索的一个结果
+			}
+		}
+		return ret;
+		
+		
 	}
 }

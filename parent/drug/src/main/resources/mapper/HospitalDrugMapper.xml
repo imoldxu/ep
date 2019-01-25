@@ -10,26 +10,27 @@
   	</resultMap>
 
 	<select id="getDrugsByKeys" resultMap="SimpleDrugInfo">
-		SELECT t_drug.id ,CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname FROM t_hospital_drug LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id WHERE t_hospital_drug.id = #{hid, jdbcType=INTEGER} AND t_drug.iszy = 1 and (t_drug.drugname LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
+		SELECT t_drug.id ,CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname FROM t_hospital_drug LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id WHERE t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} AND t_drug.iszy = 1 and (t_drug.drugname LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
 	</select>
 	
 	<select id="getZyDrugsByKeys" resultMap="SimpleDrugInfo">
-		SELECT t_drug.id ,CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname FROM t_hospital_drug  LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id WHERE t_hospital_drug.id = #{hid, jdbcType=INTEGER} AND t_drug.iszy = 2 and (t_drug.drugname LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
+		SELECT t_drug.id ,CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname FROM t_hospital_drug  LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id WHERE t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} AND t_drug.iszy = 2 and (t_drug.drugname LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
 	</select>
 
 	<select id="getDrugsByKeysWithoutID" resultMap="SimpleDrugInfo">
-		SELECT t_drug.id ,CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname FROM t_hospital_drug  LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id WHERE t_hospital_drug.id = #{hid, jdbcType=INTEGER} AND t_drug.iszy = 1 and t_drug.id != #{myid,jdbcType=INTEGER} AND (t_drug.drugname LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
+		SELECT t_drug.id ,CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname FROM t_hospital_drug  LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id WHERE t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} AND t_drug.iszy = 1 and t_drug.id != #{myid,jdbcType=INTEGER} AND (t_drug.drugname LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
 	</select>
 	
 	<select id="getZyDrugsByKeysWithoutID" resultMap="SimpleDrugInfo">
-		SELECT t_drug.id ,CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname FROM t_hospital_drug  LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id WHERE t_hospital_drug.id = #{hid, jdbcType=INTEGER} AND t_drug.iszy = 2 and t_drug.id != #{myid,jdbcType=INTEGER} AND (t_drug.drugname LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
+		SELECT t_drug.id ,CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname FROM t_hospital_drug  LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id WHERE t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} AND t_drug.iszy = 2 and t_drug.id != #{myid,jdbcType=INTEGER} AND (t_drug.drugname LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}); 	
 	</select>
 
 	<select id="getDrugByTag" resultMap="SimpleDrugInfo">
-		SELECT t_drug.id, CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname from t_hospital_drug  LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id LEFT JOIN t_drug_tag_map ON t_drug.id = t_drug_tag_map.drugid LEFT JOIN t_drug_tag ON t_drug_tag.id = t_drug_tag_map.tagid WHERE t_hospital_drug.id = #{hid, jdbcType=INTEGER} AND t_drug_tag.tag = #{tag, jdbcType=VARCHAR} and t_drug.iszy = 1;
+		SELECT t_drug.id, CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname from t_hospital_drug  LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id LEFT JOIN t_drug_tag_map ON t_drug.id = t_drug_tag_map.drugid LEFT JOIN t_drug_tag ON t_drug_tag.id = t_drug_tag_map.tagid WHERE t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} AND t_drug_tag.tag = #{tag, jdbcType=VARCHAR} and t_drug.iszy = 1;
 	</select>
 	
 	<select id="getZyDrugByTag" resultMap="SimpleDrugInfo">
-		SELECT t_drug.id, CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname from t_hospital_drug  LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id LEFT JOIN t_drug_tag_map ON t_drug.id = t_drug_tag_map.drugid LEFT JOIN t_drug_tag ON t_drug_tag.id = t_drug_tag_map.tagid WHERE t_hospital_drug.id = #{hid, jdbcType=INTEGER} AND t_drug_tag.tag = #{tag, jdbcType=VARCHAR} and t_drug.iszy = 2;
+		SELECT t_drug.id, CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname from t_hospital_drug  LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id LEFT JOIN t_drug_tag_map ON t_drug.id = t_drug_tag_map.drugid LEFT JOIN t_drug_tag ON t_drug_tag.id = t_drug_tag_map.tagid WHERE t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} AND t_drug_tag.tag = #{tag, jdbcType=VARCHAR} and t_drug.iszy = 2;
 	</select>
+
 </mapper>

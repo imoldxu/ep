@@ -29,4 +29,14 @@ public class DefaultDrugClient implements DrugClient{
 		return Response.Error(ErrorCode.MODULE_ERROR, "药品模块异常");
 	}
 
+	@Override
+	public Response getStoresByDrugs(String drugidListStr, double latitude, double longitude, int size) {
+		return Response.Error(ErrorCode.MODULE_ERROR, "药品模块异常");
+	}
+
+	@Override
+	public Response addDoctorDrugs(String drugidListStr, Integer doctorid) {
+		return Response.OK(null);//此处即使不成功，也不影响整个业务
+	}
+
 }

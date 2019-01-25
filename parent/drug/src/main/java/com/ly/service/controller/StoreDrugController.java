@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
+import com.ly.service.context.StoreAndDrugInfo;
 import com.ly.service.entity.StoreDrug;
 import com.ly.service.service.StoreDrugService;
+import com.ly.service.utils.JSONUtils;
 import com.ly.service.utils.SessionUtil;
 
 import io.swagger.annotations.Api;
@@ -144,6 +147,34 @@ public class StoreDrugController {
 			e.printStackTrace();
 			return Response.SystemError();
 		}
-	}	
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getStoresByDrugs", method = RequestMethod.GET)
+	@ApiOperation(value = "根据药品清单获取药房信息", notes = "通用接口")
+	public Response getStoresByDrugs(@ApiParam(name = "drugidListStr", value = "id数组[1,2,3]") @RequestParam(name = "drugidListStr") String drugidListStr,
+			@ApiParam(name = "latitude", value = "纬度") @RequestParam(name = "latitude") double latitude,
+			@ApiParam(name = "longitude", value = "经度") @RequestParam(name = "longitude") double longitude,
+			@ApiParam(name = "size", value = "数量") @RequestParam(name = "size")int size,
+			HttpServletRequest request, HttpServletResponse response){
+		
+		List<Integer> drugidList = null;
+		try{
+			drugidList = JSONUtils.getObjectListByJson(drugidListStr, Integer.class);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
+		}
+		
+		try{
+			List<StoreAndDrugInfo> list= drugService.getStoreByDrugs(drugidList, latitude, longitude, size);
+			return Response.OK(list);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		} catch(Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
 	
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ly.service.context.Response;
 import com.ly.service.feign.client.fallback.DefaultDrugClient;
 
+
 @FeignClient(name="drug-service", fallback=DefaultDrugClient.class )
 public interface DrugClient {
 	
@@ -27,4 +28,14 @@ public interface DrugClient {
 	@RequestMapping(value="/internal/getDrugByStore", method = RequestMethod.GET)
 	public Response getDrugByStore(@RequestParam(name = "storeid")Integer storeid,
 			@RequestParam(name = "drugid") Integer drugid);
+	
+	@RequestMapping(value = "/internal/getStoresByDrugs", method = RequestMethod.GET)
+	public Response getStoresByDrugs(@RequestParam(name = "drugidListStr") String drugidListStr,
+			@RequestParam(name = "latitude") double latitude,
+			@RequestParam(name = "longitude") double longitude,
+			@RequestParam(name = "size")int size);
+	
+	@RequestMapping(value = "/internal/addDoctorDrugs", method = RequestMethod.POST)
+	public Response addDoctorDrugs(@RequestParam(name = "drugidListStr") String drugidListStr,
+			@RequestParam(name = "doctorid") Integer doctorid);
 }

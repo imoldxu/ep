@@ -13,6 +13,8 @@ import javax.persistence.Transient;
 
 import org.apache.ibatis.type.JdbcType;
 
+import com.ly.service.context.StoreAndDrugInfo;
+
 import tk.mybatis.mapper.annotation.ColumnType;
 
 @Table(name="t_prescription")
@@ -111,13 +113,13 @@ public class Prescription implements Serializable{
 	private List<PrescriptionDrug> drugList;
 	
 	@Transient
-	private List<Store> storeList;
+	private List<StoreAndDrugInfo> storeList;
 	
-	public List<Store> getStoreList() {
+	public List<StoreAndDrugInfo> getStoreList() {
 		return storeList;
 	}
 
-	public void setStoreList(List<Store> storeList) {
+	public void setStoreList(List<StoreAndDrugInfo> storeList) {
 		this.storeList = storeList;
 	}
 

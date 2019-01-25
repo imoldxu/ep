@@ -62,9 +62,11 @@ public class WxUtil {
 
 			h.setRequestHeader("Cookie", "Language=zh_CN;UserAgent=PC");
 			int status = h.send();
-			String context = h.getResponseBodyAsString("utf-8");
-			node = JSONUtils.getJsonObject(context);
-			System.out.println(context);
+			if(status==200){
+				String context = h.getResponseBodyAsString("utf-8");
+				node = JSONUtils.getJsonObject(context);
+				System.out.println(context);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

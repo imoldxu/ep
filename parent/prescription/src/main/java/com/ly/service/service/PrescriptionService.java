@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import javax.naming.Reference;
-
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.SearchOption;
+import com.ly.service.context.StoreAndDrugInfo;
 import com.ly.service.entity.Doctor;
 import com.ly.service.entity.Hospital;
 import com.ly.service.entity.HospitalDrug;
@@ -26,7 +25,6 @@ import com.ly.service.entity.Patient;
 import com.ly.service.entity.Prescription;
 import com.ly.service.entity.PrescriptionDrug;
 import com.ly.service.entity.Seller;
-import com.ly.service.entity.Store;
 import com.ly.service.entity.StoreDrug;
 import com.ly.service.feign.client.DrugClient;
 import com.ly.service.feign.client.UserClient;
@@ -146,20 +144,11 @@ public class PrescriptionService {
 		ex.createCriteria().andEqualTo("sn", perscription.getSn()).andEqualTo("hospitalid", hospitalid);
 		Prescription p = pMapper.selectOneByExample(ex);
 		if(p!=null){
-			//相同的处方，先删除，再插入 
-			//Example drugEx = new Example(PrescriptionDrug.class);
-			//drugEx.createCriteria().andEqualTo("prescriptionid", pList.get(0).getId());
-			//drugMapper.deleteByExample(drugEx);
-			
-			//pMapper.delete(pList.get(0));
-			//FIXME：相同的处方不允许重复提交
 			throw new HandleException(ErrorCode.RECOMMIT_ERROR, "处方已提交，请勿重复提交");
 		}
 		Date now = new Date();
 		perscription.setCreatetime(now);
 		ObjectMapper om = new ObjectMapper();
-		//TODO:给处方设置医院名称
-		
 		//FIXME:医生的id，要根据医院、医生姓名、以及科室来提取，或者由医院传入医生的id
 		perscription.setDoctorid(doctorid);
 		Doctor doctor = om.convertValue(userClient.getDoctor(doctorid).fetchOKData(), Doctor.class);
@@ -188,7 +177,7 @@ public class PrescriptionService {
 		drugMapper.insertList(drugList);
 		
 		String drugListStr = JSONUtils.getJsonString(drugidList);
-		List<Store> storeList = om.convertValue(userClient.getStoreByGPS(drugListStr, hospital.getLatitude(), hospital.getLongitude(), 3).fetchOKData(), new TypeReference<List<Store>>() {});
+		List<StoreAndDrugInfo> storeList = om.convertValue(drugClient.getStoresByDrugs(drugListStr, hospital.getLatitude(), hospital.getLongitude(), 3).fetchOKData(), new TypeReference<List<StoreAndDrugInfo>>() {});
 		
 		perscription.setStoreList(storeList);
 		perscription.setDrugList(drugList);

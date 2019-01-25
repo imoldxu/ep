@@ -9,8 +9,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -59,7 +59,7 @@ import java.util.Map;
  * </pre>
  */
 public class HttpClientUtil {
-    private static final Log log = LogFactory.getLog(HttpClientUtil.class);
+    //private static final Log log = LogFactory.getLog(HttpClientUtil.class);
 
     private HttpClient client = null;
     private HttpMethodBase httpMethod = null;
