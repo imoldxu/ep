@@ -153,16 +153,13 @@ public class ExcelUtils {
 			XSSFCell shortnameCell = row.getCell(1); // 药品简列
 			XSSFCell standardCell = row.getCell(2); // 规格列
 			XSSFCell formCell = row.getCell(3);//剂型
-			XSSFCell unitCell = row.getCell(5); // 计价单位
-			XSSFCell categoryCell = row.getCell(6); // 分类
-			XSSFCell subCategoryCell = row.getCell(7);//子类
-			XSSFCell singledoseCell = row.getCell(8);
-			//XSSFCell doseunitCell = row.getCell(8);
-			XSSFCell usageCell = row.getCell(9);
-			XSSFCell frequencyCell = row.getCell(10);
-			XSSFCell companyCell = row.getCell(11);
-			//XSSFCell fullkeysCell = row.getCell(11); // 拼音缩写
-			//XSSFCell shortNameKeysCell = row.getCell(12); // 简称拼音缩写
+			XSSFCell unitCell = row.getCell(4); // 计价单位
+			XSSFCell categoryCell = row.getCell(5); // 分类
+			XSSFCell singledoseCell = row.getCell(6);
+			XSSFCell doseunitCell = row.getCell(7);
+			XSSFCell usageCell = row.getCell(8);
+			XSSFCell frequencyCell = row.getCell(9);
+			XSSFCell companyCell = row.getCell(10);
 			
 			
 			String drugname = nameCell.getStringCellValue();
@@ -174,38 +171,37 @@ public class ExcelUtils {
 				break;
 			}
 			drug.setDrugname(drugname);
+			
 			String shortname = shortnameCell.getStringCellValue();
 			if(shortname!=null){
 				shortname = shortname.trim();
 			}
 			drug.setShortname(shortname);
+			
 			String standard = standardCell.getStringCellValue();
 			if(standard!=null){
 				standard = standard.trim();
 			}
 			drug.setStandard(standard);
+			
 			String category = categoryCell.getStringCellValue();
 			if(category!=null){
 				category = category.trim();
 			}
 			drug.setCategory(category);
 			
-			String subcategory = subCategoryCell.getStringCellValue();
-			if(subcategory!=null){
-				subcategory = subcategory.trim();
-			}
-			drug.setSubcategory(subcategory);
-			
 			String unit = unitCell.getStringCellValue();
 			if(unit!= null){
 				unit = unit.trim();
 			}
 			drug.setUnit(unit);
+			
 			String form =formCell.getStringCellValue();
 			if(form!=null){
 				form = form.trim();
 			}
 			drug.setForm(form);
+			
 			if(singledoseCell.getCellType() == XSSFCell.CELL_TYPE_STRING){
 				String singledose = singledoseCell.getStringCellValue();
 				if(singledose!=null){
@@ -215,12 +211,19 @@ public class ExcelUtils {
 			}else if(singledoseCell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC){
 				drug.setSingledose(String.valueOf(singledoseCell.getNumericCellValue()));
 			}
-			//drug.setDoseunit(doseunitCell.getStringCellValue());
+			
+			String doseunit = doseunitCell.getStringCellValue();
+			if(doseunit!=null){
+				doseunit = doseunit.trim();
+			}
+			drug.setDoseunit(doseunit);
+			
 			String frequency = frequencyCell.getStringCellValue();
 			if(frequency!=null){
 				frequency = frequency.trim();
 			}
 			drug.setFrequency(frequency);
+			
 			String defaultUsage = usageCell.getStringCellValue();
 			if(defaultUsage!=null){
 				defaultUsage = defaultUsage.trim();

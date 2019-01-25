@@ -9,49 +9,60 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yyg.eprescription.context.HandleException;
-import com.yyg.eprescription.entity.DoctorDrugs;
+import com.yyg.eprescription.entity.DoctorDrug;
 import com.yyg.eprescription.entity.Drug;
 import com.yyg.eprescription.entity.ShortDrugInfo;
-import com.yyg.eprescription.mapper.DoctorDrugsMapper;
+import com.yyg.eprescription.mapper.DoctorDrugMapper;
 import com.yyg.eprescription.mapper.DrugMapper;
+import com.yyg.eprescription.proxy.PlatformProxy;
 import com.yyg.eprescription.util.ExcelUtils;
 import tk.mybatis.mapper.entity.Example;
 
 @Service
 public class DrugService {
 
+	private static final boolean isUseNative = false;
+	private static final int hid = 1;
+	
+	
 	@Autowired
 	DrugMapper drugMapper;
 	@Autowired
-	DoctorDrugsMapper doctorDrugsMapper;
+	DoctorDrugMapper doctorDrugsMapper;
 	
 	public List<ShortDrugInfo> getDrugsByKeys(String keys, int type) {
-		List<ShortDrugInfo> ret = new ArrayList<ShortDrugInfo>();
 		
-		if(type == 1){
-			keys = keys.toUpperCase();
-			List<ShortDrugInfo> matchList = drugMapper.getDrugsByKeys(keys);
-			if(matchList.isEmpty()){
-				ret = drugMapper.getDrugsByKeys("%"+keys+"%");	
+		if(isUseNative){
+			List<ShortDrugInfo> ret = new ArrayList<ShortDrugInfo>();
+			
+			if(type == 1){
+				keys = keys.toUpperCase();
+				List<ShortDrugInfo> matchList = drugMapper.getDrugsByKeys(keys);
+				if(matchList.isEmpty()){
+					ret = drugMapper.getDrugsByKeys("%"+keys+"%");	
+				}else{
+					ret.addAll(matchList);
+					Integer myid = matchList.get(0).getId();
+					List<ShortDrugInfo> druglist = drugMapper.getDrugsByKeysWithoutID(myid, "%"+keys+"%");
+					ret.addAll(druglist);
+				}
 			}else{
-				ret.addAll(matchList);
-				Integer myid = matchList.get(0).getId();
-				List<ShortDrugInfo> druglist = drugMapper.getDrugsByKeysWithoutID(myid, "%"+keys+"%");
-				ret.addAll(druglist);
+				keys = keys.toUpperCase();
+				List<ShortDrugInfo> matchList = drugMapper.getZyDrugsByKeys(keys);
+				if(matchList.isEmpty()){
+					ret = drugMapper.getZyDrugsByKeys("%"+keys+"%");	
+				}else{
+					ret.addAll(matchList);
+					Integer myid = matchList.get(0).getId();
+					List<ShortDrugInfo> druglist = drugMapper.getZyDrugsByKeysWithoutID(myid, "%"+keys+"%");
+					ret.addAll(druglist);
+				}
 			}
+			return ret;
 		}else{
-			keys = keys.toUpperCase();
-			List<ShortDrugInfo> matchList = drugMapper.getZyDrugsByKeys(keys);
-			if(matchList.isEmpty()){
-				ret = drugMapper.getZyDrugsByKeys("%"+keys+"%");	
-			}else{
-				ret.addAll(matchList);
-				Integer myid = matchList.get(0).getId();
-				List<ShortDrugInfo> druglist = drugMapper.getZyDrugsByKeysWithoutID(myid, "%"+keys+"%");
-				ret.addAll(druglist);
-			}
+			List<ShortDrugInfo> ret = PlatformProxy.getDrugsByKeys(hid, keys, type);
+			return ret;
 		}
-		return ret;
 	}
 	
 	public List<Drug> getDrugInfoListByKeys(String keys) {
@@ -68,34 +79,48 @@ public class DrugService {
 		return ret;
 	}
 	
-	public List<ShortDrugInfo> getDrugBySubCategory(String category, int type) {
-		List<ShortDrugInfo> ret = null;
-		if(type==1){
-			ret = drugMapper.getDrugBySubCategory(category);
+	public List<ShortDrugInfo> getDrugsByTag(String tag, int type) {
+		if(isUseNative){
+			List<ShortDrugInfo> ret = null;
+			if(type==1){
+				ret = drugMapper.getDrugByTag(tag);
+			}else{
+				ret = drugMapper.getZyDrugByTag(tag);	
+			}
+			return ret;
 		}else{
-			ret = drugMapper.getZyDrugBySubCategory(category);	
+			List<ShortDrugInfo> ret = PlatformProxy.getDrugsByTag(hid, tag, type);
+			return ret;
 		}
-		return ret;
 	}
 	
-	public List<ShortDrugInfo> getMyDrugInfoList(Integer doctorid, int type) {
-		List<ShortDrugInfo> ret = null;
-		if(1 == type){
-			ret = doctorDrugsMapper.getDrugsByDoctor(doctorid);
+	public List<ShortDrugInfo> getDrugsByDoctor(Integer doctorid, int type) {
+		if(isUseNative){
+			List<ShortDrugInfo> ret = null;
+			if(1 == type){
+				ret = doctorDrugsMapper.getDrugsByDoctor(doctorid);
+			}else{
+				ret = doctorDrugsMapper.getZyDrugsByDoctor(doctorid);
+			}
+			
+			return ret;
 		}else{
-			ret = doctorDrugsMapper.getZyDrugsByDoctor(doctorid);
+			List<ShortDrugInfo> ret = PlatformProxy.getDrugsByDoctor(hid, doctorid, type);
+			return ret;
 		}
-		
-		return ret;
 	}
 	
 	public Drug getDrugByID(Integer drugid) throws Exception{
-		
-		Drug drug = drugMapper.selectByPrimaryKey(drugid);
-		if(drug==null){
-			throw new HandleException(2, "请求的药品不存在或已下架");
+		if(isUseNative){
+			Drug drug = drugMapper.selectByPrimaryKey(drugid);
+			if(drug==null){
+				throw new HandleException(2, "请求的药品不存在或已下架");
+			}
+			return drug;
+		}else{
+			Drug drug = PlatformProxy.getDrugById(drugid);
+			return drug;
 		}
-		return drug;
 	}
 	
 	public List<Drug> uploadByExcel(MultipartFile file) {
@@ -146,7 +171,7 @@ public class DrugService {
 		int optRet = drugMapper.deleteByPrimaryKey(drugid);
 	
 		if(optRet!=0){
-			Example ex = new Example(DoctorDrugs.class);
+			Example ex = new Example(DoctorDrug.class);
 			ex.createCriteria().andEqualTo("drugid", drugid);
 			doctorDrugsMapper.deleteByExample(ex);
 			

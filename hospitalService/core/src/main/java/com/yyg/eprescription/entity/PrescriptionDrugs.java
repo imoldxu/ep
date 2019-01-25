@@ -37,16 +37,16 @@ public class PrescriptionDrugs implements Serializable{
 	private Long prescriptionid;//处方编号
 	
 	@Column(name = "drugid")
-	@ColumnType(jdbcType = JdbcType.BIGINT)
+	@ColumnType(jdbcType = JdbcType.INTEGER)
 	@ApiModelProperty(value = "药品编号")
-	private Long drugid;//处方编号
+	private Integer drugid;//处方编号
 	
 	
-	public Long getDrugid() {
+	public Integer getDrugid() {
 		return drugid;
 	}
 
-	public void setDrugid(Long drugid) {
+	public void setDrugid(Integer drugid) {
 		this.drugid = drugid;
 	}
 

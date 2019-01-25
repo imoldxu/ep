@@ -1,5 +1,10 @@
 package com.yyg.eprescription.entity;
 
+/**
+ * 接收平台返回的信息
+ * @author Zlinepay
+ *
+ */
 public class Doctor {
 
 	private Integer id;

@@ -77,15 +77,15 @@ public class DrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getDrugInfoListByCategory", method = RequestMethod.GET)
-	@ApiOperation(value = "根据分类搜索药品", notes = "根据分类搜索药品")
-	public Response getDrugBySubCategory(
-			@ApiParam(name = "category", value = "分类") @RequestParam(name = "category") String category,
+	@RequestMapping(value = "/getDrugsByTag", method = RequestMethod.GET)
+	@ApiOperation(value = "根据标签搜索药品", notes = "根据标签搜索药品")
+	public Response getDrugsByTag(
+			@ApiParam(name = "tag", value = "分类") @RequestParam(name = "tag") String tag,
 			@ApiParam(name = "type", value = "西药为1，中药为2") @RequestParam(name = "type") int type,
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
-			List<ShortDrugInfo> ret = drugService.getDrugBySubCategory(category, type);
+			List<ShortDrugInfo> ret = drugService.getDrugsByTag(tag, type);
 			
 			Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
 			return resp;
@@ -98,15 +98,15 @@ public class DrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getMyDrugInfoList", method = RequestMethod.GET)
+	@RequestMapping(value = "/getDrugsByDoctor", method = RequestMethod.GET)
 	@ApiOperation(value = "获得我的常用药品", notes = "获得我的常用药品")
-	public Response getMyDrugInfoList(
+	public Response getDrugsByDoctor(
 			@ApiParam(name = "doctorid", value = "医生编号") @RequestParam(name = "doctorid") Integer doctorid,
 			@ApiParam(name = "type", value = "西药为1，中药为2") @RequestParam(name = "type") int type,
 			HttpServletRequest request, HttpServletResponse response) {	
 		response.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
-			List<ShortDrugInfo> ret = drugService.getMyDrugInfoList(doctorid, type);
+			List<ShortDrugInfo> ret = drugService.getDrugsByDoctor(doctorid, type);
 			
 			Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
 			return resp;

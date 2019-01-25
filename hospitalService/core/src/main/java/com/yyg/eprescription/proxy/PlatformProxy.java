@@ -1,11 +1,16 @@
 package com.yyg.eprescription.proxy;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.yyg.eprescription.context.HandleException;
 import com.yyg.eprescription.context.Response;
 import com.yyg.eprescription.entity.Doctor;
+import com.yyg.eprescription.entity.Drug;
+import com.yyg.eprescription.entity.ShortDrugInfo;
 import com.yyg.eprescription.util.HttpClientUtil;
 import com.yyg.eprescription.util.JSONUtils;
 
@@ -38,6 +43,118 @@ public class PlatformProxy {
 					JsonNode dataNode = respNode.get("data");
 					String dataStr = dataNode.toString();
 					ret = JSONUtils.getObjectByJson(dataStr, Doctor.class);
+				}else{
+					JsonNode msgNode = respNode.get("msg");
+					String msg = msgNode.asText();
+					throw new HandleException(4, msg);
+				}
+			}else{
+				throw new HandleException(4, "网络请求异常,status="+status);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new HandleException(4, "网络异常");
+		} finally {
+			h.close();
+		}
+		return ret;
+    }
+	
+	public static List<ShortDrugInfo> getDrugsByKeys(Integer hid, String keys, Integer type) {
+		HttpClientUtil h = new HttpClientUtil();
+		List<ShortDrugInfo> ret = null;
+		try {
+			h.open(URL2+"/hospital/getDrugsByKeys", "get");
+			h.addParameter("hid", hid.toString());
+			h.addParameter("keys", URLEncoder.encode(keys, "UTF-8"));
+			h.addParameter("type", type.toString());
+
+			h.setRequestHeader("Content-Type", "application/json;charset=utf-8");
+			
+			int status = h.send();
+			if(status==200){
+				String resp = h.getResponseBodyAsString("utf-8");
+				JsonNode respNode = JSONUtils.getJsonObject(resp);
+				JsonNode codeNode = respNode.get("code");
+				int code = codeNode.asInt();
+				if(code == Response.SUCCESS){
+					JsonNode dataNode = respNode.get("data");
+					String dataStr = dataNode.toString();
+					ret = JSONUtils.getObjectListByJson(dataStr, ShortDrugInfo.class);
+				}else{
+					JsonNode msgNode = respNode.get("msg");
+					String msg = msgNode.asText();
+					throw new HandleException(4, msg);
+				}
+			}else{
+				throw new HandleException(4, "网络请求异常,status="+status);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new HandleException(4, "网络异常");
+		} finally {
+			h.close();
+		}
+		return ret;
+    }
+	
+	public static List<ShortDrugInfo> getDrugsByTag(Integer hid, String tag, Integer type) {
+		HttpClientUtil h = new HttpClientUtil();
+		List<ShortDrugInfo> ret = null;
+		try {
+			h.open(URL2+"/hospital/getDrugListByTag", "get");
+			h.addParameter("hid", hid.toString());
+			h.addParameter("tag", URLEncoder.encode(tag, "UTF-8"));
+			h.addParameter("type", type.toString());
+
+			h.setRequestHeader("Content-Type", "application/json;charset=utf-8");
+			
+			int status = h.send();
+			if(status==200){
+				String resp = h.getResponseBodyAsString("utf-8");
+				JsonNode respNode = JSONUtils.getJsonObject(resp);
+				JsonNode codeNode = respNode.get("code");
+				int code = codeNode.asInt();
+				if(code == Response.SUCCESS){
+					JsonNode dataNode = respNode.get("data");
+					String dataStr = dataNode.toString();
+					ret = JSONUtils.getObjectListByJson(dataStr, ShortDrugInfo.class);
+				}else{
+					JsonNode msgNode = respNode.get("msg");
+					String msg = msgNode.asText();
+					throw new HandleException(4, msg);
+				}
+			}else{
+				throw new HandleException(4, "网络请求异常,status="+status);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new HandleException(4, "网络异常");
+		} finally {
+			h.close();
+		}
+		return ret;
+    }
+	
+	public static Drug getDrugById(Integer drugid) {
+		HttpClientUtil h = new HttpClientUtil();
+		Drug ret = null;
+		try {
+			h.open(URL2+"/drug/getDrugByID", "get");
+			h.addParameter("drugid", drugid.toString());
+
+			h.setRequestHeader("Content-Type", "application/json;charset=utf-8");
+			
+			int status = h.send();
+			if(status==200){
+				String resp = h.getResponseBodyAsString("utf-8");
+				JsonNode respNode = JSONUtils.getJsonObject(resp);
+				JsonNode codeNode = respNode.get("code");
+				int code = codeNode.asInt();
+				if(code == Response.SUCCESS){
+					JsonNode dataNode = respNode.get("data");
+					String dataStr = dataNode.toString();
+					ret = JSONUtils.getObjectByJson(dataStr, Drug.class);
 				}else{
 					JsonNode msgNode = respNode.get("msg");
 					String msg = msgNode.asText();
@@ -89,6 +206,44 @@ public class PlatformProxy {
 		} finally {
 			h.close();
 		}
+	}
+
+	public static List<ShortDrugInfo> getDrugsByDoctor(Integer hid, Integer doctorid, Integer type) {
+		HttpClientUtil h = new HttpClientUtil();
+		List<ShortDrugInfo> ret = null;
+		try {
+			h.open(URL2+"/hospital/getDrugsByDoctor", "get");
+			h.addParameter("hid", hid.toString());
+			h.addParameter("doctorid", doctorid.toString());
+			h.addParameter("type", type.toString());
+
+			h.setRequestHeader("Content-Type", "application/json;charset=utf-8");
+			
+			int status = h.send();
+			if(status==200){
+				String resp = h.getResponseBodyAsString("utf-8");
+				JsonNode respNode = JSONUtils.getJsonObject(resp);
+				JsonNode codeNode = respNode.get("code");
+				int code = codeNode.asInt();
+				if(code == Response.SUCCESS){
+					JsonNode dataNode = respNode.get("data");
+					String dataStr = dataNode.toString();
+					ret = JSONUtils.getObjectListByJson(dataStr, ShortDrugInfo.class);
+				}else{
+					JsonNode msgNode = respNode.get("msg");
+					String msg = msgNode.asText();
+					throw new HandleException(4, msg);
+				}
+			}else{
+				throw new HandleException(4, "网络请求异常,status="+status);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new HandleException(4, "网络异常");
+		} finally {
+			h.close();
+		}
+		return ret;
 	}
 
 }

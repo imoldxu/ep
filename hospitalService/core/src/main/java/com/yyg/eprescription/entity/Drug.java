@@ -48,11 +48,6 @@ public class Drug implements Serializable{
 	@ApiModelProperty(value = "类别")
 	private String category;//分类：OTC、处方药、饮片、耗材、保健品、特殊膳食
 	
-	@Column(name = "subcategory")
-	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	@ApiModelProperty(value = "子类")
-	private String subcategory;//子类：抗生素、输液、心血管、呼吸、消化、神经、内分泌、解热镇痛、维生素激素、外用、中成药、滋补
-	
 	@Column(name = "unit")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	@ApiModelProperty(value = "单位")
@@ -68,10 +63,10 @@ public class Drug implements Serializable{
 	@ApiModelProperty(value = "单次剂量")
 	private String singledose; //单次剂量
 	
-//	@Column(name = "doseunit")
-//	@ColumnType(jdbcType = JdbcType.VARCHAR)
-//	@ApiModelProperty(value = "剂量单位")
-//	private String doseunit;//剂量单位
+	@Column(name = "doseunit")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	@ApiModelProperty(value = "剂量单位")
+	private String doseunit;//剂量单位
 	
 	@Column(name = "defaultusage")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -178,13 +173,13 @@ public class Drug implements Serializable{
 		this.singledose = singledose;
 	}
 
-//	public String getDoseunit() {
-//		return doseunit;
-//	}
-//
-//	public void setDoseunit(String doseunit) {
-//		this.doseunit = doseunit;
-//	}
+	public String getDoseunit() {
+		return doseunit;
+	}
+
+	public void setDoseunit(String doseunit) {
+		this.doseunit = doseunit;
+	}
 
 	public String getFrequency() {
 		return frequency;
@@ -224,14 +219,6 @@ public class Drug implements Serializable{
 
 	public void setDefaultusage(String defaultusage) {
 		this.defaultusage = defaultusage;
-	}
-	
-	public String getSubcategory() {
-		return subcategory;
-	}
-
-	public void setSubcategory(String subcategory) {
-		this.subcategory = subcategory;
 	}
 
 }

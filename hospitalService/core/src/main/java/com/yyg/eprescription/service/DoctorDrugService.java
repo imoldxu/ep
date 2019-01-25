@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yyg.eprescription.entity.DoctorDrugs;
-import com.yyg.eprescription.mapper.DoctorDrugsMapper;
+import com.yyg.eprescription.entity.DoctorDrug;
+import com.yyg.eprescription.mapper.DoctorDrugMapper;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -14,15 +14,15 @@ import tk.mybatis.mapper.entity.Example;
 public class DoctorDrugService {
 
 	@Autowired
-	DoctorDrugsMapper doctorDrugsMapper;
+	DoctorDrugMapper doctorDrugsMapper;
 	
-	public void add(Integer doctorid, Long drugid){
+	public void add(Integer doctorid, Integer drugid){
 		//加入医生开药信息
-		Example dex = new Example(DoctorDrugs.class);
+		Example dex = new Example(DoctorDrug.class);
 		dex.createCriteria().andEqualTo("drugid", drugid).andEqualTo("doctorid", doctorid);
-		List<DoctorDrugs> doctorDrugs = doctorDrugsMapper.selectByExample(dex);
+		List<DoctorDrug> doctorDrugs = doctorDrugsMapper.selectByExample(dex);
 		if(doctorDrugs.isEmpty()){
-			DoctorDrugs doctorDrug = new DoctorDrugs();
+			DoctorDrug doctorDrug = new DoctorDrug();
 			doctorDrug.setDoctorid(doctorid);
 			doctorDrug.setDrugid(drugid);
 			doctorDrugsMapper.insert(doctorDrug);

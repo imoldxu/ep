@@ -5,8 +5,6 @@ package com.yyg.eprescription.controller;
 import java.io.IOException;
 
 import java.net.URLEncoder;
-import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,7 +14,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.ibatis.session.RowBounds;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -29,29 +26,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.yyg.eprescription.context.HandleException;
 import com.yyg.eprescription.context.Response;
 import com.yyg.eprescription.entity.CountPrescriptionInfo;
-import com.yyg.eprescription.entity.DiagnosisMsg;
-import com.yyg.eprescription.entity.Doctor;
-import com.yyg.eprescription.entity.DoctorDrugs;
 import com.yyg.eprescription.entity.Prescription;
 import com.yyg.eprescription.entity.PrescriptionDrugs;
-import com.yyg.eprescription.entity.PrescriptionInfo;
-import com.yyg.eprescription.entity.PrescriptionNumber;
 import com.yyg.eprescription.entity.SearchOption;
-import com.yyg.eprescription.mapper.DiagnosisMsgMapper;
-import com.yyg.eprescription.mapper.DoctorDrugsMapper;
-import com.yyg.eprescription.mapper.PrescriptionDrugsMapper;
-import com.yyg.eprescription.mapper.PrescriptionMapper;
-import com.yyg.eprescription.mapper.PrescriptionNumberMapper;
-import com.yyg.eprescription.proxy.WSAPIProxy;
-import com.yyg.eprescription.service.DiagnosisService;
 import com.yyg.eprescription.service.PrescriptionService;
-import com.yyg.eprescription.util.ChineseCharacterUtil;
 import com.yyg.eprescription.util.ExportUtil;
-import com.yyg.eprescription.util.HttpClientUtil;
 import com.yyg.eprescription.util.JSONUtils;
 
 import io.swagger.annotations.Api;
