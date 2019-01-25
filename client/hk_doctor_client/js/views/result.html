@@ -24,10 +24,10 @@
 </div>
 
 <div class="con noprint">
-
-    <qrcode data="http://www.163.com" version="2" error-correction-level="Q" size="200"></qrcode>
-
-	<div>微信扫码获取处方</div>
+	<div>
+		<qrcode data="http://www.163.com" version="2" error-correction-level="Q" size="300"></qrcode>
+	</div>
+	<div>患者微信扫码获取处方</div>
 	
 </div>	
 
@@ -50,22 +50,23 @@
 	</div>
 	
 	<div class="info" ng-repeat="x in storeList">
-		<div>{{x.name}}</div>
-		<div>{{x.address}}</div>
-		<div><span>距离医院：</span>{{x.distance}}<span>米</span></div>
+		<div ng-if="x.name != null" class="storename">{{x.name}}<span><i class="ls"></i>（距离医院：</span>{{x.distance}}<span>米）</span></div>
+		<div ng-if="x.address != null"><span>地址:</span>{{x.address}}</div>
 		<div>药品目录:</div>
-		<div ng-repeat="y in x.drugList">
-			<div>{{y.drugname}}</div>
+		<div class="drugInfo" ng-repeat="y in x.drugList">
+			<div>{{y}}</div>
+		</div>
+	</div>
+	<div class="info" ng-if="noneStoreDrugList !=null">
+		<div class="storename">附近药店未找到的药品:</div>
+		<div class="drugInfo" ng-repeat="y in noneStoreDrugList">
+			<div>{{y}}</div>
 		</div>
 	</div>
 	
-	<div class="info">
-		<div>药品信息由xxx提供</div>
-	</div>
-	
 	<div class="foot">
-		<div></div>
-		<div>就诊时间：{{nowTime}}</div>
+		<div>就诊时间：{{dateTime}}</div>
+		<div>药品信息由xxx提供</div>
 	</div>
 
 </div>

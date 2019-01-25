@@ -78,7 +78,7 @@ define(['app','angular'], function(app,angular){
 			
             if (index>=0){//编辑药品则初始化选药界面
 
-                $scope.drugObj = $scope.drugTable[t];
+                $scope.drugObj = $scope.drugTable[index];
 				
 				$scope.drugObj.id = $scope.drugObj.drugid;//将drugid赋值给id
 
@@ -90,7 +90,7 @@ define(['app','angular'], function(app,angular){
 
                 $scope.drugObj = {};//新添加药品
 				
-				$scope.drugObj.singledose = '';
+				$scope.sel.singledose = '';
 
                 $scope.sel.p = '';
 
@@ -111,9 +111,12 @@ define(['app','angular'], function(app,angular){
         };
 
 		$scope.getDrugsByDoctor = function(){
+			
+			$scope.optArry = null;
+			
 			$http({
                 method: 'get',
-                url: URL+'drug/getMyDrugInfoList',
+                url: URL+'drug/getDrugsByDoctor',
                 requestType: 'json',
                 params: {
                     doctorid: $scope.doctor.id,
@@ -122,7 +125,7 @@ define(['app','angular'], function(app,angular){
             })
 			.success(function(data){
 
-                if (data.code = 1){
+                if (data.code == 1){
 
                     $scope.modSel = true;
 
@@ -139,19 +142,22 @@ define(['app','angular'], function(app,angular){
 			})
 		}
 		
-		$scope.getDrugsByCategory = function(categoryArg){
+		$scope.getDrugsByTag = function(tag){
+			
+			$scope.optArry = null;
+			
 			$http({
                 method: 'get',
-                url: URL+'drug/getDrugInfoListByCategory',
+                url: URL+'drug/getDrugsByTag',
                 requestType: 'json',
                 params: {
-                    category: categoryArg,
+                    tag: tag,
 					type: 1,
                 }
             })
 			.success(function(data){
 
-                if (data.code = 1){
+                if (data.code == 1){
 
                     //$scope.modSel = true;
 
@@ -217,7 +223,8 @@ define(['app','angular'], function(app,angular){
             //    $scope.modSel = false;
             //    return false;
             //}
-
+			$scope.optArry = null;
+			
             $http({
                 method: 'get',
                 url: URL+'drug/getDrugsByKeys',
@@ -306,7 +313,7 @@ define(['app','angular'], function(app,angular){
 
                 number:$scope.sel.n,
 
-                singledose:$scope.drugObj.singledose,
+                singledose:$scope.sel.singledose,
 
                 myusage:$scope.sel.y,
 
@@ -354,15 +361,17 @@ define(['app','angular'], function(app,angular){
             .success(function(data){
 
 				if(data.code == 1){
-                        $scope.drugObj = data.data;
+                    $scope.drugObj = data.data;
 
-                        $scope.sel.p = $scope.drugObj.frequency;
+                    $scope.sel.p = $scope.drugObj.frequency;
 
-                        $scope.sel.y = $scope.drugObj.defaultusage;
+                    $scope.sel.y = $scope.drugObj.defaultusage;
 
-                        $scope.ipt.drug = '';
+					$scope.sel.singledose = $scope.drugObj.singledose+$scope.drugObj.doseunit
+						
+                    $scope.ipt.drug = '';
 
-                        $scope.placeholder = $scope.drugObj.drugname;
+                    $scope.placeholder = $scope.drugObj.drugname;
 
                         //$scope.modSel = false;
 				}else{

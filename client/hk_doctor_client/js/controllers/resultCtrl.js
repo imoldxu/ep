@@ -8,6 +8,15 @@ define(['angular','layer'], function(angular,layer){
 		
         $scope.storeList = $scope.prescriptionObj.storeList;
 
+		$scope.noneStoreDrugList = null;
+		
+		if($scope.storeList.length > 0){
+			if($scope.storeList[0].name == null){
+				$scope.noneStoreDrugList = $scope.storeList[0].drugList;
+				$scope.storeList.splice(0,1);
+			}
+		}
+		
         $scope.drugList = $scope.prescriptionObj.drugList;
 
         var date = new Date();

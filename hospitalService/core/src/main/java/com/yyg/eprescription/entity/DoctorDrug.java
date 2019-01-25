@@ -12,40 +12,40 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import tk.mybatis.mapper.annotation.ColumnType;
 
-@Table(name="t_doctordrugs")
+@Table(name="t_doctordrug")
 @ApiModel(value = "doctordrugs", description = "医生药品库")
-public class DoctorDrugs {
+public class DoctorDrug {
 
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@ColumnType(jdbcType = JdbcType.INTEGER)
+	@ColumnType(jdbcType = JdbcType.BIGINT)
 	@ApiModelProperty(value = "id")
-	private Integer id;
+	private Long id;
 	
 	@Column(name = "drugid")
-	@ColumnType(jdbcType = JdbcType.BIGINT)
+	@ColumnType(jdbcType = JdbcType.INTEGER)
 	@ApiModelProperty(value = "drugid")
-	private Long drugid;
+	private Integer drugid;
 	
 	@Column(name = "doctorid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
 	@ApiModelProperty(value = "科室")
 	private Integer doctorid;//科室
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Long getDrugid() {
+	public Integer getDrugid() {
 		return drugid;
 	}
 
-	public void setDrugid(Long drugid) {
+	public void setDrugid(Integer drugid) {
 		this.drugid = drugid;
 	}
 

@@ -248,27 +248,30 @@
 
 			<div class="fastSelect">
 				
-				<div class="keybutton" ng-click="getDrugsByDoctor(ipt.doctorname, ipt.department)">常用药品</div> 
+				<div class="keybutton" ng-click="getDrugsByDoctor()">常用药品</div> 
 				
 				<div class="keybutton" ng-click="getDrugs('')">全部</div>
 				
-				<div class="keybutton" ng-click="getDrugsByCategory('抗生素')">抗生素</div>
-				<div class="keybutton" ng-click="getDrugsByCategory('输液')">输液</div>
-				<div class="keybutton" ng-click="getDrugsByCategory('心血管')">心血管</div>
-				<div class="keybutton" ng-click="getDrugsByCategory('呼吸')">呼吸</div>
-				<div class="keybutton" ng-click="getDrugsByCategory('消化')">消化</div>
-				<div class="keybutton" ng-click="getDrugsByCategory('神经')">神经</div>
-				<div class="keybutton" ng-click="getDrugsByCategory('内分泌')">内分泌</div>
-				<div class="keybutton" ng-click="getDrugsByCategory('解热镇痛')">解热镇痛</div>
-				<div class="keybutton" ng-click="getDrugsByCategory('维生素激素')">维生素激素</div>
-				<div class="keybutton" ng-click="getDrugsByCategory('外用')">外用</div>
-				<div class="keybutton" ng-click="getDrugsByCategory('中成药')">中成药</div>
-				<div class="keybutton" ng-click="getDrugsByCategory('滋补')">滋补</div>
+				<div class="keybutton" ng-click="getDrugsByTag('抗生素')">抗生素</div>
+				<div class="keybutton" ng-click="getDrugsByTag('输液')">输液</div>
+				<div class="keybutton" ng-click="getDrugsByTag('心血管')">心血管</div>
+				<div class="keybutton" ng-click="getDrugsByTag('呼吸')">呼吸</div>
+				<div class="keybutton" ng-click="getDrugsByTag('消化')">消化</div>
+				<div class="keybutton" ng-click="getDrugsByTag('神经')">神经</div>
+				<div class="keybutton" ng-click="getDrugsByTag('内分泌')">内分泌</div>
+				<div class="keybutton" ng-click="getDrugsByTag('解热镇痛')">解热镇痛</div>
+				<div class="keybutton" ng-click="getDrugsByTag('维生素激素')">维生素激素</div>
+				<div class="keybutton" ng-click="getDrugsByTag('外用')">外用</div>
+				<div class="keybutton" ng-click="getDrugsByTag('中成药')">中成药</div>
+				<div class="keybutton" ng-click="getDrugsByTag('滋补')">滋补</div>
 			</div>
 			
             <div class="modSel">
 
-                <div class="modOpt" ng-repeat="x in optArry" ng-click="checkDrug(x.id)">{{x.showname}}</div>
+                <div class="modOpt" ng-if="optArry !=null && optArry.length > 0" ng-repeat="x in optArry" ng-click="checkDrug(x.id)">{{x.showname}}</div>
+				<div class="modOpt" ng-if="optArry !=null && optArry.length = 0">暂无相关药品</div>
+				<div class="modOpt" ng-if="optArry == null">正在获取中...</div>
+
 
             </div>
 
@@ -292,7 +295,7 @@
                     </select><span>{{drugArry.unit}}</span>
                 </div>
 
-                <div class="subrow"><span>单次计量 : </span><input type="text" ng-model="drugObj.singledose"></div>
+                <div class="subrow"><span>单次计量 : </span><input type="text" ng-model="sel.singledose"></div>
                 <div class="selGroup">
 
                     <span>频<i class="ls"></i>次 :</span>

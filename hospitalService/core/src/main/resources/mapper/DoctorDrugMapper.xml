@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yyg.eprescription.mapper.DoctorDrugMapper" >
+		
+	<resultMap id="ShortDrugInfo" type="com.yyg.eprescription.entity.ShortDrugInfo" >
+	    <id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="showname" property="showname" jdbcType="VARCHAR" />
+  	</resultMap>
+
+	<select id="getDrugsByDoctor" resultMap="ShortDrugInfo">
+		SELECT t_drug.id ,CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname FROM t_doctordrug LEFT JOIN t_drug on t_doctordrug.drugid = t_drug.id WHERE t_doctordrug.doctorid = #{doctorid,jdbcType=INTEGER} and t_drug.iszy = 1 and t_drug.state = 1 
+	</select>
+	
+	<select id="getZyDrugsByDoctor" resultMap="ShortDrugInfo">
+		SELECT t_drug.id ,CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname FROM t_doctordrug LEFT JOIN t_drug on t_doctordrug.drugid = t_drug.id WHERE t_doctordrug.doctorid = #{doctorid,jdbcType=INTEGER} and t_drug.iszy = 2 and t_drug.state = 1 
+	</select>
+	
+</mapper>
