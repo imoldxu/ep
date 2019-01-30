@@ -10,6 +10,8 @@ define([], function(){
         //默认值
 		$scope.nextpage = function(page){
 			
+			dataVer.put('pList', []);//初始化处方列表
+			
 			$state.go(page);
 		}
 		

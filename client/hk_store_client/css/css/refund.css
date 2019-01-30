@@ -60,7 +60,9 @@ body {
   width: 80%;
   height: auto;
   margin: auto;
+  background-color: #fff;
 }
+
 .con .conBody .putAL {
   position: relative;
   width: 100%;
@@ -110,6 +112,38 @@ body {
   background: linear-gradient(to right, #12b5fd, #00d8e4);
   /* 标准的语法 */
 }
+
+.con .conBody .prescriptionHead {
+  width: 90%;
+  margin: auto;
+  height: auto;
+  overflow: auto;
+  font-size: 16px;
+  border-bottom: 1px solid #000;
+}
+
+.con .conBody .prescriptionHead  h3{
+  text-align: -webkit-center;
+  margin: 10 auto;
+}
+
+.con .conBody .prescriptionHead .row {
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  zoom: 1;
+}
+.con .conBody .prescriptionHead .row .dia {
+  width: 100%;
+}
+.con .conBody .prescriptionHead .row div {
+  width: 25%;
+  height: 25px;
+  line-height: 25px;
+  float: left;
+  margin: 3 0px;
+}
+
 .con .conBody table {
   width: 100%;
   text-align: center;
@@ -137,11 +171,22 @@ body {
   padding: 10px 20px;
 }
 .con .conBody table td {
-  padding: 10px 10px;
+  padding: 10px 30px;
 }
 .con .conBody table td img{
   padding: 2px;
 }
+
+.con .conBody table td input{
+  width: 80px;
+  height: 30px;
+  border: 1px solid #93d3ff;
+  outline: none;
+  font-size: 14px;
+  padding: 5px;
+  margin: 0 10px;
+}
+
 .group {
   position: relative;
   width: 100%;
@@ -186,7 +231,7 @@ body {
 }
 
 .group input {
-  width: 150px;
+  width: 480px;
   height: 30px;
   border: 1px solid #93d3ff;
   outline: none;

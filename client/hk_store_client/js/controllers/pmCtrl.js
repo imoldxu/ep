@@ -61,6 +61,56 @@ define(['jquery'], function($){
 			
         };
 		
+		$scope.refund = function (id,i){
+			
+			$rootScope.myloader = true;
+
+			$http({
+                method: 'get',
+                url: URL3+'prescription/getStorePrescriptionDetail',
+                requestType: 'json',
+                params: {
+                    pid : $scope.prescriptionList[i].id
+                }
+            })
+            .success(function(resp){
+
+				$rootScope.myloader = false;
+
+                if (resp.code == 1){
+
+					dataVer.put('prescriptionInfo',	resp.data);
+
+					dataVer.put('drugList', resp.data.drugList);
+					
+					console.log(resp.data.drugList);
+			
+					if(resp.data.type==1){
+						$state.go('refund');
+					}else{
+						$state.go('zyrefund');
+					}
+				}else if(resp.code == 4){
+					alert(resp.msg);
+					
+					$state.go('login');
+                }else{
+				
+					alert(resp.msg);
+				
+				}
+
+            })
+			.error(function(data){
+				
+				$rootScope.myloader = false;
+				
+				alert('系统服务异常，请联系管理员');
+				
+			})
+			
+        };
+		
 		$scope.getPrescriptionByFirstPage = function(){
 			
 			$scope.searchopt.pageindex = 1;

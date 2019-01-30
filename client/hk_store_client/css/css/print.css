@@ -191,3 +191,8 @@ body {
   font-size: 13px;
   font-weight: bolder;
 }
+
+.signature{
+	position: absolute;
+	height:50px
+}

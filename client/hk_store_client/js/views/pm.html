@@ -49,7 +49,7 @@
                 <th>年龄</th>
                 <th>患者手机号</th>
 				<th>开方日期</th>
-				<th>操作</th>
+				<th colspan="2">操作</th>
             </tr>
             </thead>
             <tbody>
@@ -64,6 +64,7 @@
 				<td>{{x.patientphone}}</td>
 				<td>{{format(x.createtime,"yyyy-MM-dd")}}</td>
 				<td><img src="img/print.png" ng-click="print(x.id,$index)" width="16px"></td>
+				<td><span ng-click="refund(x.id,$index)">退货</span></td>
             </tr>
             </tbody>
         </table>

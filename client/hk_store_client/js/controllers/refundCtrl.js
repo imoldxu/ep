@@ -3,102 +3,50 @@ define(['jquery'], function($){
 
     return ['$scope', '$http', '$window', '$cookieStore','$location','$rootScope','dataVer' ,'$state', function($scope, $http, $window, $cookieStore,$location,$rootScope,dataVer,$state){
 
-        //默认值
-		$scope.pid = null;
-		
-		//$scope.storeInfo = dataVer.get('storeInfo');
-		
-		$scope.prescription = {};//处方信息
-				
-		$scope.drugList = [];//药品清单
+        $scope.prescription = dataVer.get('prescriptionInfo');
 
-		//$scope.buyDrugList = [];//药品清单
-		
-        $scope.getPrescriptionByID = function (){
-			
-			$rootScope.myloader = true;
+        $scope.drugList = dataVer.get('drugList');
 
-			$http({
-                method: 'get',
-                url: URL3+'prescription/getPrescriptionByIDFromStore',
-                requestType: 'json',
-				params: {
-                    pid : $scope.pid
-                }
-            })
-            .success(function(resp){
+		$scope.refund = function (){
 
-				$rootScope.myloader = false;
-
-                if (resp.code == 1){
-
-                    $scope.prescription = resp.data;
-					
-					$scope.drugList = resp.data.drugList;
-			
-                }else if(resp.code == 4){
-					
-					alert(resp.msg);
-					
-					$state.go('login');
-					
-				}else{
-					
-					alert(resp.msg);
-				
-				}
-
-            })
-			.error(function(data){
-				
-				$rootScope.myloader = false;
-				
-				alert('系统服务异常，请联系管理员');
-				
-			})
-			
-        };
-
-		$scope.buyFromStore = function (){
-
-			var buyDrugList = [];
+			var refundDrugList = [];
 		
 			for(var i=0 ;i<$scope.drugList.length; i++){
 				
 				var x = $scope.drugList[i];
-				if((x.number-x.soldnumber)>0){//只处理还有可以买的项
-					if((x.number-x.soldnumber)>=x.buynum){
-						if(x.buynum>0){//只有要买的数量大于1的才提交
+				if(x.number>0){//只有大于0的才可以退
+					if(x.number>=x.refundnum){
+						if(x.refundnum>0){//只有要买的数量大于1的才提交
 					
 							var transInfo = {};
 						
 							transInfo.drugid = x.drugid;
 						
-							transInfo.num = x.buynum;
+							transInfo.num = x.refundnum;
 						
-							buyDrugList.push(transInfo);
+							refundDrugList.push(transInfo);
 						}
 					}else{
-						alert("购买数量不可超过处方要求");
+						alert("退货数量不可超过销售数量");
 						
 						return false;
 					}
 				}
 				
 			}
-			if(buyDrugList.length == 0){
-				alert("购买清单不能为空");
+			if(refundDrugList.length == 0){
+				alert("退货清单不能为空");
 				return false;
 			}
+			
 			$rootScope.myloader = true;
 		
 			$http({
                 method: 'post',
-                url: URL3+'prescription/buyFromStore',
-                //requestType: 'json',
+                url: URL3+'prescription/refund',
                 data: {
                     pid : $scope.prescription.id,
-					drugList: JSON.stringify(buyDrugList) 
+					refundDrugsStr: JSON.stringify(refundDrugList) 
                 }
             })
             .success(function(resp){
@@ -107,7 +55,7 @@ define(['jquery'], function($){
 
                 if (resp.code == 1){
 
-					alert("购买成功");
+					alert("退货成功");
 					
 					dataVer.put('prescriptionInfo',	resp.data);
 

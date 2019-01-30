@@ -50,6 +50,16 @@ define(['app','angularAMD'], function(app,angularAMD){
             templateUrl: 'js/views/mzyprint.html?ver='+ver,
             controllerUrl: "js/controllers/mprintCtrl.js"
         }))
+		.state('refund',angularAMD.route({
+            url: '/refund',
+            templateUrl: 'js/views/refund.html?ver='+ver,
+            controllerUrl: "js/controllers/refundCtrl.js"
+        }))
+		.state('zyrefund',angularAMD.route({
+            url: '/zyrefund',
+            templateUrl: 'js/views/zyrefund.html?ver='+ver,
+            controllerUrl: "js/controllers/zyrefundCtrl.js"
+        }))
     }])
 
 

@@ -44,7 +44,6 @@
 					<th>药品规格</th>
 					<th>厂商</th>
 					<th>售价(元)</th>
-					<th>信息费(元)</th>
 					<th>状态</th>
 					<th>操作</th>
 				</tr>
@@ -55,7 +54,6 @@
 					<td>{{x.drugstandard}}</td>
 					<td>{{x.drugcompany}}</td>
 					<td>{{f2y(x.price)}}</td>
-					<td>{{f2y(x.settlementprice)}}</td>
 					<td ng-if="x.state == 1">有货</td>
 					<td class="emptystate" ng-if="x.state == 2">无货</td>
 					<td><img src="img/edit.png" ng-click="openModal(x.id,$index)" width="16px"> <img src="img/down.png" ng-if="x.state == 1" ng-click="downdrug(x.id,$index)" width="16px"><img src="img/up.png" ng-if="x.state == 0" ng-click="updrug(x.id,$index)" width="16px"></td>
