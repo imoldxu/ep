@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.yyg.eprescription.BaseMapper;
+import com.yyg.BaseMapper;
 import com.yyg.eprescription.entity.DoctorDrug;
 import com.yyg.eprescription.entity.ShortDrugInfo;
 

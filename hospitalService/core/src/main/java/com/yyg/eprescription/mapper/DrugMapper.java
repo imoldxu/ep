@@ -6,11 +6,11 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.yyg.eprescription.BaseMapper;
+import com.yyg.BaseMapper;
 import com.yyg.eprescription.entity.Drug;
 import com.yyg.eprescription.entity.ShortDrugInfo;
 
-@Repository("drugMapper")
+//@Repository("drugMapper")
 //@Mapper
 public interface DrugMapper extends BaseMapper<Drug> {
 

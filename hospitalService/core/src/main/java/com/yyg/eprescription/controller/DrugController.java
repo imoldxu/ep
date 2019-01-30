@@ -21,6 +21,7 @@ import com.yyg.eprescription.entity.ShortDrugInfo;
 import com.yyg.eprescription.service.DoctorDrugService;
 import com.yyg.eprescription.service.DrugService;
 import com.yyg.eprescription.util.JSONUtils;
+import com.yyg.eprescription.util.RedissonUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +32,8 @@ import io.swagger.annotations.ApiParam;
 @Api(description = "药品接口")
 public class DrugController {
 	
+	@Autowired
+	RedissonUtil redissonUtil;
 	@Autowired
 	DrugService drugService;
 	@Autowired
@@ -45,7 +48,11 @@ public class DrugController {
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
-			List<ShortDrugInfo> ret = drugService.getDrugsByKeys(keys, type);
+			List<ShortDrugInfo> ret = (List<ShortDrugInfo>) redissonUtil.get("getDrugsByKeys_"+type+"_"+keys);
+			if(ret == null) {
+				ret = drugService.getDrugsByKeys(keys, type);
+				redissonUtil.set("getDrugsByKeys_"+type+"_"+keys, ret, 3600000L);
+			}
 			Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
 			return resp;
 		}catch(HandleException e){	
@@ -58,12 +65,12 @@ public class DrugController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getDrugInfoListByKeys", method = RequestMethod.GET)
-	@ApiOperation(value = "根据药品的拼音缩写搜索药品", notes = "根据药品的拼音缩写搜索药品")
+	@ApiOperation(value = "根据药品的拼音缩写搜索药品", notes = "管理接口")
 	public Response getDrugInfoListByKeys(
 			@ApiParam(name = "keys", value = "拼音首字母索引") @RequestParam(name = "keys") String keys,
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Methods", "GET");
-		try{
+		try{		
 			List<Drug> ret = drugService.getDrugInfoListByKeys(keys);
 			
 			Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
@@ -85,8 +92,11 @@ public class DrugController {
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
-			List<ShortDrugInfo> ret = drugService.getDrugsByTag(tag, type);
-			
+			List<ShortDrugInfo> ret = (List<ShortDrugInfo>) redissonUtil.get("getDrugsByTag_"+type+"_"+tag);
+			if(ret == null) {
+				ret = drugService.getDrugsByTag(tag, type);
+				redissonUtil.set("getDrugsByTag_"+type+"_"+tag, ret, 3600000L);
+			}
 			Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
 			return resp;
 		}catch(HandleException e){	
@@ -106,8 +116,11 @@ public class DrugController {
 			HttpServletRequest request, HttpServletResponse response) {	
 		response.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
-			List<ShortDrugInfo> ret = drugService.getDrugsByDoctor(doctorid, type);
-			
+			List<ShortDrugInfo> ret = (List<ShortDrugInfo>) redissonUtil.get("getDrugsByDoctor_"+type+"_"+doctorid);
+			if(null == ret) {
+				ret = drugService.getDrugsByDoctor(doctorid, type);
+				redissonUtil.set("getDrugsByDoctor_"+type+"_"+doctorid, ret, 600000L);//医生药品库缓存10分钟
+			}
 			Response resp = new Response(Response.SUCCESS, ret, Response.SUCCESS_MSG);
 			return resp;
 		}catch(HandleException e){	
@@ -127,7 +140,11 @@ public class DrugController {
 		response.setHeader("Access-Control-Allow-Methods", "GET");
 		
 		try{
-			Drug drug = drugService.getDrugByID(drugid);
+			Drug drug = (Drug) redissonUtil.get("DrugID_"+drugid);
+			if(null == drug) {
+				drug = drugService.getDrugByID(drugid);
+				redissonUtil.set("DrugID_"+drugid, drug, 3600000L);
+			}
 			return new Response(Response.SUCCESS, drug, Response.SUCCESS_MSG);
 		}catch(HandleException e){	
 			return new Response(e.getErrorCode(), null, e.getMessage());
@@ -156,7 +173,7 @@ public class DrugController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/modifyDrug", method = RequestMethod.POST)
-	@ApiOperation(value = "修改药品信息", notes = "{     \"id\": 23,     \"drugname\": \"硫酸亚铁片\",     \"standard\": \"0.3g*60片\",     \"category\": \"OTC\",     \"price\": 38,     \"unit\": \"盒\",     \"form\": \"片剂\",     \"singledose\": \"1\",     \"doseunit\": \"片\",     \"defaultusage\": \"饭前\",     \"frequency\": \"一天三次\",     \"fullkeys\": \"LSYTP\",     \"shortnamekeys\": \"LSYTP\"   }")
+	@ApiOperation(value = "修改药品信息", notes = "管理接口")
 	public Response modifyDrug(@RequestParam(value="drugInfo") String drugInfo,HttpServletRequest request,HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Methods", "POST");
 		
@@ -198,7 +215,7 @@ public class DrugController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/downDrug", method = RequestMethod.POST)
-	@ApiOperation(value = "下架药品", notes = "{     \"id\": 23,     \"drugname\": \"硫酸亚铁片\",     \"standard\": \"0.3g*60片\",     \"category\": \"OTC\",     \"price\": 38,     \"unit\": \"盒\",     \"form\": \"片剂\",     \"singledose\": \"1\",     \"doseunit\": \"片\",     \"defaultusage\": \"饭前\",     \"frequency\": \"一天三次\",     \"fullkeys\": \"LSYTP\",     \"shortnamekeys\": \"LSYTP\"   }")
+	@ApiOperation(value = "下架药品", notes = "管理接口")
 	public Response downDrug(@RequestParam(value="drugid") int drugid, HttpServletRequest request,HttpServletResponse response) {
 		response.setHeader("Access-Control-Allow-Methods", "POST");
 		

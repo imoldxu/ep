@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.yyg.eprescription.BaseMapper;
+import com.yyg.BaseMapper;
 
 import tk.mybatis.spring.mapper.MapperScannerConfigurer;
 

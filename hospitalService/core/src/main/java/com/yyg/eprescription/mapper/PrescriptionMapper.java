@@ -6,11 +6,11 @@ import org.apache.ibatis.annotations.Param;
 //import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import com.yyg.eprescription.BaseMapper;
+import com.yyg.BaseMapper;
 import com.yyg.eprescription.entity.CountPrescriptionInfo;
 import com.yyg.eprescription.entity.Prescription;
 
-@Repository("prescriptionMapper")
+//@Repository("prescriptionMapper")
 //@Mapper
 public interface PrescriptionMapper extends BaseMapper<Prescription> {
  
