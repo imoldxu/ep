@@ -17,7 +17,7 @@ define(['angular','layer'], function(angular,layer){
 			}
 		}
 		
-        $scope.drugList = $scope.prescriptionObj.drugList;
+        //$scope.drugList = JSON.parse($scope.prescriptionObj.drugListStr);
 
         var date = new Date();
 
@@ -28,6 +28,11 @@ define(['angular','layer'], function(angular,layer){
             $window.history.back();
 
         };
+
+		$scope.f2y = function( num ) {
+			if ( typeof num !== "number" || isNaN( num ) ) return null;
+			return ( num / 100 ).toFixed( 2 );
+		}
 
         $scope.print = function(){
 		

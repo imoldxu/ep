@@ -78,11 +78,11 @@ body {
   /* 标准的语法 */
 }
 .con {
-  width: 794px;
+  /**width: 794px;*/
   margin: auto;
   height: auto;
   background-color: #fff;
-  font-size: 22px;
+  font-size: 16px;
 }
 
 .con div{
@@ -152,6 +152,20 @@ body {
 
 .printinfo  .info  .drugInfo{
 	padding: 0 40 0 30px;
+}
+
+.printinfo  .info  .drugInfo table {
+  font-size: 12px;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.printinfo  .info  .drugInfo table td {
+  /*border-top: 1px solid #d7e9f0;*/
+  height: 20px;
+  line-height: 20px;
+}
+.printinfo  .info  .drugInfo table tr:last-child td {
+  /*border-bottom: 1px solid #d7e9f0;*/
 }
 
 .printinfo  .info .ls {
