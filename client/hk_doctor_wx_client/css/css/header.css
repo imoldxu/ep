@@ -1,0 +1,30 @@
+.header {
+  width: 100%;
+  height: 48px;
+  padding: 0px;
+  background: -webkit-linear-gradient(right, #0082bb, #1ae0c4);
+  position: relative;
+}
+
+.header .header_back {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.header .header_back_img {
+  height: 24px;
+  padding: 12 12px;
+}
+
+.header .header_title {
+  font-size: 24px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 32px;
+  width: 100px;
+  margin-left: -50px;
+  margin-top: -16px;
+  text-align: -webkit-center;
+}

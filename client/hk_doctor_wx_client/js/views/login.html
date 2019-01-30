@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="css/css/login.css?ver={{cssVer}}">
+
+<div class="head">
+
+    <img src="img/doctor.png" width="128" class="logo">
+
+</div>
+
+<div class="group">
+	
+	<div>
+		<input type="text" maxlength="11" placeholder="请输入登录手机号" ng-model="phone">
+		<input type="password" placeholder="请输入登录密码" ng-model="pwd">
+	</div>
+	<div>
+		<div class="submit" ng-click="login(phone,pwd)">登录</div>
+	</div>
+</div>
+
+<div class="foot">
+	<div ng-click="gotoRegister()">没有账号,点我注册</div>
+</div>

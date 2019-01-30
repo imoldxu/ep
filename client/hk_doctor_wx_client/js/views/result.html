@@ -1,0 +1,80 @@
+
+
+<link rel="stylesheet" href="css/css/result.css?ver={{cssVer}}">
+
+
+<style media="print" type="text/css">
+    .noprint{display:none}
+	
+	.printinfo{display:block}
+</style>
+
+<div class="head noprint">
+
+    <div class="logo">
+
+        <img src="img/logo2.png" alt="" width="54">
+
+        <span>电子处方系统</span>
+
+    </div>
+
+    <div class="goBack" ui-sref="index" >返回首页</div>
+
+</div>
+
+
+<div class="printinfo">
+	<div class="header">
+		<div class="title">取药单</div>
+		<io-barcode code="{{prescriptionObj.id}}" type="CODE128B"></io-barcode>
+		<div>处方码:{{prescriptionObj.id}}</div>
+	</div>
+	
+	<div class="baseinfo">
+		<div class="leftcontent">{{prescriptionObj.patientname + '   ' +prescriptionObj.patientsex + '   ' + prescriptionObj.patientage + '岁'}}</div>
+		<div class="rightcontent">医生:{{prescriptionObj.doctorname}}</div>
+	</div>
+	
+	<div class="info" ng-repeat="x in storeList">
+		<div ng-if="x.name != null" class="storename">{{x.name}}<span><i class="ls"></i>（距离医院：</span>{{x.distance}}<span>米）</span></div>
+		<div ng-if="x.address != null"><span>地址:</span>{{x.address}}</div>
+		<div>药品目录:</div>
+		<div class="drugInfo">
+			<table width="100%">
+				<tbody>
+					<tr  ng-repeat="y in x.drugList">
+						<td>{{y.drugname}}<span ng-if="2 == y.state"></span></td>
+						<td>{{y.standard}}</td>
+						<td>{{f2y(y.price)}}元</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="info" ng-if="noneStoreDrugList !=null">
+		<div class="storename">附近药店未找到的药品:</div>
+		<div class="drugInfo" ng-repeat="y in noneStoreDrugList">
+			<div><span>{{y.drugname}}</span><i class="ls"></i><span>{{y.standard}}</span></div>
+		</div>
+	</div>
+
+	<div class="con">
+		<div>
+			<qrcode data="http://www.163.com" version="2" error-correction-level="Q" size="140"></qrcode>
+		</div>
+		<div>患者微信扫码获取处方,查看更多药房</div>
+		
+	</div>		
+	<div class="foot">
+		<div>药品信息由xxx提供</div>
+	</div>
+
+</div>
+
+
+<div class="foot noprint">
+
+    <div class="next"  ng-click="print()">打印取药单</div>
+
+</div>

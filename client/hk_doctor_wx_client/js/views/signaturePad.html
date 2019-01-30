@@ -1,0 +1,18 @@
+
+<link rel="stylesheet" href="css/css/header.css?ver={{cssVer}}">
+<link rel="stylesheet" href="css/css/signaturePad.css?ver={{cssVer}}">
+
+
+<div class="header">
+    <div class="header_back" ng-click="goBack()"><img class="header_back_img" src="img/icon_back.png"></img></div>
+	<div class="header_title">电子签名</div>
+</div>
+
+<div class="con">
+
+	<signature-pad accept="accept" clear="clear" height="220" width="440" disabled="false"></signature-pad>
+	<div class="button" ng-click="clear()">清空</div>
+	<div class="button" ng-click="ok()">确认</div>
+	
+</div>
+

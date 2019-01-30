@@ -1,0 +1,24 @@
+
+<link rel="stylesheet" href="css/css/header.css?ver={{cssVer}}">
+<link rel="stylesheet" href="css/css/register.css?ver={{cssVer}}">
+
+
+<div class="header">
+    <div class="header_back" ng-click="goBack()"><img class="header_back_img" src="img/icon_back.png"></img></div>
+	<div class="header_title">注册账号</div>
+</div>
+
+<div class="con">
+
+	<div class="row">
+		<label>手机号：</label><input type="text" ng-model="phone" maxlength="11" placeholder="请输入登陆手机号"></input>
+	</div>
+	
+	<div class="row">
+		<label>登陆密码：</label><input type="password" ng-model="pwd" placeholder="请输入密码"></input>
+	</div>
+	
+	<div class="submit" ng-click="registe(phone, pwd)">注册</div>
+	
+</div>
+
