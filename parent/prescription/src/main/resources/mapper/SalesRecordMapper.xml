@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ly.service.mapper.PrescriptionMapper" >
+<mapper namespace="com.ly.service.mapper.SalesRecordMapper" >
 		
-	<resultMap id="myPrescription" type="com.ly.service.entity.Prescription" >
+	<!--resultMap id="myRecord" type="com.ly.service.entity.SalesRecord" >
 	    <id column="id" property="id" jdbcType="INTEGER" />
 	    <result column="doctorid" property="doctorid" jdbcType="INTEGER" />
 	    <result column="hospitalid" property="hospitalid" jdbcType="INTEGER" />
@@ -24,14 +24,10 @@
 	    <result column="zysingledose" property="zysingledose" jdbcType="VARCHAR" />
 	    <result column="zyfrequence" property="zyfrequence" jdbcType="VARCHAR" />
 	    <result column="zymode" property="zymode" jdbcType="VARCHAR" />
-  	</resultMap>
+  	</resultMap-->
 
-	<select id="getStorePrescripts" resultMap="myPrescription">
-		SELECT id, createtime, department, diagnosis, doctorid, doctorname, hospitalid, hospitalname, patientage,
-   patientname, patientphone, patientsex, sn, type, userid, zyfrequence, zymode,
-zynum, zysingledose, zyusage FROM (SELECT t_prescription.id, t_prescription.createtime, t_prescription.department, t_prescription.diagnosis, t_prescription.doctorid, t_prescription.doctorname, t_prescription.hospitalid, t_prescription.hospitalname, t_prescription.patientage,
-   t_prescription.patientname, t_prescription.patientphone, t_prescription.patientsex, t_prescription.sn, t_prescription.type, t_prescription.userid, t_prescription.zyfrequence, t_prescription.zymode,
-t_prescription.zynum, t_prescription.zysingledose, t_prescription.zyusage, SUM(t_sales_record.num) as snumber FROM t_sales_record LEFT JOIN t_prescription ON t_sales_record.prescriptionid = t_prescription.id WHERE t_sales_record.storeid = #{storeId,jdbcType=INTEGER} AND t_prescription.createtime BETWEEN #{startDate,jdbcType=VARCHAR} AND #{endDate,jdbcType=VARCHAR} GROUP BY t_sales_record.drugid, t_sales_record.prescriptionid) AS t_temp WHERE t_temp.snumber>0 GROUP BY t_temp.id ORDER BY createtime DESC LIMIT #{offset,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	<select id="getSalesRecordForRefund" resultType="com.ly.service.entity.SalesRecord">
+		SELECT * FROM t_sales_record WHERE t_sales_record.drugid = #{drugid, jdbcType=INTEGER} AND t_sales_record.storeid = #{storeid, jdbcType=INTEGER} AND t_sales_record.prescriptionid = #{pid, jdbcType=BIGINT} AND t_sales_record.num > 0 AND(t_sales_record.num - t_sales_record.refundnum) > 0 ORDER BY t_sales_record.price
 	</select>
 	
 </mapper>

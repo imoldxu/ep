@@ -50,6 +50,10 @@ public class Store {
 	@ColumnType(jdbcType= JdbcType.DOUBLE)
 	private Double latitude;
 
+	@Column(name ="rate")
+	@ColumnType(jdbcType= JdbcType.DOUBLE)
+	private Double rate;//费率
+	
 	@Transient
 	private int distance;
 
@@ -135,6 +139,13 @@ public class Store {
 	public void setPwdnonce(String pwdnonce) {
 		this.pwdnonce = pwdnonce;
 	}
-	
+
+	public Double getRate() {
+		return rate;
+	}
+
+	public void setRate(Double rate) {
+		this.rate = rate;
+	}
 	
 }

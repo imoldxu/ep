@@ -17,4 +17,11 @@ public class ValidDataUtil {
 	    }
 	}
 
+	public static boolean isEmail(String mail) {
+		if(mail.matches("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*")){
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

@@ -265,6 +265,9 @@ public class PrescriptionController {
 		List<TransactionDrug> transDrugList = null;
 		try{
 			transDrugList = JSONUtils.getObjectListByJson(drugList, TransactionDrug.class);
+			if(transDrugList.isEmpty()) {
+				return Response.Error(ErrorCode.NORMAL_ERROR, "购买清单不能为空");
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
@@ -283,6 +286,38 @@ public class PrescriptionController {
 		}
 	}
 
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/refund", method = RequestMethod.POST)
+	@ApiOperation(value = "退货", notes = "药店接口")
+	public Response refund(
+			@ApiParam(name="pid", value="处方id") @RequestParam(name="pid") Long pid,
+			@ApiParam(name="refundDrugsStr", value="退货清单") @RequestParam(name="refundDrugsStr") String refundDrugsStr,
+			HttpServletRequest request, HttpServletResponse response){
+		List<TransactionDrug> refundDrugs;
+		try {
+			refundDrugs = JSONUtils.getObjectListByJson(refundDrugsStr, TransactionDrug.class);
+			if(refundDrugs.isEmpty()) {
+				return Response.Error(ErrorCode.NORMAL_ERROR, "退货清单不能为空");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
+		}
+		
+		try {
+			Integer storeid = SessionUtil.getStoreId(request);
+			
+			prescriptionService.refund(storeid, pid, refundDrugs);
+			Prescription ret = prescriptionService.getStorePrescriptionDetail(storeid, pid);
+			return Response.OK(ret);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();		
+		}
+	}
+	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getStorePrescriptions", method = RequestMethod.GET)
 	@ApiOperation(value = "获取药房已经销售的处方列表", notes = "药房接口")

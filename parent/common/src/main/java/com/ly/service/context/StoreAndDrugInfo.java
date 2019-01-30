@@ -6,7 +6,7 @@ import com.ly.service.utils.JSONUtils;
 
 /**药房，以及药房包含的药品*/
 public class StoreAndDrugInfo {
-
+	
 	private Integer id;
 	
 	private String name;
@@ -19,7 +19,7 @@ public class StoreAndDrugInfo {
 
 	private Integer distance;
 
-	private List<String> drugList; //["",""]字符串数组
+	private List<SimpleStoreDrug> drugList; //["",""]字符串数组
 	
 	private String drugListStr; //["",""]字符串数组
 
@@ -71,14 +71,6 @@ public class StoreAndDrugInfo {
 		this.distance = distance;
 	}
 
-	public List<String> getDrugList() {
-		return drugList;
-	}
-
-	public void setDrugList(List<String> drugList) {
-		this.drugList = drugList;
-	}
-
 	public String fetchDrugListStr() {
 		return drugListStr;
 	}
@@ -86,10 +78,18 @@ public class StoreAndDrugInfo {
 	public void setDrugListStr(String drugListStr) {
 		this.drugListStr = drugListStr;
 		try {
-			this.drugList = JSONUtils.getObjectListByJson(drugListStr, String.class);
+			this.drugList = JSONUtils.getObjectListByJson(drugListStr, SimpleStoreDrug.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public List<SimpleStoreDrug> getDrugList() {
+		return drugList;
+	}
+
+	public void setDrugList(List<SimpleStoreDrug> drugList) {
+		this.drugList = drugList;
 	}
 
 

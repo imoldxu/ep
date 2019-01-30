@@ -35,13 +35,9 @@ public class HospitalDrug {
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String drugcompany;//药品厂商
 	
-	@Column(name = "sellerid")
+	@Column(name = "exid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer sellerid;//销售人员id
-	
-	@Column(name = "sellername")
-	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String sellername;//销售人员姓名
+	private Integer exid;//第三方id
 	
 	@Column(name = "hospitalid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
@@ -50,11 +46,7 @@ public class HospitalDrug {
 	@Column(name = "hospitalname")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String hospitalname;//医院名称
-	
-	@Column(name = "sellfee")
-	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer sellfee;//推广费分 不同医院，不用药品的推广费不一样
-	
+		
 	public String getDrugname() {
 		return drugname;
 	}
@@ -79,13 +71,13 @@ public class HospitalDrug {
 		this.drugcompany = drugcompany;
 	}
 
-	public String getSellername() {
-		return sellername;
-	}
-
-	public void setSellername(String sellername) {
-		this.sellername = sellername;
-	}
+//	public String getSellername() {
+//		return sellername;
+//	}
+//
+//	public void setSellername(String sellername) {
+//		this.sellername = sellername;
+//	}
 
 	public String getHospitalname() {
 		return hospitalname;
@@ -93,14 +85,6 @@ public class HospitalDrug {
 
 	public void setHospitalname(String hospitalname) {
 		this.hospitalname = hospitalname;
-	}
-
-	public Integer getSellfee() {
-		return sellfee;
-	}
-
-	public void setSellfee(Integer sellfee) {
-		this.sellfee = sellfee;
 	}
 
 	public Long getId() {
@@ -119,20 +103,20 @@ public class HospitalDrug {
 		this.drugid = drugid;
 	}
 
-	public Integer getSellerid() {
-		return sellerid;
-	}
-
-	public void setSellerid(Integer sellerid) {
-		this.sellerid = sellerid;
-	}
-
 	public Integer getHospitalid() {
 		return hospitalid;
 	}
 
 	public void setHospitalid(Integer hospitalid) {
 		this.hospitalid = hospitalid;
+	}
+
+	public Integer getExid() {
+		return exid;
+	}
+
+	public void setExid(Integer exid) {
+		this.exid = exid;
 	}
 	
 }

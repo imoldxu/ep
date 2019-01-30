@@ -50,28 +50,31 @@ public class SalesRecordController {
 		}
 	}
 	
-	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getRecordBySeller", method = RequestMethod.GET)
-	@ApiOperation(value = "获取销售的销售清单", notes = "销售接口")
-	public Response getRecordBySeller(
-			@ApiParam(name="doctorName", value="医生姓名") @RequestParam(name="doctorName") String doctorName,
-			@ApiParam(name="startDate", value="起始日期") @RequestParam(name="startDate") String startDate,
-			@ApiParam(name="endDate", value="结束日期") @RequestParam(name="endDate") String endDate,
-			@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
-			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
-			HttpServletRequest request, HttpServletResponse response){
-		
-		try{
-			Integer sellerid = SessionUtil.getSellerId(request);
-			List<SalesRecord> list = recordService.getRecordBySeller(sellerid, doctorName, startDate, endDate, pageIndex, pageSize);
-			return Response.OK(list);
-		}catch (HandleException e) {
-			return Response.Error(e.getErrorCode(), e.getMessage());
-		}catch (Exception e) {
-			e.printStackTrace();
-			return Response.SystemError();		
-		}
-	}
+	
+	
+	
+//	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+//	@RequestMapping(value = "/getRecordBySeller", method = RequestMethod.GET)
+//	@ApiOperation(value = "获取销售的销售清单", notes = "销售接口")
+//	public Response getRecordBySeller(
+//			@ApiParam(name="doctorName", value="医生姓名") @RequestParam(name="doctorName") String doctorName,
+//			@ApiParam(name="startDate", value="起始日期") @RequestParam(name="startDate") String startDate,
+//			@ApiParam(name="endDate", value="结束日期") @RequestParam(name="endDate") String endDate,
+//			@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
+//			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
+//			HttpServletRequest request, HttpServletResponse response){
+//		
+//		try{
+//			Integer sellerid = SessionUtil.getSellerId(request);
+//			List<SalesRecord> list = recordService.getRecordBySeller(sellerid, doctorName, startDate, endDate, pageIndex, pageSize);
+//			return Response.OK(list);
+//		}catch (HandleException e) {
+//			return Response.Error(e.getErrorCode(), e.getMessage());
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//			return Response.SystemError();		
+//		}
+//	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getRecords", method = RequestMethod.GET)

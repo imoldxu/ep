@@ -66,4 +66,12 @@ public class HospitalService {
 		Hospital ret = hospitalMapper.selectByPrimaryKey(hid);
 		return ret;
 	}
+
+	public List<Hospital> getAllHospital() {
+		Example ex = new Example(Hospital.class);
+		ex.setOrderByClause("id DESC");
+		List<Hospital> ret = hospitalMapper.selectByExample(ex);
+		return ret;
+	
+	}
 }

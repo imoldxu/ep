@@ -24,7 +24,7 @@ import com.ly.service.entity.Order;
 import com.ly.service.entity.Patient;
 import com.ly.service.entity.Prescription;
 import com.ly.service.entity.PrescriptionDrug;
-import com.ly.service.entity.Seller;
+//import com.ly.service.entity.Seller;
 import com.ly.service.entity.StoreDrug;
 import com.ly.service.feign.client.DrugClient;
 import com.ly.service.feign.client.UserClient;
@@ -47,6 +47,8 @@ public class PrescriptionService {
 	
 	@Autowired
 	OrderService orderService;
+	@Autowired
+	SalesRecordService salesRecordService;
 	
 	@Autowired
 	UserClient userClient;
@@ -154,6 +156,7 @@ public class PrescriptionService {
 		Doctor doctor = om.convertValue(userClient.getDoctor(doctorid).fetchOKData(), Doctor.class);
 		perscription.setDoctorname(doctor.getName());
 		perscription.setDepartment(doctor.getDepartment());
+		perscription.setSignatureurl(doctor.getSignatureurl());
 		perscription.setHospitalid(hospitalid);
 		Hospital hospital = om.convertValue(userClient.getHospital(hospitalid).fetchOKData(), Hospital.class);
 		perscription.setHospitalname(hospital.getName());
@@ -169,15 +172,18 @@ public class PrescriptionService {
 			pdrug.setSoldnumber(0);
 			pdrug.setDrugname(hospitalDrug.getDrugname());
 			pdrug.setStandard(hospitalDrug.getDrugstandard());
-			pdrug.setSellfee(hospitalDrug.getSellfee());
-			pdrug.setSellerid(hospitalDrug.getSellerid());
+
+			pdrug.setExid(hospitalDrug.getExid());
 			
 			drugidList.add(pdrug.getDrugid());
 		}
 		drugMapper.insertList(drugList);
 		
-		String drugListStr = JSONUtils.getJsonString(drugidList);
-		List<StoreAndDrugInfo> storeList = om.convertValue(drugClient.getStoresByDrugs(drugListStr, hospital.getLatitude(), hospital.getLongitude(), 3).fetchOKData(), new TypeReference<List<StoreAndDrugInfo>>() {});
+		
+		String drugidListStr = JSONUtils.getJsonString(drugidList);
+		List<StoreAndDrugInfo> storeList = om.convertValue(drugClient.getStoresByDrugs(drugidListStr, hospital.getLatitude(), hospital.getLongitude(), 3).fetchOKData(), new TypeReference<List<StoreAndDrugInfo>>() {});
+		
+		drugClient.addDoctorDrugs(drugidListStr, doctorid);
 		
 		perscription.setStoreList(storeList);
 		perscription.setDrugList(drugList);
@@ -253,7 +259,7 @@ public class PrescriptionService {
 			p = getPrescriptionById(pid);
 			Date now = new Date();
 			Date createDate = p.getCreatetime();
-			//TODO 处方有效期不得超过3天
+			//处方有效期不得超过3天
 			int i = now.compareTo(createDate);
 			if(i>3){
 				throw new HandleException(-1, "处方已过期");
@@ -278,11 +284,8 @@ public class PrescriptionService {
 					    tDrug.setHospitalname(hospital.getName());
 					    
 					    tDrug.setDrugname(pDrug.getDrugname());
-					    tDrug.setSellerfee(pDrug.getSellfee());
-					    tDrug.setSellerid(pDrug.getSellerid());
-					    //FIXME:获取销售胡名字
-					    Seller seller = om.convertValue(userClient.getSeller(pDrug.getSellerid()).fetchOKData(), Seller.class);
-					    tDrug.setSellername(seller.getName());
+					    
+					    tDrug.setExid(pDrug.getExid());
 					    
 					    pDrug.setSoldnumber(pDrug.getSoldnumber()+tDrug.getNum());
 						isMatch = true;
@@ -292,7 +295,7 @@ public class PrescriptionService {
 					}
 				}
 				if(!isMatch){
-					throw new HandleException(-1, "不可选购超过处方的药品");
+					throw new HandleException(ErrorCode.NORMAL_ERROR, "不可选购超过处方的药品");
 				}
 			}
 			redissonUtil.unlock("BUY_PRESCRIPTION_"+pid);
@@ -381,5 +384,39 @@ public class PrescriptionService {
 			throw new HandleException(ErrorCode.DOMAIN_ERROR, "你无权进行此操作");
 		}
 		return p;
+	}
+	
+	@Transactional
+	public void refund(Integer storeid, Long pid, List<TransactionDrug> refundDrugs) {
+		Prescription prescription = getPrescriptionDetailByStore(storeid, pid);
+		
+		//检查该药店销售的数量与退货数量是否匹配
+		List<PrescriptionDrug> soldDrugs = prescription.getDrugList();
+		for(TransactionDrug refundDrug : refundDrugs) {
+			boolean isMatch = false;
+			for(PrescriptionDrug soldDrug : soldDrugs) {
+				if(refundDrug.getDrugid() == soldDrug.getDrugid()) {
+					isMatch = true;
+					if(soldDrug.getNumber() < refundDrug.getNum()) {
+						throw new HandleException(ErrorCode.NORMAL_ERROR, "退货不可超过销售的数量");
+					}
+				}
+			}
+			if(!isMatch) {
+				throw new HandleException(ErrorCode.NORMAL_ERROR, "不可退销售药品以外的药品");
+			}
+		}		
+		//处方的药品调整已经销售的数量
+		List<PrescriptionDrug> pDrugList = getDrugListByPrescriptionID(pid);
+		for(TransactionDrug refundDrug : refundDrugs) {
+			for(PrescriptionDrug pDrug : pDrugList) {
+				if(refundDrug.getDrugid() == pDrug.getDrugid()) {
+					pDrug.setSoldnumber(pDrug.getSoldnumber()-refundDrug.getNum());
+					drugMapper.updateByPrimaryKey(pDrug);
+				}
+			}
+		}
+
+		salesRecordService.refund(storeid, pid, refundDrugs);
 	}
 }

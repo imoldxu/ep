@@ -39,20 +39,18 @@ public class HospitalDrugController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(path="/add", method = RequestMethod.POST)
 	@ApiOperation(value = "设置医院销售的药品", notes = "管理接口")
-	public Response add(@ApiParam(name="sellerid", value="销售编号") @RequestParam(name="sellerid") Integer sellerid,
-			@ApiParam(name="sellername", value="销售名称") @RequestParam(name="sellername") String sellername,
+	public Response add(@ApiParam(name="exid", value="扩展编号") @RequestParam(name="exid") Integer exid,
 			@ApiParam(name="drugid", value="药名id") @RequestParam(name="drugid") int drugid,
 			@ApiParam(name="drugname", value="药品名称") @RequestParam(name="drugname") String drugname,
 			@ApiParam(name="standard", value="药品规格") @RequestParam(name="standard") String standard,
 			@ApiParam(name="company", value="药品厂商") @RequestParam(name="company") String company,
 			@ApiParam(name="hospitalid", value="医院id") @RequestParam(name="hospitalid") int hospitalid,
 			@ApiParam(name="hospitalname", value="医院名称") @RequestParam(name="hospitalname") String hospitalname,
-			@ApiParam(name="sellfee", value="销售提成") @RequestParam(name="sellfee") int sellfee,
 			HttpServletRequest request, HttpServletResponse response){
 		try{
 			SessionUtil.getManagerId(request);
 			
-			HospitalDrug ret = drugService.setHospitalDrug(sellerid, sellername, drugid, drugname, standard, company, hospitalid, hospitalname, sellfee);
+			HospitalDrug ret = drugService.setHospitalDrug(exid, drugid, drugname, standard, company, hospitalid, hospitalname);
 			return Response.OK(ret);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -170,28 +168,28 @@ public class HospitalDrugController {
 		}
 	}
 	
-	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getDrugListBySeller", method = RequestMethod.GET)
-	@ApiOperation(value = "根据标签搜索药品", notes = "面向销售的接口")
-	public Response getDrugListBySeller(
-			@ApiParam(name = "key", value = "药品关键字") @RequestParam(name = "key") String key,
-			@ApiParam(name = "pageIndex", value = "页码1-n") @RequestParam(name = "pageIndex") int pageIndex,
-			@ApiParam(name = "pageSize", value = "每页最大数量") @RequestParam(name = "pageSize") int pageSize,
-			HttpServletRequest request, HttpServletResponse response) {
-		//response.setHeader("Access-Control-Allow-Origin", "*");
-		//response.setHeader("Access-Control-Allow-Methods", "GET");
-		try{
-			Integer sellerid = SessionUtil.getSellerId(request);
-			
-			List<HospitalDrug> ret = drugService.getHospitalDrugListBySeller(sellerid, key, pageIndex, pageSize);
-			
-			Response resp = Response.OK(ret);
-			return resp;
-		}catch (HandleException e) {
-			return Response.Error(e.getErrorCode(), e.getMessage());
-		}catch (Exception e){
-			e.printStackTrace();
-			return Response.SystemError();
-		}
-	}
+//	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+//	@RequestMapping(value = "/getDrugListBySeller", method = RequestMethod.GET)
+//	@ApiOperation(value = "根据标签搜索药品", notes = "面向销售的接口")
+//	public Response getDrugListBySeller(
+//			@ApiParam(name = "key", value = "药品关键字") @RequestParam(name = "key") String key,
+//			@ApiParam(name = "pageIndex", value = "页码1-n") @RequestParam(name = "pageIndex") int pageIndex,
+//			@ApiParam(name = "pageSize", value = "每页最大数量") @RequestParam(name = "pageSize") int pageSize,
+//			HttpServletRequest request, HttpServletResponse response) {
+//		//response.setHeader("Access-Control-Allow-Origin", "*");
+//		//response.setHeader("Access-Control-Allow-Methods", "GET");
+//		try{
+//			Integer sellerid = SessionUtil.getSellerId(request);
+//			
+//			List<HospitalDrug> ret = drugService.getHospitalDrugListBySeller(sellerid, key, pageIndex, pageSize);
+//			
+//			Response resp = Response.OK(ret);
+//			return resp;
+//		}catch (HandleException e) {
+//			return Response.Error(e.getErrorCode(), e.getMessage());
+//		}catch (Exception e){
+//			e.printStackTrace();
+//			return Response.SystemError();
+//		}
+//	}
 }

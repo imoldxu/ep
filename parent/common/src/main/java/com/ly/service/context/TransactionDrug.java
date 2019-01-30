@@ -25,14 +25,9 @@ public class TransactionDrug implements Serializable{
 	
 	private String hospitalname;//医院名称
 	
-	private int sellerid;//关联的销售id
-	
-	private String sellername;//销售名字
+	private int exid;//关联的扩展id
 
 	private int num;//购买数量
-	
-	private int sellerfee;//销售推广费单价
-
 
 	public int getNum() {
 		return num;
@@ -49,15 +44,15 @@ public class TransactionDrug implements Serializable{
 	public void setDrugid(int drugid) {
 		this.drugid = drugid;
 	}
-	
-	public int getSellerid() {
-		return sellerid;
+
+	public int getExid() {
+		return exid;
 	}
 
-	public void setSellerid(int sellerid) {
-		this.sellerid = sellerid;
+	public void setExid(int exid) {
+		this.exid = exid;
 	}
-	
+
 	public int getDoctorid() {
 		return doctorid;
 	}
@@ -72,14 +67,6 @@ public class TransactionDrug implements Serializable{
 
 	public void setHospitalid(int hospitalid) {
 		this.hospitalid = hospitalid;
-	}
-
-	public String getSellername() {
-		return sellername;
-	}
-
-	public void setSellername(String sellername) {
-		this.sellername = sellername;
 	}
 
 	public String getHospitalname() {
@@ -114,11 +101,4 @@ public class TransactionDrug implements Serializable{
 		this.prescriptionid = prescriptionid;
 	}
 
-	public int getSellerfee() {
-		return sellerfee;
-	}
-
-	public void setSellerfee(int sellerfee) {
-		this.sellerfee = sellerfee;
-	}
 }

@@ -58,6 +58,10 @@ public class Doctor {
 	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
 	private Date lastlogintime;//最后登录时间
 
+	@Column(name = "signatureurl")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String signatureurl;//医生的电子签名
+
 	@Transient
 	private int subscribe;//是否关注公众号
 	
@@ -159,6 +163,13 @@ public class Doctor {
 	public void setDepartment(String department) {
 		this.department = department;
 	}
-	
-	
+
+	public String getSignatureurl() {
+		return signatureurl;
+	}
+
+	public void setSignatureurl(String signatureurl) {
+		this.signatureurl = signatureurl;
+	}
+		
 }

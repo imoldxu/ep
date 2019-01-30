@@ -27,8 +27,8 @@ public interface UserClient {
 	@RequestMapping(value = "/internal/getHospital", method = RequestMethod.GET)
 	public Response getHospital(@RequestParam(name = "hid") Integer hid);
 
-	@RequestMapping(value = "/internal/getSeller", method = RequestMethod.GET)
-	public Response getSeller(@RequestParam(name = "sellerid") Integer sellerid);
+//	@RequestMapping(value = "/internal/getSeller", method = RequestMethod.GET)
+//	public Response getSeller(@RequestParam(name = "sellerid") Integer sellerid);
 	
 	@RequestMapping(value = "/internal/getStore", method = RequestMethod.GET)
 	public Response getStore(@RequestParam(name = "storeid") Integer storeid);

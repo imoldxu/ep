@@ -34,9 +34,9 @@ public class PrescriptionDrug implements Serializable{
 	@ColumnType(jdbcType = JdbcType.INTEGER)
 	private Integer drugid;//药品编号
 
-	@Column(name = "sellerid")
+	@Column(name = "exid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer sellerid;//销售id
+	private Integer exid;//扩展id
 	
 	@Column(name = "drugname")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -50,14 +50,6 @@ public class PrescriptionDrug implements Serializable{
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String category;//分类
 
-	@Column(name = "sellfee")
-	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer sellfee;//推广费
-//	
-//	@Column(name = "settlementprice")
-//	@ColumnType(jdbcType = JdbcType.DOUBLE)
-//	private Double settlementprice;//药店给平台的费用
-	
 	@Column(name = "unit")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String unit;//单位：盒、瓶
@@ -197,29 +189,13 @@ public class PrescriptionDrug implements Serializable{
 	public void setDrugid(Integer drugid) {
 		this.drugid = drugid;
 	}
+
+	public Integer getExid() {
+		return exid;
+	}
+
+	public void setExid(Integer exid) {
+		this.exid = exid;
+	}
 	
-	public Integer getSellfee() {
-		return sellfee;
-	}
-
-	public void setSellfee(Integer sellfee) {
-		this.sellfee = sellfee;
-	}
-	
-	public Integer getSellerid() {
-		return sellerid;
-	}
-
-	public void setSellerid(Integer sellerid) {
-		this.sellerid = sellerid;
-	}
-
-//
-//	public Double getSettlementprice() {
-//		return settlementprice;
-//	}
-//
-//	public void setSettlementprice(Double settlementprice) {
-//		this.settlementprice = settlementprice;
-//	}
 }

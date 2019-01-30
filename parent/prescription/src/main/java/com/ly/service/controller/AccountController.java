@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
-import com.ly.service.entity.SellerAccount;
-import com.ly.service.entity.SellerAccountRecord;
 import com.ly.service.entity.StoreAccount;
 import com.ly.service.entity.StoreAccountRecord;
 import com.ly.service.service.AccountService;
@@ -33,24 +31,24 @@ public class AccountController {
 	@Autowired
 	AccountService accountService;
 	
-	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getAllSellerAccount", method = RequestMethod.GET)
-	@ApiOperation(value = "获取所有销售的账户", notes = "管理接口")
-	public Response getAllSellerAccount(@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
-			@ApiParam(name = "pageSize", value = "最大数") @RequestParam(name = "pageSize") int pageSize,
-			HttpServletRequest request, HttpServletResponse resp) {
-		try{
-			SessionUtil.getManagerId(request);
-			
-			List<SellerAccount> ret = accountService.getAllSellerAccount(pageIndex, pageSize);
-			return Response.OK(ret);
-		} catch (HandleException e) {
-			return Response.Error(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Response.SystemError();
-		}
-	}
+//	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+//	@RequestMapping(value = "/getAllSellerAccount", method = RequestMethod.GET)
+//	@ApiOperation(value = "获取所有销售的账户", notes = "管理接口")
+//	public Response getAllSellerAccount(@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
+//			@ApiParam(name = "pageSize", value = "最大数") @RequestParam(name = "pageSize") int pageSize,
+//			HttpServletRequest request, HttpServletResponse resp) {
+//		try{
+//			SessionUtil.getManagerId(request);
+//			
+//			List<SellerAccount> ret = accountService.getAllSellerAccount(pageIndex, pageSize);
+//			return Response.OK(ret);
+//		} catch (HandleException e) {
+//			return Response.Error(e.getErrorCode(), e.getMessage());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return Response.SystemError();
+//		}
+//	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getAllStoreAccount", method = RequestMethod.GET)
@@ -71,41 +69,41 @@ public class AccountController {
 		}
 	}
 	
-	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getSellerBalance", method = RequestMethod.GET)
-	@ApiOperation(value = "获取销售的余额", notes = "销售人员接口")
-	public Response getSellerBalance(HttpServletRequest request, HttpServletResponse resp) {
-		try{
-			int sellerid = SessionUtil.getSellerId(request);
-			int balance = accountService.getSellerBalance(sellerid);
-			return Response.OK(balance);
-		} catch (HandleException e) {
-			return Response.Error(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Response.SystemError();
-		}
-	}
+//	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+//	@RequestMapping(value = "/getSellerBalance", method = RequestMethod.GET)
+//	@ApiOperation(value = "获取销售的余额", notes = "销售人员接口")
+//	public Response getSellerBalance(HttpServletRequest request, HttpServletResponse resp) {
+//		try{
+//			int sellerid = SessionUtil.getSellerId(request);
+//			int balance = accountService.getSellerBalance(sellerid);
+//			return Response.OK(balance);
+//		} catch (HandleException e) {
+//			return Response.Error(e.getErrorCode(), e.getMessage());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return Response.SystemError();
+//		}
+//	}
 	
-	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getSellerAccountRecord", method = RequestMethod.GET)
-	@ApiOperation(value = "获取销售的记录", notes = "销售人员接口")
-	public Response getSellerAccountRecord(@ApiParam(name="startDate", value="开始日期") @RequestParam(name="startDate") String startDate,
-			@ApiParam(name="endDate", value="结束日期") @RequestParam(name="endDate") String endDate,
-			@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
-			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
-			HttpServletRequest request, HttpServletResponse resp) {
-		try{
-			int sellerid = SessionUtil.getSellerId(request);
-			List<SellerAccountRecord> list = accountService.getSellerAccountRecord(sellerid, startDate, endDate, pageIndex, pageSize);
-			return Response.OK(list);
-		} catch (HandleException e) {
-			return Response.Error(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Response.SystemError();
-		}
-	}
+//	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+//	@RequestMapping(value = "/getSellerAccountRecord", method = RequestMethod.GET)
+//	@ApiOperation(value = "获取销售的记录", notes = "销售人员接口")
+//	public Response getSellerAccountRecord(@ApiParam(name="startDate", value="开始日期") @RequestParam(name="startDate") String startDate,
+//			@ApiParam(name="endDate", value="结束日期") @RequestParam(name="endDate") String endDate,
+//			@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
+//			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
+//			HttpServletRequest request, HttpServletResponse resp) {
+//		try{
+//			int sellerid = SessionUtil.getSellerId(request);
+//			List<SellerAccountRecord> list = accountService.getSellerAccountRecord(sellerid, startDate, endDate, pageIndex, pageSize);
+//			return Response.OK(list);
+//		} catch (HandleException e) {
+//			return Response.Error(e.getErrorCode(), e.getMessage());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return Response.SystemError();
+//		}
+//	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getStoreBalance", method = RequestMethod.GET)
@@ -143,25 +141,25 @@ public class AccountController {
 		}
 	}
 	
-	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/updateSellerBalance", method = RequestMethod.POST)
-	@ApiOperation(value = "调整销售的账户", notes = "管理接口")
-	public Response updateSellerBalance(@ApiParam(name = "sellerid", value = "销售的id") @RequestParam(name = "sellerid") int sellerid,
-			@ApiParam(name = "type", value = "1、add, 2、reduce") @RequestParam(name = "type") int type,
-			@ApiParam(name = "amount", value = "调整金额") @RequestParam(name = "amount") int amount,
-			HttpServletRequest request, HttpServletResponse resp) {
-		try{
-			SessionUtil.getManagerId(request);
-			
-			SellerAccount ret = accountService.updateSellerBalance(sellerid, type, amount);
-			return Response.OK(ret);
-		} catch (HandleException e) {
-			return Response.Error(e.getErrorCode(), e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Response.SystemError();
-		}
-	}
+//	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+//	@RequestMapping(value = "/updateSellerBalance", method = RequestMethod.POST)
+//	@ApiOperation(value = "调整销售的账户", notes = "管理接口")
+//	public Response updateSellerBalance(@ApiParam(name = "sellerid", value = "销售的id") @RequestParam(name = "sellerid") int sellerid,
+//			@ApiParam(name = "type", value = "1、add, 2、reduce") @RequestParam(name = "type") int type,
+//			@ApiParam(name = "amount", value = "调整金额") @RequestParam(name = "amount") int amount,
+//			HttpServletRequest request, HttpServletResponse resp) {
+//		try{
+//			SessionUtil.getManagerId(request);
+//			
+//			SellerAccount ret = accountService.updateSellerBalance(sellerid, type, amount);
+//			return Response.OK(ret);
+//		} catch (HandleException e) {
+//			return Response.Error(e.getErrorCode(), e.getMessage());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return Response.SystemError();
+//		}
+//	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/updateStoreBalance", method = RequestMethod.POST)

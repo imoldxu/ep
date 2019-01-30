@@ -1,15 +1,19 @@
 package com.ly.service.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.StoreAndDrugInfo;
+import com.ly.service.entity.Store;
 import com.ly.service.entity.StoreDrug;
+import com.ly.service.feign.client.UserClient;
 import com.ly.service.mapper.StoreDrugMapper;
 
 import tk.mybatis.mapper.entity.Example;
@@ -20,7 +24,8 @@ public class StoreDrugService {
 
 	@Autowired
 	StoreDrugMapper storeDrugMapper;
-		
+	@Autowired
+	UserClient userClient;
 	
 	public StoreDrug upDrug(int storeid, Long storedrugId){
 		StoreDrug drug= storeDrugMapper.selectByPrimaryKey(storedrugId);
@@ -94,7 +99,11 @@ public class StoreDrugService {
 		ret.setDrugname(drugName);
 		ret.setDrugstandard(standard);
 		ret.setPrice(price);
-		ret.setSettlementprice(settlementPrice);
+	
+		ObjectMapper om = new ObjectMapper();
+		Store store = om.convertValue(userClient.getStore(storeid).fetchOKData(), Store.class);
+		
+		ret.setSettlementprice(getInt(store.getRate()*price));//根据药品售价以及药店的费率计算服务费
 		ret.setState(StoreDrug.STATE_UP);
 		ret.setStoreid(storeid);
 		
@@ -103,6 +112,11 @@ public class StoreDrugService {
 		return ret;
 	}
 
+	private int getInt(double number){
+	    BigDecimal bd=new BigDecimal(number).setScale(0, BigDecimal.ROUND_HALF_UP);
+	    return Integer.parseInt(bd.toString()); 
+	} 
+	
 	public List<StoreDrug> getAllStoreDrugList(int pageIndex, int pageSize) {
 		Example ex = new Example(StoreDrug.class);
 		ex.setOrderByClause("id DESC");
@@ -119,6 +133,9 @@ public class StoreDrugService {
 			throw new HandleException(ErrorCode.DOMAIN_ERROR, "你无权进行此操作");
 		}
 		storeDrug.setPrice(price);
+		ObjectMapper om = new ObjectMapper();
+		Store store = om.convertValue(userClient.getStore(storeid).fetchOKData(), Store.class);
+		storeDrug.setSettlementprice(getInt(store.getRate()*price));//根据药品售价以及药店的费率计算服务费
 		storeDrugMapper.updateByPrimaryKey(storeDrug);
 		
 		return storeDrug;

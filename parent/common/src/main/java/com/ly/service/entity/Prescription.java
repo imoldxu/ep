@@ -109,6 +109,10 @@ public class Prescription implements Serializable{
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String zymode;//中药服用方式
 	
+	@Column(name = "signatureurl")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String signatureurl;
+	
 	@Transient
 	private List<PrescriptionDrug> drugList;
 	
@@ -289,6 +293,14 @@ public class Prescription implements Serializable{
 
 	public void setHospitalname(String hospitalname) {
 		this.hospitalname = hospitalname;
+	}
+
+	public String getSignatureurl() {
+		return signatureurl;
+	}
+
+	public void setSignatureurl(String signatureurl) {
+		this.signatureurl = signatureurl;
 	}
 	
 }

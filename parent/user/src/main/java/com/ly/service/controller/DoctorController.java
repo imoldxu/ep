@@ -97,9 +97,9 @@ public class DoctorController {
 			@ApiParam(name="password", value="密码") @RequestParam(name="password") String password,
 			HttpServletRequest request, HttpServletResponse response){
 		try{
-			doctorService.register(phone, password);
-			
-			return Response.OK(null);
+			Doctor doctor = doctorService.register(phone, password);
+			SessionUtil.setDoctorId(request, doctor.getId());
+			return Response.OK(doctor);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e){
@@ -113,11 +113,13 @@ public class DoctorController {
 	@ApiOperation(value = "更新医生信息", notes = "更新信息")
 	public Response updateInfo(@ApiParam(name="hid", value="医院编号") @RequestParam(name="hid") Integer hid,
 			@ApiParam(name="name", value="医生姓名") @RequestParam(name="name") String name,
-			 HttpServletRequest request, HttpServletResponse response){
+			@ApiParam(name="department", value="医生科室") @RequestParam(name="department") String department,
+			@ApiParam(name="signatureurl", value="医生签名") @RequestParam(name="signatureurl") String signatureurl,
+			HttpServletRequest request, HttpServletResponse response){
 		try{
 			Integer doctorID = SessionUtil.getDoctorId(request);
 			
-			Doctor doctor = doctorService.updateInfo(doctorID, hid, name);
+			Doctor doctor = doctorService.updateInfo(doctorID, hid, name, department, signatureurl);
 			
 			SessionUtil.setDoctorId(request, doctor.getId());
 			

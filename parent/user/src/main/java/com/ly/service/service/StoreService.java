@@ -17,6 +17,7 @@ import com.ly.service.feign.client.DrugClient;
 import com.ly.service.mapper.StoreMapper;
 import com.ly.service.utils.JSONUtils;
 import com.ly.service.utils.PasswordUtil;
+import com.ly.service.utils.ValidDataUtil;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -80,13 +81,17 @@ public class StoreService {
 		}
 	}
 
-	public Store create(String name, String address, String email, double longitude, double latitude, String password) {
+	public Store create(String name, String address, String email, double longitude, double latitude, String password, double rate) {
 
+		if(!ValidDataUtil.isEmail(email)) {
+			throw new HandleException(ErrorCode.ARG_ERROR, "邮箱格式不正确");
+		}
+		
 		Example ex = new Example(Store.class);
 		ex.createCriteria().andEqualTo("email", email);
 		Store store = storeMapper.selectOneByExample(ex);
 		if(store != null){
-			throw new HandleException(ErrorCode.NORMAL_ERROR, "该email账号已存在");
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "该账号已存在");
 		}
 		
 		store = new Store();
@@ -95,13 +100,14 @@ public class StoreService {
 		store.setLatitude(latitude);
 		store.setLongitude(longitude);
 		store.setName(name);
+		store.setRate(rate);
 		
 		String nonce = PasswordUtil.generateNonce();
 		store.setPwdnonce(nonce);
 		String newPwd = PasswordUtil.generatePwd(password, nonce);
 		store.setPassword(newPwd);
 		storeMapper.insertUseGeneratedKeys(store);
-				
+
 		return store;
 	}
 

@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.entity.SalesRecord;
-import com.ly.service.entity.SellerAccount;
-import com.ly.service.entity.SellerAccountRecord;
+//import com.ly.service.entity.SellerAccount;
+//import com.ly.service.entity.SellerAccountRecord;
 import com.ly.service.entity.StoreAccount;
 import com.ly.service.entity.StoreAccountRecord;
 import com.ly.service.mapper.*;
@@ -28,48 +28,49 @@ public class AccountService {
 	@Autowired
 	RedissonUtil redissonUtil;
 	
-	@Autowired
-	SellerAccountMapper sellerAccountMapper;
-	@Autowired
-	SellerAccountRecordMapper sellerRecordMapper;
+//	@Autowired
+//	SellerAccountMapper sellerAccountMapper;
+//	@Autowired
+//	SellerAccountRecordMapper sellerRecordMapper;
 	@Autowired
 	StoreAccountMapper storeAccountMapper;
 	@Autowired
 	StoreAccountRecordMapper storeRecordMapper;
 	
-	private SellerAccount getSellerAccount(int sellerid) {
-		Example ex = new Example(SellerAccount.class);
-		ex.createCriteria().andEqualTo("sellerid", sellerid);
-		SellerAccount account = sellerAccountMapper.selectOneByExample(ex);
-		if(null == account){
-			account = new SellerAccount();
-			account.setSellerid(sellerid);
-			account.setBalance(0);
-			sellerAccountMapper.insertUseGeneratedKeys(account);
-		}
-		return account;
-	}
-	
-	public int getSellerBalance(int sellerid) {
-		Example ex = new Example(SellerAccount.class);
-		ex.createCriteria().andEqualTo("sellerid", sellerid);
-		SellerAccount account = sellerAccountMapper.selectOneByExample(ex);
-		if(account==null){
-			return 0;
-		}
-		return account.getBalance();
-	}
+//	private SellerAccount getSellerAccount(int sellerid) {
+//		Example ex = new Example(SellerAccount.class);
+//		ex.createCriteria().andEqualTo("sellerid", sellerid);
+//		SellerAccount account = sellerAccountMapper.selectOneByExample(ex);
+//		if(null == account){
+//			account = new SellerAccount();
+//			account.setSellerid(sellerid);
+//			account.setBalance(0);
+//			sellerAccountMapper.insertUseGeneratedKeys(account);
+//		}
+//		return account;
+//	}
+//	
+//	public int getSellerBalance(int sellerid) {
+//		Example ex = new Example(SellerAccount.class);
+//		ex.createCriteria().andEqualTo("sellerid", sellerid);
+//		SellerAccount account = sellerAccountMapper.selectOneByExample(ex);
+//		if(account==null){
+//			return 0;
+//		}
+//		return account.getBalance();
+//	}
 
 	@Transactional
 	public void settleSalesRecords(List<SalesRecord> salesRecords) {
 		for(SalesRecord salesRecord: salesRecords){
-			int sellerid = salesRecord.getSellerid();
-			int totalSellerfee = salesRecord.getTotalsellerfee();
-			addSellerAccount(sellerid, totalSellerfee, "奖励处方:"+salesRecord.getPrescriptionid()+",领药记录:"+salesRecord.getId()+",售卖"+salesRecord.getDrugname()+"*"+salesRecord.getNum());
 			
 			int storeid = salesRecord.getStoreid();
 			int totalSettleamount = salesRecord.getTotalsettlementprice();
-			reduceStoreAccount(storeid, totalSettleamount, "结算处方:"+salesRecord.getPrescriptionid()+",领药记录:"+salesRecord.getId()+",售卖"+salesRecord.getDrugname()+"*"+salesRecord.getNum());
+			if(totalSettleamount>0) {
+				reduceStoreAccount(storeid, totalSettleamount, "结算处方："+salesRecord.getPrescriptionid()+",售卖："+salesRecord.getDrugname()+"*"+salesRecord.getNum());
+			}else {
+				addStoreAccount(storeid, 0-totalSettleamount, "结算处方："+salesRecord.getPrescriptionid()+",退货："+salesRecord.getDrugname()+"*"+(0-salesRecord.getNum()));
+			}
 		}
 		return;
 	}
@@ -137,54 +138,54 @@ public class AccountService {
 		}
 	}
 
-	@Transactional
-	public SellerAccount reduceSellerAccount(int sellerid, int amount, String msg) {
-		boolean isLock = redissonUtil.tryLock("SELLER_ACCOUNT_"+sellerid, TimeUnit.MILLISECONDS, 1000, 1500);
-		if(isLock){
-			SellerAccount account = getSellerAccount(sellerid);
-			if(account.getBalance()>=amount){
-				account.setBalance(account.getBalance()-amount);
-				sellerAccountMapper.updateByPrimaryKey(account);
-				
-				SellerAccountRecord record = new SellerAccountRecord();
-				record.setAmount(amount);
-				record.setType(SellerAccountRecord.TYPE_PAYOUT);
-				record.setCreatetime(new Date());
-				record.setSellerid(sellerid);
-				record.setMsg(msg);
-				sellerRecordMapper.insert(record);
-				redissonUtil.unlock("SELLER_ACCOUNT_"+sellerid);
-				return account;
-			}else{
-				redissonUtil.unlock("SELLER_ACCOUNT_"+sellerid);
-				throw new HandleException(ErrorCode.BALANCE_ERROR, "余额不足");
-			}
-		}else{
-			throw new HandleException(ErrorCode.SYSTEM_ERROR, "系统异常");
-		}
-	}
-
-	@Transactional
-	public SellerAccount addSellerAccount(int sellerid, int amount, String msg) {
-		boolean isLock = redissonUtil.tryLock("SELLER_ACCOUNT_"+sellerid, TimeUnit.MILLISECONDS, 1000, 1500);
-		if(isLock){
-			SellerAccount account = getSellerAccount(sellerid);
-			account.setBalance(account.getBalance()+amount);
-			sellerAccountMapper.updateByPrimaryKey(account);
-			
-			SellerAccountRecord record = new SellerAccountRecord();
-			record.setAmount(amount);
-			record.setType(SellerAccountRecord.TYPE_INCOME);
-			record.setCreatetime(new Date());
-			record.setSellerid(sellerid);
-			record.setMsg(msg);
-			sellerRecordMapper.insert(record);
-			redissonUtil.unlock("SELLER_ACCOUNT_"+sellerid);
-			return account;
-		}else{
-			throw new HandleException(-1, "系统异常");
-		}
-	}
+//	@Transactional
+//	public SellerAccount reduceSellerAccount(int sellerid, int amount, String msg) {
+//		boolean isLock = redissonUtil.tryLock("SELLER_ACCOUNT_"+sellerid, TimeUnit.MILLISECONDS, 1000, 1500);
+//		if(isLock){
+//			SellerAccount account = getSellerAccount(sellerid);
+//			if(account.getBalance()>=amount){
+//				account.setBalance(account.getBalance()-amount);
+//				sellerAccountMapper.updateByPrimaryKey(account);
+//				
+//				SellerAccountRecord record = new SellerAccountRecord();
+//				record.setAmount(amount);
+//				record.setType(SellerAccountRecord.TYPE_PAYOUT);
+//				record.setCreatetime(new Date());
+//				record.setSellerid(sellerid);
+//				record.setMsg(msg);
+//				sellerRecordMapper.insert(record);
+//				redissonUtil.unlock("SELLER_ACCOUNT_"+sellerid);
+//				return account;
+//			}else{
+//				redissonUtil.unlock("SELLER_ACCOUNT_"+sellerid);
+//				throw new HandleException(ErrorCode.BALANCE_ERROR, "余额不足");
+//			}
+//		}else{
+//			throw new HandleException(ErrorCode.SYSTEM_ERROR, "系统异常");
+//		}
+//	}
+//
+//	@Transactional
+//	public SellerAccount addSellerAccount(int sellerid, int amount, String msg) {
+//		boolean isLock = redissonUtil.tryLock("SELLER_ACCOUNT_"+sellerid, TimeUnit.MILLISECONDS, 1000, 1500);
+//		if(isLock){
+//			SellerAccount account = getSellerAccount(sellerid);
+//			account.setBalance(account.getBalance()+amount);
+//			sellerAccountMapper.updateByPrimaryKey(account);
+//			
+//			SellerAccountRecord record = new SellerAccountRecord();
+//			record.setAmount(amount);
+//			record.setType(SellerAccountRecord.TYPE_INCOME);
+//			record.setCreatetime(new Date());
+//			record.setSellerid(sellerid);
+//			record.setMsg(msg);
+//			sellerRecordMapper.insert(record);
+//			redissonUtil.unlock("SELLER_ACCOUNT_"+sellerid);
+//			return account;
+//		}else{
+//			throw new HandleException(-1, "系统异常");
+//		}
+//	}
 
 	public int getStoreBalance(int id) {
 		Example ex = new Example(StoreAccount.class);
@@ -196,23 +197,23 @@ public class AccountService {
 		return account.getBalance();
 	}
 
-	public List<SellerAccountRecord> getSellerAccountRecord(int sellerid, String startDate, String endDate, int pageIndex, int pageSize) {
-		if(startDate==null || startDate.isEmpty()){
-			startDate = "1970-1-1";
-		}else{
-			startDate = DateUtils.UTCStringtODefaultString(startDate);
-		}
-		if(endDate == null || endDate.isEmpty()){
-			endDate = "2099-12-31";
-		}else{
-			endDate = DateUtils.UTCStringtODefaultString(endDate);
-		}
-		Example ex = new Example(SellerAccountRecord.class);
-		ex.createCriteria().andEqualTo("sellerid", sellerid).andBetween("createtime", startDate, endDate);
-		ex.setOrderByClause("id DESC");
-		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
-		return sellerRecordMapper.selectByExampleAndRowBounds(ex, rowBounds);
-	}
+//	public List<SellerAccountRecord> getSellerAccountRecord(int sellerid, String startDate, String endDate, int pageIndex, int pageSize) {
+//		if(startDate==null || startDate.isEmpty()){
+//			startDate = "1970-1-1";
+//		}else{
+//			startDate = DateUtils.UTCStringtODefaultString(startDate);
+//		}
+//		if(endDate == null || endDate.isEmpty()){
+//			endDate = "2099-12-31";
+//		}else{
+//			endDate = DateUtils.UTCStringtODefaultString(endDate);
+//		}
+//		Example ex = new Example(SellerAccountRecord.class);
+//		ex.createCriteria().andEqualTo("sellerid", sellerid).andBetween("createtime", startDate, endDate);
+//		ex.setOrderByClause("id DESC");
+//		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
+//		return sellerRecordMapper.selectByExampleAndRowBounds(ex, rowBounds);
+//	}
 
 	public List<StoreAccountRecord> getStoreAccountRecord(int storeid,String startDate, String endDate, int pageIndex, int pageSize) {
 		if(startDate==null || startDate.isEmpty()){
@@ -228,12 +229,12 @@ public class AccountService {
 		return storeRecordMapper.selectByExampleAndRowBounds(ex, rowBounds);
 	}
 
-	public List<SellerAccount> getAllSellerAccount(int pageIndex, int pageSize) {
-		Example ex = new Example(SellerAccount.class);
-		ex.setOrderByClause("id DESC");
-		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
-		return sellerAccountMapper.selectByExampleAndRowBounds(ex, rowBounds);
-	}
+//	public List<SellerAccount> getAllSellerAccount(int pageIndex, int pageSize) {
+//		Example ex = new Example(SellerAccount.class);
+//		ex.setOrderByClause("id DESC");
+//		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
+//		return sellerAccountMapper.selectByExampleAndRowBounds(ex, rowBounds);
+//	}
 
 	public List<StoreAccount> getAllStoreAccount(int pageIndex, int pageSize) {
 		Example ex = new Example(StoreAccount.class);
@@ -242,18 +243,18 @@ public class AccountService {
 		return storeAccountMapper.selectByExampleAndRowBounds(ex, rowBounds);
 	}
 
-	public SellerAccount updateSellerBalance(int sellerid, int type, int amount) {
-		if(amount <= 0){
-			throw new HandleException(ErrorCode.ARG_ERROR, "参数错误");
-		}
-		if(type == 1){
-			return addSellerAccount(sellerid, amount, "系统调账");
-		}else if(type == 2){
-			return reduceSellerAccount(sellerid, amount, "系统调账");
-		}else{
-			throw new HandleException(ErrorCode.ARG_ERROR, "参数错误");
-		}
-	}
+//	public SellerAccount updateSellerBalance(int sellerid, int type, int amount) {
+//		if(amount <= 0){
+//			throw new HandleException(ErrorCode.ARG_ERROR, "参数错误");
+//		}
+//		if(type == 1){
+//			return addSellerAccount(sellerid, amount, "系统调账");
+//		}else if(type == 2){
+//			return reduceSellerAccount(sellerid, amount, "系统调账");
+//		}else{
+//			throw new HandleException(ErrorCode.ARG_ERROR, "参数错误");
+//		}
+//	}
 
 	public StoreAccount updateStoreBalance(int storeid, int type, int amount) {
 		if(amount <= 0){

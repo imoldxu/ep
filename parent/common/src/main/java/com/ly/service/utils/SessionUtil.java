@@ -53,20 +53,20 @@ public class SessionUtil {
 		return id;
 	}
 
-	public static void setSellerId(HttpServletRequest request, Integer id) {
-		HttpSession session = request.getSession();
-		session.setAttribute("SELLER_ID", id);
-		session.setMaxInactiveInterval(7200);
-	}
-	
-	public static Integer getSellerId(HttpServletRequest request) throws HandleException {
-		HttpSession session = request.getSession();
-		Integer id = (Integer) session.getAttribute("SELLER_ID");
-		if(id==null){
-			throw new HandleException(ErrorCode.SESSION_ERROR, "登录已过期,请重新登录");
-		}
-		return id;
-	}
+//	public static void setSellerId(HttpServletRequest request, Integer id) {
+//		HttpSession session = request.getSession();
+//		session.setAttribute("SELLER_ID", id);
+//		session.setMaxInactiveInterval(7200);
+//	}
+//	
+//	public static Integer getSellerId(HttpServletRequest request) throws HandleException {
+//		HttpSession session = request.getSession();
+//		Integer id = (Integer) session.getAttribute("SELLER_ID");
+//		if(id==null){
+//			throw new HandleException(ErrorCode.SESSION_ERROR, "登录已过期,请重新登录");
+//		}
+//		return id;
+//	}
 
 	public static void setManagerId(HttpServletRequest request, Integer id) {
 		HttpSession session = request.getSession();

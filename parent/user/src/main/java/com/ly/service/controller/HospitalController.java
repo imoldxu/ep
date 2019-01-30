@@ -90,6 +90,21 @@ public class HospitalController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/getHospitalList", method = RequestMethod.GET)
+	@ApiOperation(value = "获取所有医院", notes = "通用接口")
+	public Response getAllHospital(HttpServletRequest request, HttpServletResponse response){
+		try{
+			List<Hospital> ret = hospitalService.getAllHospital();
+			return Response.OK(ret);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(path="/getAllHospital", method = RequestMethod.GET)
 	@ApiOperation(value = "获取所有医院", notes = "获取所有医院")
 	public Response getAllHospital(@ApiParam(name="pageIndex", value="页码 1- n") @RequestParam(name="pageIndex") Integer pageIndex,

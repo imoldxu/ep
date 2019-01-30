@@ -153,7 +153,7 @@ public class DoctorService {
 		return doctor;
 	}
 
-	public Doctor updateInfo(Integer doctorID, Integer hid, String name) {
+	public Doctor updateInfo(Integer doctorID, Integer hid, String name, String department, String signatureurl) {
 		Doctor doctor = doctorMapper.selectByPrimaryKey(doctorID);
 		if(doctor == null){
 			throw new HandleException(ErrorCode.ARG_ERROR,"参数错误");
@@ -163,6 +163,12 @@ public class DoctorService {
 		}
 		if(name != null){
 			doctor.setName(name);
+		}
+		if(department != null) {
+			doctor.setDepartment(department);
+		}
+		if(signatureurl != null) {
+			doctor.setSignatureurl(signatureurl);
 		}
 		doctorMapper.updateByPrimaryKeySelective(doctor);
 		return doctor;

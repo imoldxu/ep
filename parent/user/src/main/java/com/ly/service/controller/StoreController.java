@@ -41,12 +41,13 @@ public class StoreController {
 			@ApiParam(name = "longitude", value = "经度") @RequestParam(name = "longitude")double longitude,
 			@ApiParam(name = "latitude", value = "纬度") @RequestParam(name = "latitude")double latitude,
 			@ApiParam(name = "password", value = "密码") @RequestParam(name = "password") String password,
+			@ApiParam(name = "rate", value = "费率") @RequestParam(name = "rate") double rate,
 			HttpServletRequest request, HttpServletResponse response){
 		
 		try{
 			SessionUtil.getManagerId(request);
 			
-			Store store = storeService.create(name,address,email,longitude,latitude,password);
+			Store store = storeService.create(name,address,email,longitude,latitude,password,rate);
  		
 			return Response.OK(store);
 		}catch (HandleException e) {

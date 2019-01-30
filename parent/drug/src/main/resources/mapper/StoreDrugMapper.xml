@@ -35,7 +35,8 @@
 	                )
 	            )
 	        ) * 1000
-	    ) AS distance, CONCAT("[",GROUP_CONCAT(CONCAT("\"",t_drug.drugname," ",t_drug.standard,"\"")),"]") AS drugListStr FROM t_drug LEFT JOIN t_store_drug ON t_store_drug.drugid = t_drug.id LEFT JOIN t_store ON t_store_drug.storeid = t_store.id WHERE t_drug.id in ${drugids} AND (t_store_drug.state = 1 OR t_store_drug.id is NULL) AND (t_store.id is NULL OR (t_store.latitude BETWEEN #{lat,jdbcType=DOUBLE}-0.1 AND #{lat,jdbcType=DOUBLE}+0.1 AND t_store.longitude BETWEEN #{lon,jdbcType=DOUBLE}-0.1 AND #{lon,jdbcType=DOUBLE}+0.1)) GROUP BY t_store_drug.storeid ORDER BY distance ASC LIMIT #{size,jdbcType=INTEGER}
+	    ) AS distance, CONCAT("[",GROUP_CONCAT(CONCAT("{","\"drugname\":\"",t_drug.drugname,"\",\"standard\":\"",t_drug.standard,"\",\"price\":",t_store_drug.price,",\"state\":",t_store_drug.state
+			,"}")),"]") AS drugListStr FROM t_drug LEFT JOIN t_store_drug ON t_store_drug.drugid = t_drug.id LEFT JOIN t_store ON t_store_drug.storeid = t_store.id WHERE t_drug.id in ${drugids} AND (t_store_drug.state = 1 OR t_store_drug.id is NULL) AND (t_store.id is NULL OR (t_store.latitude BETWEEN #{lat,jdbcType=DOUBLE}-0.1 AND #{lat,jdbcType=DOUBLE}+0.1 AND t_store.longitude BETWEEN #{lon,jdbcType=DOUBLE}-0.1 AND #{lon,jdbcType=DOUBLE}+0.1)) GROUP BY t_store_drug.storeid ORDER BY distance ASC LIMIT #{size,jdbcType=INTEGER}
 	</select>
 	
 </mapper>

@@ -19,9 +19,9 @@ public class HospitalDrugService {
 	@Autowired
 	HospitalDrugMapper drugMapper;
 	
-	public HospitalDrug setHospitalDrug(int sellerid, String sellername, int drugid, String drugname, String drugstandard, String drugcompany, int hospitalid, String hospitalname, int sellfee){
+	public HospitalDrug setHospitalDrug(int exid, int drugid, String drugname, String drugstandard, String drugcompany, int hospitalid, String hospitalname){
 		Example ex = new Example(HospitalDrug.class);
-		ex.createCriteria().andEqualTo("sellerid", sellerid).andEqualTo("drugid", drugid).andEqualTo("hospitalid", hospitalid);
+		ex.createCriteria().andEqualTo("drugid", drugid).andEqualTo("hospitalid", hospitalid);
 		HospitalDrug hdrug = drugMapper.selectOneByExample(ex);
 		if(hdrug ==  null){
 			hdrug = new HospitalDrug();
@@ -31,9 +31,7 @@ public class HospitalDrugService {
 			hdrug.setDrugname(drugname);
 			hdrug.setDrugstandard(drugstandard);
 			hdrug.setDrugcompany(drugcompany);
-			hdrug.setSellerid(sellerid);
-			hdrug.setSellername(sellername);
-			hdrug.setSellfee(sellfee);
+			hdrug.setExid(exid);
 			drugMapper.insertUseGeneratedKeys(hdrug);
 		}else{
 			hdrug.setHospitalid(hospitalid);
@@ -42,26 +40,24 @@ public class HospitalDrugService {
 			hdrug.setDrugname(drugname);
 			hdrug.setDrugstandard(drugstandard);
 			hdrug.setDrugcompany(drugcompany);
-			hdrug.setSellerid(sellerid);
-			hdrug.setSellername(sellername);
-			hdrug.setSellfee(sellfee);
+			hdrug.setExid(exid);
 			drugMapper.updateByPrimaryKey(hdrug);
 		}
 		return hdrug;
 	}
 	
-	public List<HospitalDrug> getHospitalDrugListBySeller(int sellerid, String key, int pageIndex, int pageSize){
-		Example ex = new Example(HospitalDrug.class);
-		if(key != null && !key.isEmpty()){
-			ex.createCriteria().andEqualTo("sellerid", sellerid).andLike("drugname", "%"+key+"%");		
-		}else{
-			ex.createCriteria().andEqualTo("sellerid", sellerid);	
-		}
-		ex.setOrderByClause("id DESC");
-		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize,pageSize);
-		List<HospitalDrug> list = drugMapper.selectByExampleAndRowBounds(ex, rowBounds);
-		return list;
-	}
+//	public List<HospitalDrug> getHospitalDrugListBySeller(int sellerid, String key, int pageIndex, int pageSize){
+//		Example ex = new Example(HospitalDrug.class);
+//		if(key != null && !key.isEmpty()){
+//			ex.createCriteria().andEqualTo("sellerid", sellerid).andLike("drugname", "%"+key+"%");		
+//		}else{
+//			ex.createCriteria().andEqualTo("sellerid", sellerid);	
+//		}
+//		ex.setOrderByClause("id DESC");
+//		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize,pageSize);
+//		List<HospitalDrug> list = drugMapper.selectByExampleAndRowBounds(ex, rowBounds);
+//		return list;
+//	}
 
 	public HospitalDrug getHospitalDrug(int drugid, int hospitalid) {
 		Example ex = new Example(HospitalDrug.class);

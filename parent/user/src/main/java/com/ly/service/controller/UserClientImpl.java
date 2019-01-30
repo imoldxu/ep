@@ -14,13 +14,11 @@ import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
 import com.ly.service.entity.Doctor;
 import com.ly.service.entity.Hospital;
-import com.ly.service.entity.Seller;
 import com.ly.service.entity.Store;
 import com.ly.service.feign.client.UserClient;
 import com.ly.service.service.DoctorService;
 import com.ly.service.service.HospitalService;
 import com.ly.service.service.PatientService;
-import com.ly.service.service.SellerService;
 import com.ly.service.service.StoreService;
 import com.ly.service.utils.JSONUtils;
 
@@ -39,8 +37,6 @@ public class UserClientImpl implements UserClient{
 	DoctorService doctorService;
 	@Autowired
 	HospitalService hospitalService;
-	@Autowired
-	SellerService sellerService;
 	@Autowired
 	StoreService storeService;
 	
@@ -95,20 +91,20 @@ public class UserClientImpl implements UserClient{
 		}
 	}
 	
-	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getSeller", method = RequestMethod.GET)
-	@ApiOperation(value = "获取销售信息", notes = "内部接口")
-	public Response getSeller(@ApiParam(name = "sellerid", value = "销售编号") @RequestParam(name = "sellerid") Integer sellerid) {
-		try{
-			Seller ret = sellerService.getSeller(sellerid);
-			return Response.OK(ret);
-		}catch (HandleException e) {
-			return Response.Error(e.getErrorCode(), e.getMessage());
-		}catch (Exception e) {
-			e.printStackTrace();
-			return Response.SystemError();
-		}
-	}
+//	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+//	@RequestMapping(value = "/getSeller", method = RequestMethod.GET)
+//	@ApiOperation(value = "获取销售信息", notes = "内部接口")
+//	public Response getSeller(@ApiParam(name = "sellerid", value = "销售编号") @RequestParam(name = "sellerid") Integer sellerid) {
+//		try{
+//			Seller ret = sellerService.getSeller(sellerid);
+//			return Response.OK(ret);
+//		}catch (HandleException e) {
+//			return Response.Error(e.getErrorCode(), e.getMessage());
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//			return Response.SystemError();
+//		}
+//	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getStore", method = RequestMethod.GET)

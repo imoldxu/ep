@@ -38,13 +38,9 @@ public class SalesRecord {
 	private String drugname;//药品编号
 	
 
-	@Column(name = "sellerid")
+	@Column(name = "exid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer sellerid;//哪个销售的单子
-
-	@Column(name = "sellername")
-	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String sellername;//哪个销售的单子
+	private Integer exid;//扩展id
 	
 	@Column(name = "storeid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
@@ -74,13 +70,9 @@ public class SalesRecord {
 	@ColumnType(jdbcType = JdbcType.INTEGER)
 	private Integer num;//销售数量
 	
-	@Column(name = "sellerfee")
+	@Column(name = "price")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer sellerfee;//推广费单价
-
-	@Column(name = "totalsellerfee")
-	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer totalsellerfee;//推广费总价
+	private Integer price;//销售价格
 	
 	@Column(name = "settlementprice")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
@@ -93,6 +85,10 @@ public class SalesRecord {
 	@Column(name = "createtime")
 	@ColumnType(jdbcType = JdbcType.TIMESTAMP)
 	private Date createtime;//创建时间
+	
+	@Column(name = "refundnum")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private Integer refundnum;//退货数量，将退货挂在销售记录上是为了保障销售价格和退的价格一致，以及多次退货的处理。若将退货单独记录成一条salesRecord为负数num的话，多次退货若出现价格不一致的，就不太好判断是退的哪一笔了
 	
 	public Long getId() {
 		return id;
@@ -118,12 +114,12 @@ public class SalesRecord {
 		this.drugid = drugid;
 	}
 
-	public Integer getSellerid() {
-		return sellerid;
+	public Integer getExid() {
+		return exid;
 	}
 
-	public void setSellerid(Integer sellerid) {
-		this.sellerid = sellerid;
+	public void setExid(Integer exid) {
+		this.exid = exid;
 	}
 
 	public Integer getStoreid() {
@@ -166,14 +162,6 @@ public class SalesRecord {
 		this.drugname = drugname;
 	}
 
-	public String getSellername() {
-		return sellername;
-	}
-
-	public void setSellername(String sellername) {
-		this.sellername = sellername;
-	}
-
 	public String getStorename() {
 		return storename;
 	}
@@ -206,14 +194,6 @@ public class SalesRecord {
 		this.hospitalname = hospitalname;
 	}
 
-	public Integer getSellerfee() {
-		return sellerfee;
-	}
-
-	public void setSellerfee(Integer sellerfee) {
-		this.sellerfee = sellerfee;
-	}
-
 	public Integer getSettlementprice() {
 		return settlementprice;
 	}
@@ -230,20 +210,28 @@ public class SalesRecord {
 		this.createtime = createtime;
 	}
 
-	public Integer getTotalsellerfee() {
-		return totalsellerfee;
-	}
-
-	public void setTotalsellerfee(Integer totalsellerfee) {
-		this.totalsellerfee = totalsellerfee;
-	}
-
 	public Integer getTotalsettlementprice() {
 		return totalsettlementprice;
 	}
 
 	public void setTotalsettlementprice(Integer totalsettlementprice) {
 		this.totalsettlementprice = totalsettlementprice;
+	}
+
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+
+	public Integer getRefundnum() {
+		return refundnum;
+	}
+
+	public void setRefundnum(Integer refundnum) {
+		this.refundnum = refundnum;
 	}
 
 }

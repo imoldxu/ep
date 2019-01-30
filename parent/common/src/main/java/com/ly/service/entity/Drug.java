@@ -105,8 +105,7 @@ public class Drug implements Serializable{
 //	public static final int STATE_OK = 1;//有货
 //	public static final int STATE_EMPTY = 0;//缺货
 //	
-//	@Column(name = "state")
-//	@ColumnType(jdbcType = JdbcType.INTEGER)
+//	@Transient
 //	private int state;//药品拼音首字母索引
 	
 //	public int getState() {
