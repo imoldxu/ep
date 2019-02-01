@@ -4,7 +4,7 @@ define(['jquery'], function($){
     return ['$scope', '$http', '$window', '$cookieStore','$location','$rootScope','dataVer' ,'$state', function($scope, $http, $window, $cookieStore,$location,$rootScope,dataVer,$state){
 
         //默认值
-		$scope.pid = null;
+		$scope.barcode = null;
 		
 		//$scope.storeInfo = dataVer.get('storeInfo');
 		
@@ -23,7 +23,7 @@ define(['jquery'], function($){
                 url: URL3+'prescription/getPrescriptionByIDFromStore',
                 requestType: 'json',
 				params: {
-                    pid : $scope.pid
+                    barcode : $scope.barcode
                 }
             })
             .success(function(resp){

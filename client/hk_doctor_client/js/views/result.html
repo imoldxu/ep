@@ -27,8 +27,8 @@
 <div class="printinfo">
 	<div class="header">
 		<div class="title">取药单</div>
-		<io-barcode code="{{prescriptionObj.id}}" type="CODE128B"></io-barcode>
-		<div>处方码:{{prescriptionObj.id}}</div>
+		<io-barcode code="{{prescriptionObj.barcode}}" type="CODE128B"></io-barcode>
+		<div>处方码:{{prescriptionObj.barcode}}</div>
 	</div>
 	
 	<div class="baseinfo">
@@ -61,7 +61,7 @@
 
 	<div class="con">
 		<div>
-			<qrcode data="http://www.163.com" version="2" error-correction-level="Q" size="140"></qrcode>
+			<qrcode data="http://www.163.com/barcode={{prescriptionObj.barcode}}" version="2" error-correction-level="Q" size="140"></qrcode>
 		</div>
 		<div>患者微信扫码获取处方,查看更多药房</div>
 		

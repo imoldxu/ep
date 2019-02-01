@@ -1,5 +1,7 @@
 package com.ly.service.service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -348,7 +350,7 @@ public class PrescriptionService {
 		return plist;
 	}
 
-	public List<Prescription> getStorePrescriptions(Integer storeid, String startDate, String endDate, int pageIndex, int pageSize) {
+	public List<Prescription> getStorePrescriptions(Integer storeid, Long pid, String patientName, String startDate, String endDate, int pageIndex, int pageSize) {
 		int offset = (pageIndex-1)*pageSize;
 		if(startDate==null || startDate.isEmpty()){
 			startDate = "1970-1-1";
@@ -419,4 +421,5 @@ public class PrescriptionService {
 
 		salesRecordService.refund(storeid, pid, refundDrugs);
 	}
+	
 }

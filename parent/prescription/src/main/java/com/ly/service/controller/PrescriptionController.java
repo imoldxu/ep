@@ -21,6 +21,7 @@ import com.ly.service.entity.Order;
 import com.ly.service.entity.Prescription;
 import com.ly.service.entity.PrescriptionDrug;
 import com.ly.service.service.PrescriptionService;
+import com.ly.service.utils.BarcodeUtil;
 import com.ly.service.utils.JSONUtils;
 import com.ly.service.utils.SessionUtil;
 
@@ -210,14 +211,17 @@ public class PrescriptionController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getPrescriptionByIDFromStore", method = RequestMethod.GET)
-	@ApiOperation(value = "药房获取处方详情,只提供药房有的药品信息", notes = "药房接口")
+	@ApiOperation(value = "根据取药码药房获取处方详情,只提供药房有的药品信息", notes = "药房接口")
 	public Response getPrescriptionByIDFromStore(
-			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
+			@ApiParam(name = "barcode", value = "处方id") @RequestParam(name = "barcode") String barcode,
 			HttpServletRequest request, HttpServletResponse respons) {
 		respons.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
 		respons.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
 			Integer storeid = SessionUtil.getStoreId(request);
+			
+			Long pid = BarcodeUtil.barcode2ID(barcode);
+			
 		    Prescription detail = prescriptionService.getPrescriptionDetailByStore(storeid, pid);		
 		    return Response.OK(detail);		
 		}catch (HandleException e) {
@@ -321,7 +325,9 @@ public class PrescriptionController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getStorePrescriptions", method = RequestMethod.GET)
 	@ApiOperation(value = "获取药房已经销售的处方列表", notes = "药房接口")
-	public Response getStorePrescriptions(@ApiParam(name="startDate", value="开始日期") @RequestParam(name="startDate") String startDate,
+	public Response getStorePrescriptions(@ApiParam(name="barcode", value="处方码") @RequestParam(name="barcode") String barcode,
+			@ApiParam(name="patientName", value="患者姓名") @RequestParam(name="patientName") String patientName,
+			@ApiParam(name="startDate", value="开始日期") @RequestParam(name="startDate") String startDate,
 			@ApiParam(name="endDate", value="结束日期，可为''") @RequestParam(name="endDate") String endDate,
 			@ApiParam(name="pageIndex", value="页码1-n") @RequestParam(name="pageIndex") int pageIndex,
 			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
@@ -330,7 +336,12 @@ public class PrescriptionController {
 		try{
 			Integer storeid = SessionUtil.getStoreId(request);
 			
-			List<Prescription> list = prescriptionService.getStorePrescriptions(storeid, startDate, endDate, pageIndex, pageSize);
+			Long pid = null;
+			if(barcode!=null || !barcode.isEmpty()) {
+				pid = BarcodeUtil.barcode2ID(barcode);
+			}
+			
+			List<Prescription> list = prescriptionService.getStorePrescriptions(storeid, pid, patientName, startDate, endDate, pageIndex, pageSize);
 			return Response.OK(list);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -358,4 +369,5 @@ public class PrescriptionController {
 			return Response.SystemError();		
 		}
 	}
+
 }

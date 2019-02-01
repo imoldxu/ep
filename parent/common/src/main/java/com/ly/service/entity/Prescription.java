@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 import org.apache.ibatis.type.JdbcType;
 
 import com.ly.service.context.StoreAndDrugInfo;
+import com.ly.service.utils.BarcodeUtil;
 
 import tk.mybatis.mapper.annotation.ColumnType;
 
@@ -114,6 +115,17 @@ public class Prescription implements Serializable{
 	private String signatureurl;
 	
 	@Transient
+	private String barcode;//取药码
+	
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
+
+	@Transient
 	private List<PrescriptionDrug> drugList;
 	
 	@Transient
@@ -149,6 +161,7 @@ public class Prescription implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
+		this.barcode = BarcodeUtil.generateBarcode(id);
 	}
 
 	public String getSn() {
