@@ -147,6 +147,8 @@ define(['jquery'], function($){
                 url: URL3+'prescription/getStorePrescriptions',
                 requestType: 'json',
                 params: {
+					barcode: $scope.searchopt.barcode || '',
+					patientname: $scope.searchopt.patientname || '',
 				    startDate : $scope.searchopt.startdate || '',
 					endDate : $scope.searchopt.enddate || '',
                     pageIndex : $scope.searchopt.pageindex,

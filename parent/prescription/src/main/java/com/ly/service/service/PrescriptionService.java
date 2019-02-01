@@ -351,19 +351,35 @@ public class PrescriptionService {
 	}
 
 	public List<Prescription> getStorePrescriptions(Integer storeid, Long pid, String patientName, String startDate, String endDate, int pageIndex, int pageSize) {
-		int offset = (pageIndex-1)*pageSize;
-		if(startDate==null || startDate.isEmpty()){
-			startDate = "1970-1-1";
-		}else{
-			startDate = DateUtils.UTCStringtODefaultString(startDate);
+		if(pid!=null) {
+			Prescription p = pMapper.getStorePrescriptByPid(storeid, pid);
+			List<Prescription> ret = new ArrayList<>();
+			if(null == p) {
+				return ret;
+			}else {
+				ret.add(p);
+				return ret;
+			}
+		}else {
+			int offset = (pageIndex-1)*pageSize;
+			if(startDate==null || startDate.isEmpty()){
+				startDate = "1970-1-1";
+			}else{
+				startDate = DateUtils.UTCStringtODefaultString(startDate);
+			}
+			if(endDate==null || endDate.isEmpty()){
+				endDate = "2099-12-31";
+			}else{
+				endDate = DateUtils.UTCStringtODefaultString(endDate);
+			}
+			if(patientName.isEmpty()) {
+				List<Prescription> ret = pMapper.getStorePrescripts(storeid, startDate, endDate, offset, pageSize);
+				return ret;
+			}else{
+				List<Prescription> ret = pMapper.getStorePrescriptsWithPatient(storeid, patientName, startDate, endDate, offset, pageSize);
+				return ret;	
+			}
 		}
-		if(endDate==null || endDate.isEmpty()){
-			endDate = "2099-12-31";
-		}else{
-			endDate = DateUtils.UTCStringtODefaultString(endDate);
-		}
-		List<Prescription> ret = pMapper.getStorePrescripts(storeid, startDate, endDate, offset, pageSize);
-		return ret;
 	}
 	
 	public Prescription getStorePrescriptionDetail(Integer storeid, Long pid) {		

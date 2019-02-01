@@ -26,12 +26,28 @@
 	    <result column="zymode" property="zymode" jdbcType="VARCHAR" />
   	</resultMap>
 
+	<select id="getStorePrescriptByPid" resultMap="myPrescription">
+		SELECT id, createtime, department, diagnosis, doctorid, doctorname, hospitalid, hospitalname, patientage,
+   patientname, patientphone, patientsex, sn, type, userid, zyfrequence, zymode,
+zynum, zysingledose, zyusage FROM (SELECT t_prescription.id, t_prescription.createtime, t_prescription.department, t_prescription.diagnosis, t_prescription.doctorid, t_prescription.doctorname, t_prescription.hospitalid, t_prescription.hospitalname, t_prescription.patientage,
+   t_prescription.patientname, t_prescription.patientphone, t_prescription.patientsex, t_prescription.sn, t_prescription.type, t_prescription.userid, t_prescription.zyfrequence, t_prescription.zymode,
+t_prescription.zynum, t_prescription.zysingledose, t_prescription.zyusage, SUM(t_sales_record.num) as snumber FROM t_sales_record LEFT JOIN t_prescription ON t_sales_record.prescriptionid = t_prescription.id WHERE t_sales_record.storeid = #{storeId,jdbcType=INTEGER} AND t_prescription.prescriptionid = #{pid,jdbcType=BIGINT} GROUP BY t_sales_record.drugid, t_sales_record.prescriptionid) AS t_temp WHERE t_temp.snumber>0 GROUP BY t_temp.id
+	</select>
+
 	<select id="getStorePrescripts" resultMap="myPrescription">
 		SELECT id, createtime, department, diagnosis, doctorid, doctorname, hospitalid, hospitalname, patientage,
    patientname, patientphone, patientsex, sn, type, userid, zyfrequence, zymode,
 zynum, zysingledose, zyusage FROM (SELECT t_prescription.id, t_prescription.createtime, t_prescription.department, t_prescription.diagnosis, t_prescription.doctorid, t_prescription.doctorname, t_prescription.hospitalid, t_prescription.hospitalname, t_prescription.patientage,
    t_prescription.patientname, t_prescription.patientphone, t_prescription.patientsex, t_prescription.sn, t_prescription.type, t_prescription.userid, t_prescription.zyfrequence, t_prescription.zymode,
 t_prescription.zynum, t_prescription.zysingledose, t_prescription.zyusage, SUM(t_sales_record.num) as snumber FROM t_sales_record LEFT JOIN t_prescription ON t_sales_record.prescriptionid = t_prescription.id WHERE t_sales_record.storeid = #{storeId,jdbcType=INTEGER} AND t_prescription.createtime BETWEEN #{startDate,jdbcType=VARCHAR} AND #{endDate,jdbcType=VARCHAR} GROUP BY t_sales_record.drugid, t_sales_record.prescriptionid) AS t_temp WHERE t_temp.snumber>0 GROUP BY t_temp.id ORDER BY createtime DESC LIMIT #{offset,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getStorePrescriptsWithPatient" resultMap="myPrescription">
+		SELECT id, createtime, department, diagnosis, doctorid, doctorname, hospitalid, hospitalname, patientage,
+   patientname, patientphone, patientsex, sn, type, userid, zyfrequence, zymode,
+zynum, zysingledose, zyusage FROM (SELECT t_prescription.id, t_prescription.createtime, t_prescription.department, t_prescription.diagnosis, t_prescription.doctorid, t_prescription.doctorname, t_prescription.hospitalid, t_prescription.hospitalname, t_prescription.patientage,
+   t_prescription.patientname, t_prescription.patientphone, t_prescription.patientsex, t_prescription.sn, t_prescription.type, t_prescription.userid, t_prescription.zyfrequence, t_prescription.zymode,
+t_prescription.zynum, t_prescription.zysingledose, t_prescription.zyusage, SUM(t_sales_record.num) as snumber FROM t_sales_record LEFT JOIN t_prescription ON t_sales_record.prescriptionid = t_prescription.id WHERE t_sales_record.storeid = #{storeId,jdbcType=INTEGER} AND t_prescription.patientname = #{patientName,jdbcType=VARCHAR} AND t_prescription.createtime BETWEEN #{startDate,jdbcType=VARCHAR} AND #{endDate,jdbcType=VARCHAR} GROUP BY t_sales_record.drugid, t_sales_record.prescriptionid) AS t_temp WHERE t_temp.snumber>0 GROUP BY t_temp.id ORDER BY createtime DESC LIMIT #{offset,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
 	</select>
 	
 </mapper>
