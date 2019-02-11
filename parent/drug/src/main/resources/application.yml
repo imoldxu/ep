@@ -71,8 +71,10 @@ spring:
 redisson:
   #address: redis://192.168.6.103:6379
   #password: oldxu
-  address: redis://39.108.253.177:6379
-  password: zm666
+  #address: redis://39.108.253.177:6379
+  #password: zm666
+  address: redis://127.0.0.1:6379
+  password: hk666
 
 #hystrix
 #feign:
