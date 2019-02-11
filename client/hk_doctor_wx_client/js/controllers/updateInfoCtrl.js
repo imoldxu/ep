@@ -20,7 +20,7 @@ define([], function(){
                 alert('请选择所在医院')
 				return false;
             }
-			if ($scope.signatureurl == null || $scope.signatureurl == '' || $scope.signatureurl == undefined){
+			if ($scope.doctorObj.signatureurl == null || $scope.doctorObj.signatureurl == '' || $scope.doctorObj.signatureurl == undefined){
                 alert('请设置手写签名')
 				return false;
             }
@@ -123,17 +123,6 @@ define([], function(){
 			$window.history.back();
 		}
 		
-		$scope dataURItoFile = function(dataURI, fileName) { 
-			var imgType = atob(dataURI.split(',')[0]);
-			var byteString = atob(dataURI.split(',')[1]); 
-			var ab = new ArrayBuffer(byteString.length); 
-			var ia = new Uint8Array(ab); 
-			for (var i = 0; i < byteString.length; i++) { 
-				ia[i] = byteString.charCodeAt(i); 
-			} 
-			// return new Blob([ab], { type: 'image/jpeg' }); 
-			return new File([ia], fileName, {type: imgType, lastModified: Date.now()}) 
-		} 
     }];
 
 });

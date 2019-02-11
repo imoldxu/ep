@@ -32,7 +32,9 @@ require.config({
 		'utf8-qrcode':'libs/qrcode_UTF8',
         'angular-qrcode':'libs/angular-qrcode',
 		'signature_pad':'libs/signature_pad.min',
-		'signature':'libs/signature'
+		'signature':'libs/signature',
+		'angular-oss': 'libs/angular-aliyun-oss',
+		'oss': 'libs/aliyun-oss-sdk'
     },
     shim:{
         "angular":{
@@ -61,6 +63,9 @@ require.config({
 		},
 		"signature":{
 			deps: ["angular","signature_pad"]
+		},
+		"angular-oss": {
+			deps: ["angular","oss"]
 		}
     },
 
@@ -71,7 +76,7 @@ require.config({
 
 
 
-require(['jquery','angular','ng-route','app','fn-route','angularAMD','data','loader','encrypt','io-barcode','qrcode','utf8-qrcode','angular-qrcode','signature_pad','signature'],function($,angular){
+require(['jquery','angular','ng-route','app','fn-route','angularAMD','data','loader','encrypt','io-barcode','qrcode','utf8-qrcode','angular-qrcode','signature_pad','signature','angular-oss','oss'],function($,angular){
     $(function () {
         angular.bootstrap(document,["fnApp"]);
     })
