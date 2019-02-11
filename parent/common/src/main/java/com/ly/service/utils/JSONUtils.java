@@ -1,5 +1,6 @@
 package com.ly.service.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,6 +16,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
+
+import org.omg.CORBA.OMGVMCID;
 
 /**
  * Created on 2015-08-21.
@@ -44,6 +47,11 @@ public class JSONUtils {
 	public static Map<String, Object> getJsonMapData(Object o) {
 		Map<String, Object> map = new HashMap<>();
 		map.put(ROWS, getJsonObject(o));
+		return map;
+	}
+	
+	public static Map<String, String> json2Map(String jsonStr) {
+		Map map = JSON.parseObject(jsonStr, Map.class);
 		return map;
 	}
 
