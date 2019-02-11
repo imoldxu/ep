@@ -3,7 +3,9 @@ package com.yyg.eprescription.proxy;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.yyg.eprescription.context.HandleException;
@@ -13,6 +15,7 @@ import com.yyg.eprescription.entity.Drug;
 import com.yyg.eprescription.entity.ShortDrugInfo;
 import com.yyg.eprescription.util.HttpClientUtil;
 import com.yyg.eprescription.util.JSONUtils;
+import com.yyg.eprescription.util.SignUtil;
 
 /**
  * 平台服务代理
@@ -24,6 +27,7 @@ public class PlatformProxy {
 	private static final String URL = "http://127.0.0.1:9201";
 	private static final String URL2 = "http://127.0.0.1:9202";
 	private static final String URL3 = "http://127.0.0.1:9203";
+	private static final String signkey = "pzzyy";
 	
 	public static Doctor login(String phone, String pwd) {
 		HttpClientUtil h = new HttpClientUtil();
@@ -175,11 +179,19 @@ public class PlatformProxy {
 	public static String commit2Server(Integer doctorid, Integer hospitalid, String prescriptionInfo, String drugListStr) {
 		HttpClientUtil h = new HttpClientUtil();
 		try {
+			Map<String, String> signMap = new HashMap<String, String>();
+			
 			h.open(URL3+"/prescription/commitByHospital", "post");
 			h.addParameter("doctorid", doctorid.toString());
 			h.addParameter("hospitalid", hospitalid.toString());
-			h.addParameter("perscription", prescriptionInfo);
+			h.addParameter("prescription", prescriptionInfo);
 			h.addParameter("drugList", drugListStr);
+			signMap.put("doctorid", doctorid.toString());
+			signMap.put("hospitalid", hospitalid.toString());
+			signMap.put("prescription", prescriptionInfo);
+			signMap.put("drugList", drugListStr);
+			String sign = SignUtil.generateSignature(signMap, signkey);
+			h.addParameter("sign", sign);
 			
 			h.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 			int status = h.send();

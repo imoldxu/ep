@@ -1,6 +1,8 @@
 package com.ly.service.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +26,7 @@ import com.ly.service.service.PrescriptionService;
 import com.ly.service.utils.BarcodeUtil;
 import com.ly.service.utils.JSONUtils;
 import com.ly.service.utils.SessionUtil;
+import com.ly.service.utils.SignUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -66,17 +69,30 @@ public class PrescriptionController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/commitByHospital", method = RequestMethod.POST)
 	@ApiOperation(value = "从医院处方系统传入处方", notes = "医院接口")
-	public Response commit(@ApiParam(name = "doctorid", value = "医生") @RequestParam(name = "doctorid") int doctorid,
-			@ApiParam(name = "hospitalid", value = "医院编号") @RequestParam(name = "hospitalid") int hospitalid,
-			@ApiParam(name = "perscription", value = "{  \"sn\": \"18082800001\",     \"type\": 1,     \"department\": \"外科\",     \"diagnosis\": \"小指骨折\",     \"patientname\": \"刘希\",     \"patientage\": \"23\",     \"patientsex\": \"女\",     \"patientphone\": \"13880001234\",      \"zynum\": 1,     \"zyusage\": \" \",     \"zysingledose\": \" \",     \"zyfrequence\": \" \",     \"zymode\": \" \"}") @RequestParam(name = "perscription") String perscription,
+	public Response commit(@ApiParam(name = "doctorid", value = "医生") @RequestParam(name = "doctorid") Integer doctorid,
+			@ApiParam(name = "hospitalid", value = "医院编号") @RequestParam(name = "hospitalid") Integer hospitalid,
+			@ApiParam(name = "prescription", value = "{  \"sn\": \"18082800001\",     \"type\": 1,     \"department\": \"外科\",     \"diagnosis\": \"小指骨折\",     \"patientname\": \"刘希\",     \"patientage\": \"23\",     \"patientsex\": \"女\",     \"patientphone\": \"13880001234\",      \"zynum\": 1,     \"zyusage\": \" \",     \"zysingledose\": \" \",     \"zyfrequence\": \" \",     \"zymode\": \" \"}") @RequestParam(name = "prescription") String prescription,
 			@ApiParam(name = "drugList", value = "[ { \"drugid\": 1, \"drugname\": \"头孢地尼分散片\",  \"standard\": \"0.1g*10片/盒\", \"category\": \"处方药\", \"unit\": \"盒\", \"number\": 2, \"singledose\": \"0.1g\", \"myusage\": \"饭后口服\", \"frequency\": \"1日3次\" } ]") @RequestParam(name = "drugList") String drugList,
+			@ApiParam(name = "sign", value = "签名") @RequestParam(name = "sign") String sign,
 			HttpServletRequest request, HttpServletResponse response) {
 		
-		//TODO:此处应该有安全机制认证医院的身份
+		//此处应该有安全机制认证医院的身份
+		Map<String, String> signMap = new HashMap<String, String>();
+		
+		signMap.put("doctorid", doctorid.toString());
+		signMap.put("hospitalid", hospitalid.toString());
+		signMap.put("prescription", prescription);
+		signMap.put("drugList", drugList);
+		
+		if(!SignUtil.isSignatureValid(signMap, "pzzyy", sign)) {
+			return Response.Error(ErrorCode.NORMAL_ERROR, "验签失败");
+		}
+		
+		
 		Prescription p = null;
 		List<PrescriptionDrug> list = null;
 		try{
-			p = JSONUtils.getObjectByJson(perscription, Prescription.class);
+			p = JSONUtils.getObjectByJson(prescription, Prescription.class);
 			list = JSONUtils.getObjectListByJson(drugList, PrescriptionDrug.class);
 		}catch (Exception e) {
 			e.printStackTrace();
