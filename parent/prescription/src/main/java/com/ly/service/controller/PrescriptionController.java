@@ -84,11 +84,6 @@ public class PrescriptionController {
 		signMap.put("prescription", prescription);
 		signMap.put("drugList", drugList);
 		
-		if(!SignUtil.isSignatureValid(signMap, "pzzyy", sign)) {
-			return Response.Error(ErrorCode.NORMAL_ERROR, "验签失败");
-		}
-		
-		
 		Prescription p = null;
 		List<PrescriptionDrug> list = null;
 		try{
@@ -99,7 +94,7 @@ public class PrescriptionController {
 			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
 		}
 		try{
-			Prescription ret = prescriptionService.commit(doctorid, hospitalid, p, list);
+			Prescription ret = prescriptionService.commit(doctorid, hospitalid, p, list, signMap, sign);
 			return Response.OK(ret);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -139,8 +134,6 @@ public class PrescriptionController {
 	public Response getPrescriptionList(
 			@ApiParam(name = "option", value = "查询条件") @RequestParam(name = "option") String option,
 			HttpServletRequest request, HttpServletResponse respons) {
-		respons.setHeader("Access-Control-Allow-Origin", "*");
-		respons.setHeader("Access-Control-Allow-Methods", "GET");
 		SearchOption searchOption = null;
 		try{
 			searchOption = JSONUtils.getObjectByJson(option, SearchOption.class);
@@ -167,8 +160,6 @@ public class PrescriptionController {
 	public Response getPrescriptionByID(
 			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
 			HttpServletRequest request, HttpServletResponse respons) {
-		respons.setHeader("Access-Control-Allow-Origin", "*");
-		respons.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
 			SessionUtil.getManagerId(request);
 			
@@ -188,8 +179,6 @@ public class PrescriptionController {
 	public Response getUserPrescriptionByID(
 			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
 			HttpServletRequest request, HttpServletResponse respons) {
-		respons.setHeader("Access-Control-Allow-Origin", "*");
-		respons.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
 			Integer uid = SessionUtil.getUserId(request);
 			
@@ -211,8 +200,6 @@ public class PrescriptionController {
 			@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
 			@ApiParam(name = "pageSize", value = "最大数") @RequestParam(name = "pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse respons) {
-		respons.setHeader("Access-Control-Allow-Origin", "*");
-		respons.setHeader("Access-Control-Allow-Methods", "GET");
 		try{
 			Integer uid = SessionUtil.getUserId(request);
 		    List<Prescription> list = prescriptionService.getPrescriptionListByUser(uid, pageIndex, pageSize);		
@@ -236,7 +223,7 @@ public class PrescriptionController {
 		try{
 			Integer storeid = SessionUtil.getStoreId(request);
 			
-			Long pid = BarcodeUtil.barcode2ID(barcode);
+			Long pid = BarcodeUtil.barcode2ID(BarcodeUtil.TYPE_PRESCRIPTION,barcode);
 			
 		    Prescription detail = prescriptionService.getPrescriptionDetailByStore(storeid, pid);		
 		    return Response.OK(detail);		
@@ -354,7 +341,7 @@ public class PrescriptionController {
 			
 			Long pid = null;
 			if(barcode!=null || !barcode.isEmpty()) {
-				pid = BarcodeUtil.barcode2ID(barcode);
+				pid = BarcodeUtil.barcode2ID(BarcodeUtil.TYPE_PRESCRIPTION,barcode);
 			}
 			
 			List<Prescription> list = prescriptionService.getStorePrescriptions(storeid, pid, patientName, startDate, endDate, pageIndex, pageSize);
