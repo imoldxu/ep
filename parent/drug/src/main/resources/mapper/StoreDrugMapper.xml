@@ -15,28 +15,28 @@
   	</resultMap>
 
 	<select id="getStoreByDrugs" resultMap="StoreAndDrugInfo">
-		SELECT t_store.id, t_store.name, t_store.address, t_store.longitude, t_store.latitude, ROUND(
+		SELECT t_search_result.id, t_search_result.name, t_search_result.address, t_search_result.longitude, t_search_result.latitude , ROUND(
 	        6378.138 * 2 * ASIN(
 	            SQRT(
 	                POW(
 	                    SIN(
 	                    	(
-	                          #{lat,jdbcType=DOUBLE} * PI() / 180 - t_store.latitude * PI() / 180
+	                          #{lat,jdbcType=DOUBLE} * PI() / 180 - t_search_result.latitude * PI() / 180
 	                        ) / 2
 	                    ),
 	                    2
-	                ) + COS( #{lat,jdbcType=DOUBLE} * PI() / 180) * COS( t_store.latitude * PI() / 180) * POW(
+	                ) + COS( #{lat,jdbcType=DOUBLE} * PI() / 180) * COS( t_search_result.latitude * PI() / 180) * POW(
 	                    SIN(
 	                        (
-	                            #{lon,jdbcType=DOUBLE} * PI() / 180 - t_store.longitude * PI() / 180
+	                            #{lon,jdbcType=DOUBLE} * PI() / 180 - t_search_result.longitude * PI() / 180
 	                        ) / 2
 	                    ),
 	                    2
 	                )
 	            )
 	        ) * 1000
-	    ) AS distance, CONCAT("[",GROUP_CONCAT(CONCAT("{","\"drugname\":\"",t_drug.drugname,"\",\"standard\":\"",t_drug.standard,"\",\"price\":",t_store_drug.price,",\"state\":",t_store_drug.state
-			,"}")),"]") AS drugListStr FROM t_drug LEFT JOIN t_store_drug ON t_store_drug.drugid = t_drug.id LEFT JOIN t_store ON t_store_drug.storeid = t_store.id WHERE t_drug.id in ${drugids} AND (t_store_drug.state = 1 OR t_store_drug.id is NULL) AND (t_store.id is NULL OR (t_store.latitude BETWEEN #{lat,jdbcType=DOUBLE}-0.1 AND #{lat,jdbcType=DOUBLE}+0.1 AND t_store.longitude BETWEEN #{lon,jdbcType=DOUBLE}-0.1 AND #{lon,jdbcType=DOUBLE}+0.1)) GROUP BY t_store_drug.storeid ORDER BY distance ASC LIMIT #{size,jdbcType=INTEGER}
+	    ) AS distance, CONCAT("[",GROUP_CONCAT(CONCAT("{","\"drugname\":\"",t_drug.drugname,"\",\"standard\":\"",t_drug.standard,"\",\"price\":",IFNULL(t_search_result.price,0),",\"state\":",IFNULL(t_search_result.state,1),"}")),"]") AS drugListStr FROM t_drug LEFT JOIN
+(SELECT t_store_drug.drugid, t_store_drug.price, t_store_drug.state, t_store.id, t_store.name, t_store.address, t_store.longitude, t_store.latitude FROM t_store_drug LEFT JOIN t_store ON t_store_drug.storeid = t_store.id WHERE t_store_drug.drugid in ${drugids} AND t_store_drug.state = 1 AND t_store.latitude BETWEEN #{lat,jdbcType=DOUBLE}-0.1 AND #{lat,jdbcType=DOUBLE}+0.1 AND t_store.longitude BETWEEN #{lon,jdbcType=DOUBLE}-0.1 AND #{lon,jdbcType=DOUBLE}+0.1) AS t_search_result ON t_drug.id = t_search_result.drugid WHERE t_drug.id in ${drugids} GROUP BY t_search_result.id ORDER BY distance ASC LIMIT #{size,jdbcType=INTEGER}
 	</select>
 	
 </mapper>
