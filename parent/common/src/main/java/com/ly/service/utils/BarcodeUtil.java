@@ -5,8 +5,13 @@ import com.ly.service.context.HandleException;
 
 public class BarcodeUtil {
 
-	public static String generateBarcode(Long id) {
-		Long offset = 150331L;//offset偏移值
+	public static String generateBarcode(int type, Long id) {
+		long offset = 0L;
+		if(type==TYPE_PRESCRIPTION) {
+			offset = 150331L;//offset偏移值
+		}else if(type==TYPE_PATIENT) {
+			offset = 550925L;
+		}
 		Long rawCode = id+offset;
 		String rawCodeStr = String.format("%09d", rawCode);
 		String validNum = calcValidNum(rawCodeStr);
@@ -41,8 +46,16 @@ public class BarcodeUtil {
 		return String.valueOf(validNum);
 	}
 	
-	public static Long barcode2ID(String code) {
-		int offset = 150331;//offset偏移值
+	public static final int TYPE_PRESCRIPTION = 1;
+	public static final int TYPE_PATIENT = 2;
+	
+	public static Long barcode2ID(int type, String code) {
+		long offset = 0L;
+		if(type==TYPE_PRESCRIPTION) {
+			offset = 150331L;//offset偏移值
+		}else if(type==TYPE_PATIENT) {
+			offset = 550925L;
+		}
 		
 		String rawCode = code.substring(0, code.length()-1);
 		String validNum = code.substring(code.length()-1);

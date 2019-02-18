@@ -9,6 +9,8 @@ import javax.persistence.Transient;
 
 import org.apache.ibatis.type.JdbcType;
 
+import com.ly.service.utils.BarcodeUtil;
+
 import tk.mybatis.mapper.annotation.ColumnType;
 
 @Table(name="t_patient")
@@ -54,6 +56,18 @@ public class Patient {
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String phone;
 
+	@Transient
+	private String barCode;
+	
+	public String getBarCode() {
+		return barCode;
+	}
+
+
+	public void setBarCode(String barCode) {
+		this.barCode = barCode;
+	}
+
 
 	public Long getId() {
 		return id;
@@ -62,6 +76,7 @@ public class Patient {
 
 	public void setId(Long id) {
 		this.id = id;
+		this.barCode = BarcodeUtil.generateBarcode(BarcodeUtil.TYPE_PATIENT, id);
 	}
 
 

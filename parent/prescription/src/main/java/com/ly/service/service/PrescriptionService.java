@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.ibatis.session.RowBounds;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
+import com.ly.service.context.Response;
 import com.ly.service.context.SearchOption;
 import com.ly.service.context.StoreAndDrugInfo;
 import com.ly.service.entity.Doctor;
@@ -35,6 +37,7 @@ import com.ly.service.mapper.PrescriptionMapper;
 import com.ly.service.utils.DateUtils;
 import com.ly.service.utils.JSONUtils;
 import com.ly.service.utils.RedissonUtil;
+import com.ly.service.utils.SignUtil;
 
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.entity.Example.Criteria;
@@ -142,7 +145,14 @@ public class PrescriptionService {
 	}
 
 	@Transactional
-	public Prescription commit(int doctorid, int hospitalid, Prescription perscription, List<PrescriptionDrug> drugList) {	
+	public Prescription commit(int doctorid, int hospitalid, Prescription perscription, List<PrescriptionDrug> drugList, Map<String, String> signMap, String sign) {	
+		ObjectMapper om = new ObjectMapper();
+		Hospital hospital = om.convertValue(userClient.getHospital(hospitalid).fetchOKData(), Hospital.class);
+		
+		if(!SignUtil.isSignatureValid(signMap, hospital.getSecretkey(), sign)) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "验签失败");
+		}
+		
 		//检查是否有相同编号的处方签
 		Example ex = new Example(Prescription.class);
 		ex.createCriteria().andEqualTo("sn", perscription.getSn()).andEqualTo("hospitalid", hospitalid);
@@ -152,15 +162,12 @@ public class PrescriptionService {
 		}
 		Date now = new Date();
 		perscription.setCreatetime(now);
-		ObjectMapper om = new ObjectMapper();
-		//FIXME:医生的id，要根据医院、医生姓名、以及科室来提取，或者由医院传入医生的id
 		perscription.setDoctorid(doctorid);
 		Doctor doctor = om.convertValue(userClient.getDoctor(doctorid).fetchOKData(), Doctor.class);
 		perscription.setDoctorname(doctor.getName());
 		perscription.setDepartment(doctor.getDepartment());
-		perscription.setSignatureurl(doctor.getSignatureurl());
+		perscription.setSignatureurl(doctor.getSignatureurl());//医生签名
 		perscription.setHospitalid(hospitalid);
-		Hospital hospital = om.convertValue(userClient.getHospital(hospitalid).fetchOKData(), Hospital.class);
 		perscription.setHospitalname(hospital.getName());
 		
 		pMapper.insertUseGeneratedKeys(perscription);

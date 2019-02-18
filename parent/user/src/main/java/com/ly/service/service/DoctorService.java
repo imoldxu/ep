@@ -178,5 +178,16 @@ public class DoctorService {
 		Doctor ret = doctorMapper.selectByPrimaryKey(doctorid);
 		return ret;
 	}
+
+	public void modifyPwd(Integer doctorid, String oldPwd, String newPwd) {
+		Doctor doctor = doctorMapper.selectByPrimaryKey(doctorid);
+		if(PasswordUtil.isEqual(doctor.fetchPassword(), oldPwd, doctor.fetchPwdnonce())){
+			String nPwd = PasswordUtil.generatePwd(newPwd, doctor.fetchPwdnonce());
+			doctor.setPassword(nPwd);
+			doctorMapper.updateByPrimaryKey(doctor);
+		}else{
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "旧密码错误");
+		}
+	}
 	
 }

@@ -22,6 +22,7 @@ import com.ly.service.entity.Patient;
 import com.ly.service.entity.User;
 import com.ly.service.service.PatientService;
 import com.ly.service.service.UserService;
+import com.ly.service.utils.BarcodeUtil;
 import com.ly.service.utils.JSONUtils;
 import com.ly.service.utils.SessionUtil;
 
@@ -65,6 +66,23 @@ public class UserController{
 				return Response.SystemError();
 			}
 			
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	@ApiOperation(value = "登出", notes = "用户接口")
+	public Response logout(
+			HttpServletRequest request, HttpServletResponse response) {
+	
+		try{
+			SessionUtil.setUserId(request, null);
+			return Response.OK(null);
+		}catch (HandleException e) {
+			return Response.NormalError(e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
 		}
 	}
 	
@@ -134,6 +152,25 @@ public class UserController{
 	}
 
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getPatient", method = RequestMethod.POST)
+	@ApiOperation(value = "获取患者信息", notes = "通用接口")
+	public Response getPatient(
+			@ApiParam(name = "barcode", value = "患者一维码") @RequestParam(name = "barcode") String barcode,
+			HttpServletRequest request, HttpServletResponse response) {
+	
+		try{
+			Long pid = BarcodeUtil.barcode2ID(BarcodeUtil.TYPE_PATIENT, barcode);
+			Patient p = patientService.getPatient(pid);
+			return Response.OK(p);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/addPatient", method = RequestMethod.POST)
 	@ApiOperation(value = "添加患者信息", notes = "添加患者信息")
 	public Response addPatient(
@@ -142,12 +179,11 @@ public class UserController{
 			@ApiParam(name = "phone", value = "电话") @RequestParam(name = "phone") String phone,
 			@ApiParam(name = "idcardtype", value = "证件类型") @RequestParam(name = "idcardtype") int idcardtype,
 			@ApiParam(name = "idcardnum", value = "证件号") @RequestParam(name = "idcardnum") String idcardnum,
-			@ApiParam(name = "birthday", value = "出生日期") @RequestParam(name = "birthday") String birthday,
 			HttpServletRequest request, HttpServletResponse response) {
 	
 		try{
 			int uid = SessionUtil.getUserId(request);
-			Patient p = patientService.add(uid, name, sex, phone, idcardtype, idcardnum, birthday);
+			Patient p = patientService.add(uid, name, sex, phone, idcardtype, idcardnum, null);
 			return Response.OK(p);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -184,24 +220,18 @@ public class UserController{
 	@RequestMapping(value = "/updatePatient", method = RequestMethod.POST)
 	@ApiOperation(value = "添加患者信息", notes = "添加患者信息")
 	public Response updatePatient(
-			@ApiParam(name = "patient", value = "patient") @RequestParam(name = "patient") String patient,
+			@ApiParam(name = "pid", value = "pid") @RequestParam(name = "pid") Long pid,
+			@ApiParam(name = "name", value = "姓名") @RequestParam(name = "name") String name,
+			@ApiParam(name = "sex", value = "性别") @RequestParam(name = "sex") String sex,	
+			@ApiParam(name = "phone", value = "电话") @RequestParam(name = "phone") String phone,
+			@ApiParam(name = "idcardtype", value = "证件类型") @RequestParam(name = "idcardtype") int idcardtype,
+			@ApiParam(name = "idcardnum", value = "证件号") @RequestParam(name = "idcardnum") String idcardnum,
 			HttpServletRequest request, HttpServletResponse response) {
-		Patient p;
-		try{
-			p = JSONUtils.getObjectByJson(patient, Patient.class);
-		}catch (Exception e) {
-			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
-		}
-		
 		try{
 			int uid = SessionUtil.getUserId(request);
 			
-			int ret = patientService.update(uid, p);
-			if(ret==1){
-				return Response.OK(patient);	
-			}else{
-				return Response.NormalError("更新失败");
-			}
+			Patient patient = patientService.update(uid, pid, name, sex, phone, idcardtype, idcardnum);
+			return Response.OK(patient);	
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e){

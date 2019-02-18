@@ -109,6 +109,25 @@ public class DoctorController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/modifyPwd", method = RequestMethod.POST)
+	@ApiOperation(value = "修改密码", notes = "医生调用")
+	public Response modifyPwd(@ApiParam(name="oldPwd", value="旧密码") @RequestParam(name="oldPwd") String oldPwd,
+			@ApiParam(name="newPwd", value="新密码") @RequestParam(name="newPwd") String newPwd,
+			HttpServletRequest request, HttpServletResponse response){
+		try{
+			Integer doctorid = SessionUtil.getDoctorId(request);
+			
+			doctorService.modifyPwd(doctorid, oldPwd, newPwd);
+			return Response.OK(null);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(path="/updateInfo", method = RequestMethod.POST)
 	@ApiOperation(value = "更新医生信息", notes = "更新信息")
 	public Response updateInfo(@ApiParam(name="hid", value="医院编号") @RequestParam(name="hid") Integer hid,

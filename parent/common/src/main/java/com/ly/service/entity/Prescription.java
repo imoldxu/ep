@@ -161,7 +161,7 @@ public class Prescription implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
-		this.barcode = BarcodeUtil.generateBarcode(id);
+		this.barcode = BarcodeUtil.generateBarcode(BarcodeUtil.TYPE_PRESCRIPTION,id);
 	}
 
 	public String getSn() {

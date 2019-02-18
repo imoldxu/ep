@@ -66,6 +66,13 @@ public class User {
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String phone;
 	
+	@Column(name = "nick")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String nick;
+	
+	@Column(name = "headimgurl")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String headimgurl;
 
 	@Column(name = "password")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -198,6 +205,22 @@ public class User {
 
 	public void setSessionID(String sessionID) {
 		this.sessionID = sessionID;
+	}
+
+	public String getNick() {
+		return nick;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+
+	public String getHeadimgurl() {
+		return headimgurl;
+	}
+
+	public void setHeadimgurl(String headimgurl) {
+		this.headimgurl = headimgurl;
 	}
 	
 }

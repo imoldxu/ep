@@ -47,6 +47,18 @@ public class Hospital {
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String pwdnonce;
 	
+	@Column(name = "secretkey")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String secretkey;
+	
+	public String getSecretkey() {
+		return secretkey;
+	}
+
+	public void setSecretkey(String secretkey) {
+		this.secretkey = secretkey;
+	}
+
 	public Integer getId() {
 		return id;
 	}

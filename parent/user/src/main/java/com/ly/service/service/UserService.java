@@ -45,8 +45,8 @@ public class UserService {
 			//设置微信图片为64的标号
 			headerImgURL = headerImgURL+"64";
 		}
-		//String wxnick = wxUserInfo.get("nickname").asText();
-		//String nick = WxUtil.converWxNick(wxnick);
+		String wxnick = wxUserInfo.get("nickname").asText();
+		String nick = WxUtil.converWxNick(wxnick);
 		// 获取微信账号对应的账号
 		Example wxUserExample = new Example(User.class);
 		wxUserExample.createCriteria().andEqualTo("wxunionid", unionID);
@@ -55,12 +55,16 @@ public class UserService {
 		if (user == null) {
 			// 微信用户未注册
 			user = new User();
+			user.setHeadimgurl(headerImgURL);
+			user.setNick(nick);
 			user.setWxunionid(unionID);
 			user.setCreatetime(new Date());
 			userMapper.insertUseGeneratedKeys(user);
 		} else {
 			// 微信用户已经注册
 			// 更新用户的昵称和头像
+			user.setHeadimgurl(headerImgURL);
+			user.setNick(nick);
 			userMapper.updateByPrimaryKey(user);			
 		}
 		

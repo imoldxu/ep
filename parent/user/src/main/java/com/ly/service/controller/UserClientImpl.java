@@ -54,10 +54,12 @@ public class UserClientImpl implements UserClient{
 			patientService.add(uid, name, sex, phone, idcardtype, idcardnum, birthday);
 			return Response.OK(null);
 		}catch (HandleException e) {
-			return Response.Error(e.getErrorCode(), e.getMessage());
+			return Response.OK(null);
+			//return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			return Response.SystemError();
+			//return Response.SystemError();
+			return Response.OK(null);
 		}
 	}
 

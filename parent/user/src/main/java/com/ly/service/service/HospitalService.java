@@ -1,6 +1,7 @@
 package com.ly.service.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,10 @@ public class HospitalService {
 		h.setPassword(password);
 		h.setLatitude(latitude);
 		h.setLongitude(longitude);
+		
+		String secretkey = UUID.randomUUID().toString();
+		h.setSecretkey(secretkey);
+		
 		hospitalMapper.insertUseGeneratedKeys(h);
 		return h;
 	}
