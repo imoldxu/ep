@@ -15,23 +15,11 @@ define(['app','angularAMD'], function(app,angularAMD){
 	    templateUrl:'js/views/login.html?ver='+ver,
 	    controllerUrl: "js/controllers/loginCtrl.js"
 	}))
-        .state('index',angularAMD.route({
-            url:"/index",
-            templateUrl:'js/views/index.html?ver='+ver,
-            controllerUrl: "js/controllers/indexCtrl.js"
-        }))
         .state('home',angularAMD.route({
             url: '/home',
             templateUrl: 'js/views/home.html?ver='+ver,
             controllerUrl: "js/controllers/homeCtrl.js"
         }))
-		.state('zyhome',angularAMD.route({
-            url: '/zyhome',
-            templateUrl: 'js/views/zyhome.html?ver='+ver,
-            controllerUrl: "js/controllers/zyhomeCtrl.js"
-
-        }))
-
         .state('print',angularAMD.route({
             url: '/print',
             templateUrl: 'js/views/print.html?ver='+ver,
@@ -70,6 +58,12 @@ define(['app','angularAMD'], function(app,angularAMD){
             url: '/signaturePad',
             templateUrl: 'js/views/signaturePad.html?ver='+ver,
             controllerUrl: "js/controllers/signaturePadCtrl.js"
+
+        }))
+		.state('modifyPwd',angularAMD.route({
+            url: '/modifyPwd',
+            templateUrl: 'js/views/modifyPwd.html?ver='+ver,
+            controllerUrl: "js/controllers/modifyPwdCtrl.js"
 
         }))
 		

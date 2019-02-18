@@ -7,9 +7,14 @@
  */
 
 
-var URL = 'http://127.0.0.1:9201/';  // 请求地址;
-var URL2 = 'http://127.0.0.1:9202/'  // 药品服务
-var URL3 = 'http://127.0.0.1:9203/'  // 处方服务
+//var URL = 'http://127.0.0.1:9201/';  // 请求地址;
+//var URL2 = 'http://127.0.0.1:9202/'  // 药品服务
+//var URL3 = 'http://127.0.0.1:9203/'  // 处方服务
+
+var URL = 'http://192.168.31.187:9201/';  // 请求地址;
+var URL2 = 'http://192.168.31.187:9202/'  // 药品服务
+var URL3 = 'http://192.168.31.187:9203/'  // 处方服务
+
 
 var ver = '1.0.7';
 
@@ -27,13 +32,15 @@ require.config({
         'data':'services/data',
         'layer':'libs/layer/layer',
 	    'loader':'directives/loader',
-	    'encrypt':'libs/encrypt',
+	    'wheader':'directives/wheader',
+		'weui':'libs/weui.min',
+		'wx':'libs/jweixin-1.4.0',
+		'encrypt':'libs/encrypt',
 		'qrcode':'libs/qrcode',
 		'utf8-qrcode':'libs/qrcode_UTF8',
         'angular-qrcode':'libs/angular-qrcode',
 		'signature_pad':'libs/signature_pad.min',
 		'signature':'libs/signature',
-		'angular-oss': 'libs/angular-aliyun-oss',
 		'oss': 'libs/aliyun-oss-sdk'
     },
     shim:{
@@ -63,9 +70,6 @@ require.config({
 		},
 		"signature":{
 			deps: ["angular","signature_pad"]
-		},
-		"angular-oss": {
-			deps: ["angular","oss"]
 		}
     },
 
@@ -76,7 +80,7 @@ require.config({
 
 
 
-require(['jquery','angular','ng-route','app','fn-route','angularAMD','data','loader','encrypt','io-barcode','qrcode','utf8-qrcode','angular-qrcode','signature_pad','signature','angular-oss','oss'],function($,angular){
+require(['jquery','angular','ng-route','ng-cookies','app','fn-route','angularAMD','data','loader','weui','encrypt','io-barcode','qrcode','utf8-qrcode','angular-qrcode','wheader','signature_pad','signature','oss'],function($,angular){
     $(function () {
         angular.bootstrap(document,["fnApp"]);
     })

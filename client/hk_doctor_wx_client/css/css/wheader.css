@@ -1,0 +1,50 @@
+.header{
+    padding: 0px;
+    height: 48px;
+    width: 100%;
+    background-color: #fff;
+	position: fixed;
+	top: 0;
+	z-index: 99;
+}
+.normal{
+    background-color: #10aeff;
+}
+.white{
+    background-color: #fff;
+}
+.header_conter{
+    -webkit-box-align:center;
+    -webkit-align-items:center;
+    align-items:center;
+}
+
+.header_back {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.header_icon{
+    height: 24px;
+	padding: 12px;
+}
+
+.header .header_title {
+  font-size: 22px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 36px;
+  width: 100px;
+  margin-left: -50px;
+  margin-top: -17px;
+  text-align: -webkit-center;
+}
+
+.header .header_right_func{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}

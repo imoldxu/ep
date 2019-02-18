@@ -1,5 +1,5 @@
 
-define([], function(){
+define(['weui'], function(weui){
 
     return ['$scope', '$http', '$window','$cookieStore','$location','$rootScope','dataVer' ,'$state', 'Md5', function($scope, $http, $window, $cookieStore,$location,$rootScope,dataVer,$state,Md5){
 
@@ -7,18 +7,19 @@ define([], function(){
         $scope.registe = function(phone, pwd){
 
             if (phone == '' || phone == undefined){
-                alert('请输入登录手机号')
+                weui.topTips('请输入登录手机号', 3000);
 				return false;
             }
 			if (pwd == '' || pwd == undefined){
-                alert('请设置登录密码')
+                weui.topTips('请设置登录密码', 3000);
 				return false;
             }
 			
 			//FIXME: 暂时屏蔽
 			//pwd = Md5.b64_hmac_md5("hk",pwd);//使用md5对密码加密,并转换为HEX
 			
-			$rootScope.myloader = true;
+			//$rootScope.myloader = true;
+			var loading = weui.loading('注册中...');
 			
             $http({
                 method: 'post',
@@ -30,21 +31,22 @@ define([], function(){
             })
             .success(function(resp){
 				
-				$rootScope.myloader = false;
+				//$rootScope.myloader = false;
+				loading.hide();
 
                 if (resp.code == 1){
 
-                    alert('注册成功');
+                    weui.toast('注册成功');
 					
 					dataVer.put('doctorInfo', resp.data);
 					
 					$state.go('updateInfo');
 
-                    return false
+                    return false;
 
                 } else{
 
-					alert(resp.msg);
+					weui.alert(resp.msg);
 
 					console.log(resp)
 				}
@@ -52,16 +54,13 @@ define([], function(){
             })
 			.error(function(data){
 				
-				$rootScope.myloader = false;
+				//$rootScope.myloader = false;
+				loading.hide();
 				
-				alert('系统服务异常，请联系管理员');
+				weui.alert('系统服务异常，请联系管理员');
 				
 			})
         }
-		
-		$scope.goBack = function() {
-			$window.history.back();
-		}
     }];
 
 });

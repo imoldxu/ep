@@ -3,7 +3,7 @@
  */
 
 
-define(['angular','ng-route','ng-cookies','io-barcode','angular-qrcode'], function (angular) {
+define(['angular'], function (angular) {
 
     var app = angular.module('fnApp', ['ui.router','ngCookies','Encrypt','monospaced.qrcode','io-barcode','signature'])
 	.config(['$httpProvider', function($httpProvider) {

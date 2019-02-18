@@ -1,5 +1,5 @@
 
-define([], function(){
+define(['weui'], function(weui){
 
     return ['$scope', '$http', '$window', '$cookieStore','$location','$rootScope','dataVer' ,'$state', 'Md5', function($scope, $http, $window, $cookieStore,$location,$rootScope,dataVer,$state,Md5){
 
@@ -8,20 +8,20 @@ define([], function(){
 
         $scope.update = function(){
 
-            if ($scope.doctorObj.name == null || $scope.doctorObj.name == '' || $scope.doctorObj.name == undefined){
-                alert('请输入医生姓名')
+            if ($scope.doctorObj.name == undefined || $scope.doctorObj.name == null || $scope.doctorObj.name == ''){
+                weui.topTips('请输入医生姓名', 3000);
 				return false;
             }
-			if ($scope.doctorObj.department == null || $scope.doctorObj.department == '' || $scope.doctorObj.department == undefined){
-                alert('请输入科室')
+			if ($scope.doctorObj.department == undefined || $scope.doctorObj.department == null || $scope.doctorObj.department == ''){
+                weui.topTips('请输入科室', 3000);
 				return false;
             }
-			if ($scope.doctorObj.hospitalid == null || $scope.doctorObj.hospitalid == undefined){
-                alert('请选择所在医院')
+			if ($scope.doctorObj.hospitalid == undefined || $scope.doctorObj.hospitalid == null ){
+                weui.topTips('请选择所在医院', 3000);
 				return false;
             }
-			if ($scope.doctorObj.signatureurl == null || $scope.doctorObj.signatureurl == '' || $scope.doctorObj.signatureurl == undefined){
-                alert('请设置手写签名')
+			if ($scope.doctorObj.signatureurl == undefined || $scope.doctorObj.signatureurl == null || $scope.doctorObj.signatureurl == ''){
+                weui.topTips('请设置手写签名', 3000);
 				return false;
             }
 			
@@ -34,7 +34,7 @@ define([], function(){
                 data: {
 					hid: $scope.doctorObj.hospitalid,
 					name: $scope.doctorObj.name,
-                    department: $scope.doctorObj.depart,
+                    department: $scope.doctorObj.department,
 					signatureurl: $scope.doctorObj.signatureurl
                 }
             })
@@ -44,20 +44,22 @@ define([], function(){
 
                 if (resp.code == 1){
 
+					weui.toast('修改成功', 3000);
+
                     dataVer.put('doctorInfo',resp.data);
 					
-					$state.go('index');
+					$state.go('home');
 
                     return false
 
                 } else if(resp.code == 4){
 					
-					alert(resp.msg);
+					weui.alert(resp.msg);
 					
 					$state.go('login');
 				}else{
 
-					alert(resp.msg);
+					weui.alert(resp.msg);
 
 					console.log(data)
 				}
@@ -118,10 +120,6 @@ define([], function(){
 			// 页面加载完执行
 			$scope.initHospital();
 		});
-		
-		$scope.goBack = function() {
-			$window.history.back();
-		}
 		
     }];
 

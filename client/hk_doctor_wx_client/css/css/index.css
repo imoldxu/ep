@@ -3,29 +3,7 @@
   padding: 0;
 }
 
-.con {
-  text-align: webkit-center;
-}
-
-.welcome{
-  text-align: -webkit-center;
-  margin: 40 auto;
-  font-size: 32px;
-}
-
-.imgbutton{
-  width: 49%;
-  display: inline-block; 
-  margin: 30 0px;
-  text-align: -webkit-center;
-}
-
-.imgbutton img{
-
-}
-
-.imgbutton span {
-  display: block;
-  text-align: -webkit-center;
-  font-size: 24px;
+body {
+  background-color: #f8f8f8;
+  height: 100%;
 }
