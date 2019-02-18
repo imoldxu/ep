@@ -1,0 +1,8 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.con {
+  padding-top: 48px; /*空出头部的位置*/
+}

@@ -1,0 +1,13 @@
+
+
+<link rel="stylesheet" href="css/css/myBarcode.css?ver={{cssVer}}">
+
+<div class="con" ng-click="goBack()">
+	<div class="barcode_area">
+		<io-barcode code="{{code}}" type="CODE128B" options="{height:100}"></io-barcode>
+		<div class="barcode_show">取药码:{{code}}</div>
+		<div class="hint">向药房出示取药码</div>
+	</div>
+
+	<div class="op_hint_area">点击屏幕任意位置关闭</div>
+</div>

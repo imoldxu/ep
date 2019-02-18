@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.tab_hide {
+  display : none;
+}	
+
+.con {
+  padding-top: 48px; /*空出头部的位置*/
+  padding-bottom: 48px;/*空出底部的位置*/
+  height: 100%;
+  width: 100%;
+  background-color: #f8f8f8;
+}
+
+.plist .pitem {
+  margin: 0 0 30 0px;/*留出卡片的间距*/
+}
+
+.patientlist .pitem {
+  margin: 0 0 30 0px;/*留出卡片的间距*/
+}

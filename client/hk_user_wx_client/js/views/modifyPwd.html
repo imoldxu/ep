@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="css/css/modifyPwd.css?ver={{cssVer}}">
+
+
+<wheader title="修改密码"></wheader>
+
+<div class="con">
+
+	<div class="weui-cells weui-cells_from">
+		<div class="weui-cell">
+			<div class="weui-cell__hd">
+				<label class="weui-label">旧密码</label>
+			</div>
+			<div class="weui-cell__bd">
+				<input class="weui-input" type="password" ng-model="oldPwd" placeholder="请输入旧密码"></input>
+			</div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__hd">
+				<label class="weui-label">新密码</label>
+			</div>
+			<div class="weui-cell__bd">
+				<input class="weui-input" type="password" ng-model="newPwd" placeholder="请输入新密码"></input>
+			</div>
+		</div>
+	</div>
+	
+	<div class="weui-btn-area">
+		<a class="weui-btn weui-btn_primary" ng-click="modifyPwd(oldPwd, newPwd)">提交</a>
+	</div>
+	
+</div>
+

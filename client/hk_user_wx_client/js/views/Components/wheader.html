@@ -1,0 +1,23 @@
+
+
+
+
+    <div class="header normal">
+
+
+        <div class="header_back" ng-if="header.backShow" ng-click="goBack()">
+
+
+            <img class="header_icon" src="img/icon_back.png"/>
+
+        </div>
+
+        <div class="header_title" ng-bind="header.title"></div>
+
+		<div class="header_right_func" ng-if="header.rightIcon != null" ng-click="header.header_right_function()">
+
+            <img class="header_icon" ng-src="{{header.rightIcon}}"/>
+
+        </div>
+
+    </div>

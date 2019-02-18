@@ -1,0 +1,51 @@
+
+
+<link rel="stylesheet" href="css/css/result.css?ver={{cssVer}}">
+
+
+<wheader title="搜索结果"></wheader>
+
+<div class="con">
+	<div class="weui-search-bar" ng-click="gotoPage('map')">
+		<form class="weui-search-bar__form">
+			<div class="weui-search-bar__box fix_box">
+				<input type="search" class="weui-search-bar__input">
+			</div>
+			<label class="weui-search-bar__label">
+				<i class="weui-icon-search"></i>
+				<span>{{location.place}}</span>
+			</label>
+		</form>
+	</div>
+	
+	<div class="weui-cells storeItem" ng-repeat="x in storeList">
+		<div class="weui-cell">
+			<div class="weui-cell__hd title">{{x.name}}</div>
+			<div class="weui-cell__bd right_content">{{x.distance}}米</div>
+			<div class="weui-cell__fd" ng-click="gotoNav($index)"><img src="img/navigator.png"></img></div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__hd">地址:</div>
+			<div class="weui-cell__bd right_content">{{x.address}}</div>
+		</div>
+		<div class="weui-cell">药品目录:</div>
+		<div class="drugInfo">
+			<table width="100%">
+				<tbody>
+					<tr  ng-repeat="y in x.drugList">
+						<td>{{y.drugname}}<span ng-if="2 == y.state"></span></td>
+						<td>{{y.standard}}</td>
+						<td>{{f2y(y.price)}}元</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="weui-cells storeItem" ng-if="noneStoreDrugList !=null && noneStoreDrugList.length>0">
+		<div class="weui-cell title">方圆10公里内未找到药品</div>
+		<div class="drugInfo" ng-repeat="y in noneStoreDrugList">
+			<div><span>{{y.drugname}}</span><i class="ls"></i><span>{{y.standard}}</span></div>
+		</div>
+	</div>
+
+</div>

@@ -1,0 +1,14 @@
+
+
+<link rel="stylesheet" href="css/css/showPatientCode.css?ver={{cssVer}}">
+
+<div class="con" ng-click="goBack()">
+	<div class="barcode_area">
+		<io-barcode code="{{code}}" type="CODE128B" options="{height:100}"></io-barcode>
+		<div class="barcode_show">患者码:{{code}}</div>
+		<div class="hint">医生扫码可提取患者信息</div>
+		
+	</div>
+
+	<div class="op_hint_area">点击屏幕任意位置关闭</div>
+</div>

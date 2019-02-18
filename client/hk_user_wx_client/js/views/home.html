@@ -1,0 +1,150 @@
+
+<link rel="stylesheet" href="css/css/home.css?ver={{cssVer}}">
+
+<wheader title="资讯" backshow='false'></wheader>
+			
+<div class="weui-tab">
+	<div class="weui-tab__panel">
+		<div id="tab1">
+			<div class="con">
+				<span>敬请期待</span>
+			</div>
+		</div>
+		
+		<div id="tab2" class="plist">
+			<div class="con">
+				<div infinite-scroll='loadMore()' infinite-scroll-disabled="state.isfinish" infinite-scroll-distance='1'>
+					<div class="weui-form-preview pitem" ng-repeat="p in state.pList">
+						<div class="weui-form-preview__hd">
+							<div class="weui-form-preview__item">
+								<label class="weui-form-preview__label">处方编号</label>
+								<em class="weui-form-preview__value">{{p.sn}}</em>
+							</div>
+						</div>
+						<div class="weui-form-preview__bd">
+							<div class="weui-form-preview__item">
+								<label class="weui-form-preview__label">医院</label>
+								<span class="weui-form-preview__value">{{p.hospitalname}}</span>
+							</div>
+							<div class="weui-form-preview__item">
+								<label class="weui-form-preview__label">患者</label>
+								<span class="weui-form-preview__value">{{p.patientname+' '+p.patientsex+' '+p.patientage}}</span>
+							</div>
+							<div class="weui-form-preview__item">
+								<label class="weui-form-preview__label">创建时间</label>
+								<span class="weui-form-preview__value">{{dateFormat(p.createtime,'yyyy-MM-dd HH:mm')}}</span>
+							</div>
+						</div>
+						<div class="weui-form-preview__ft">
+							<a class="weui-form-preview__btn weui-form-preview__btn_default" ng-click="showPrescriptionCode(p.barcode)">取药码</a>
+							<a class="weui-form-preview__btn weui-form-preview__btn_primary" ng-click="gotoDetail(p.id)">查看详情</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="weui-loadmore" ng-if="state.isloading">
+					<i class="weui-loading"></i>
+					<span class="weui-loadmore__tips">正在加载</span>
+				</div>	
+				
+				<div class="weui-loadmore weui-loadmore_line" ng-if="!state.isloading && state.pList.length == 0">
+					<span class="weui-loadmore__tips">暂无数据</span>
+				</div>
+				
+				<div class="weui-loadmore weui-loadmore_line weui-loadmore_dot" ng-if="state.isfinish">
+					<span class="weui-loadmore__tips">后面已经没有数据了</span>
+				</div>
+				
+			</div>
+		</div>
+		
+		<div id="tab3" class="patientlist">
+			<div class="con">
+				<div class="weui-form-preview pitem" ng-repeat="p in patientList">
+					<div class="weui-form-preview__hd">
+						<div class="weui-form-preview__item">
+							<label class="weui-form-preview__label">姓名</label>
+							<em class="weui-form-preview__value">{{p.name}}</em>
+						</div>
+					</div>
+					<div class="weui-form-preview__bd">
+						<div class="weui-form-preview__item">
+							<label class="weui-form-preview__label">性别</label>
+							<span class="weui-form-preview__value">{{p.sex}}</span>
+						</div>
+						<div class="weui-form-preview__item">
+							<label class="weui-form-preview__label">身份证</label>
+							<span class="weui-form-preview__value">{{p.idcardnum}}</span>
+						</div>
+						<div class="weui-form-preview__item">
+							<label class="weui-form-preview__label">联系电话</label>
+							<span class="weui-form-preview__value">{{p.phone}}</span>
+						</div>
+					</div>
+					<div class="weui-form-preview__ft">
+						<a class="weui-form-preview__btn weui-form-preview__btn_primary" ng-click="showPatientCode(p.barCode)">患者码</a>
+						<a class="weui-form-preview__btn weui-form-preview__btn_default" ng-click="modifyPatient($index)">编辑</a>
+						<a class="weui-form-preview__btn weui-form-preview__btn_default" ng-click="delPatient($index, p.id)">删除</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="tab4" class="me">
+			<div class="con">
+				<div class="weui-panel weui-panel_access">
+					<div class="weui-panel__bd">
+						<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+							<div class="weui-media-box__hd">
+								<img class="weui-media-box__thumb" ng-src="{{userObj.headimgurl}}" alt="">
+							</div>
+							<div class="weui-media-box__bd">
+								<h4 class="weui-media-box__title">{{userObj.nick}}</h4>
+								<p class="weui-media-box__desc">{{userObj.phone}}</p>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="weui-cells">
+					<a class="weui-cell weui-cell_access" ng-click="gotoPage()">
+						<div class="weui-cell__bd">
+							<p>修改密码</p>
+						</div>
+						<div class="weui-cell__ft">
+						</div>
+					</a>
+					<a class="weui-cell weui-cell_access" ng-click="gotoPage()">
+						<div class="weui-cell__bd">
+							<p>修改手机号</p>
+						</div>
+						<div class="weui-cell__ft">
+						</div>
+					</a>
+				</div>
+				
+				<div class="weui-btn-area" >
+					<a class="weui-btn weui-btn_warn" ng-click="logout()">退出</a>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+	<div class="weui-tabbar">
+		<div id="#tab1" class="weui-tabbar__item weui-bar__item_on">
+			<img class="weui-tabbar__icon" src="./img/news.png" alt>
+			<p class="weui-tabbar__label">养生资讯</p>
+		</div>
+		<div id="#tab2" class="weui-tabbar__item">
+			<img class="weui-tabbar__icon" src="./img/presc.png" alt>
+			<p class="weui-tabbar__label">我的处方</p>
+		</div>
+		<div id="#tab3" class="weui-tabbar__item">
+			<img class="weui-tabbar__icon" src="./img/patient.png" alt>
+			<p class="weui-tabbar__label">患者</p>
+		</div>
+		<div id="#tab4" class="weui-tabbar__item">
+			<img class="weui-tabbar__icon" src="./img/me.png" alt>
+			<p class="weui-tabbar__label">我</p>
+		</div>
+	</div>
+</div>

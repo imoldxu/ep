@@ -1,0 +1,61 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.con {
+  /**width: 794px;*/
+  padding-top: 48px;
+  height: auto;
+  font-size: 16px;
+  text-align: center;
+}
+
+.fix_box{
+  height: auto;
+  width: auto;
+}
+
+.con .right_content{
+	text-align: right;
+}
+
+.con .storeItem{
+  margin: 0 0 30 0px;
+  padding: 0 0 10 0px;
+  text-align: left;
+  height: auto;
+  font-size: 18px;
+  background-color: #fff;
+}
+
+.con .storeItem img{
+  width: 20px
+}
+
+.con .title{
+  font-size: 24px;
+}
+
+.con .storeItem  .drugInfo{
+	padding: 0 40 0 30px;
+}
+
+.con  .storeItem  .drugInfo table {
+  font-size: 14px;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.con  .storeItem  .drugInfo table td {
+  /*border-top: 1px solid #d7e9f0;*/
+  height: 20px;
+  line-height: 20px;
+}
+.con  .storeItem  .drugInfo table tr:last-child td {
+  /*border-bottom: 1px solid #d7e9f0;*/
+}
+
+.con  .storeItem .ls {
+  width: 1em;
+  display: inline-block;
+}
