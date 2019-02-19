@@ -16,16 +16,21 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class RouteConfig {
 
 	/**
-	 * 依赖于webflux的断言路由器
+	   * 依赖于webflux的断言路由器，屏蔽掉所有内部的接口
 	 * @return
 	 */
 	@Bean
 	public RouterFunction<ServerResponse> consulFunRouterFunction() {
         RouterFunction<ServerResponse> route = RouterFunctions.route(
-                RequestPredicates.path("/test"),
-                request -> ServerResponse.ok().body(BodyInserters.fromObject("hello")));
+                RequestPredicates.path("/*/internal/**"),
+                request -> ServerResponse.ok().body(BodyInserters.fromObject("sorry, the api can not be accessed")));
         return route;
     }
+	
+//	@Bean
+//	public RouteLocator addHanderRouteLocator(RouteLocatorBuilder builder) {
+//		return builder.routes().route("internal", r->r.path("/*/internal/**").uri("http://www.baidu.com")).build();
+//	}
 	
 	/**
 	 * 与服务发现结合，配置路由

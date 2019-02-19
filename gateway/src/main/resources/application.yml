@@ -1,20 +1,38 @@
 server:
-  port: 8901
+  port: 9200
+  ssl:    
+    enabled: true
+    key-alias: gateway
+    key-store-password: 820125
+    key-store: classpath:gatewaykeystore.p12
+    key-store-type: PKCS12
 
 spring:
   application:
     name: gateway
   cloud:
     consul:
-      host: 192.168.6.103
+      host: 127.0.0.1
       port: 8500
       discovery:
+        registerHealthCheck: false
+        scheme: https
         healthCheckInterval: 15s
         instanceId: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
         preferIpAddress: true
-        ipAddress: ${spring.cloud.client.ip-address}
+        #ipAddress: ${spring.cloud.client.ip-address}
         port: ${server.port}
     gateway:
+      #routes:
+        #- id: internal_route
+          #uri: http://www.baidu.com:80/
+          #predicates:
+            #- Path=/*/internal/**
+      httpclient:        
+        ssl:          
+          handshake-timeout-millis: 10000
+          close-notify-flush-timeout-millis: 3000
+          close-notify-read-timeout-millis: 0
       locator:
         enable: true
       filter:
