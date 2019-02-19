@@ -16,5 +16,13 @@
 	<select id="getZyDrugsByDoctor" resultMap="SimpleDrugInfo">
 		SELECT t_doctor_drug.drugid, CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) AS showname FROM t_doctor_drug LEFT JOIN t_hospital_drug ON t_doctor_drug.drugid = t_hospital_drug.drugid AND t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} LEFT JOIN t_drug ON t_doctor_drug.drugid = t_drug.id WHERE t_doctor_drug.doctorid = #{doctorid, jdbcType=INTEGER} AND t_drug.iszy = 2 AND t_hospital_drug.id IS NOT NULL;
 	</select>
+	
+	<select id="getDrugListByDoctor" resultType="com.ly.service.entity.Drug">
+		SELECT t_drug.id,t_drug.defaultusage, t_drug.doseunit, t_drug.form,t_drug.frequency, t_drug.singledose, t_drug.drugname,t_drug.standard,t_drug.company,t_drug.unit FROM t_doctor_drug LEFT JOIN t_hospital_drug ON t_doctor_drug.drugid = t_hospital_drug.drugid AND t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} LEFT JOIN t_drug ON t_doctor_drug.drugid = t_drug.id WHERE t_doctor_drug.doctorid = #{doctorid, jdbcType=INTEGER} AND t_drug.iszy = 1 AND t_hospital_drug.id IS NOT NULL;
+	</select>
+	
+	<select id="getZyDrugListByDoctor" resultType="com.ly.service.entity.Drug">
+		SELECT t_drug.id,t_drug.defaultusage, t_drug.doseunit, t_drug.form,t_drug.frequency, t_drug.singledose, t_drug.drugname,t_drug.standard,t_drug.company,t_drug.unit FROM t_doctor_drug LEFT JOIN t_hospital_drug ON t_doctor_drug.drugid = t_hospital_drug.drugid AND t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} LEFT JOIN t_drug ON t_doctor_drug.drugid = t_drug.id WHERE t_doctor_drug.doctorid = #{doctorid, jdbcType=INTEGER} AND t_drug.iszy = 2 AND t_hospital_drug.id IS NOT NULL;
+	</select>
 
 </mapper>
