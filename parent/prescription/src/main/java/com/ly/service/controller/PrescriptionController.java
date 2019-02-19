@@ -109,11 +109,15 @@ public class PrescriptionController {
 	@RequestMapping(value = "/receive", method = RequestMethod.POST)
 	@ApiOperation(value = "用户领取处方", notes = "用户接口")
 	public Response receive(
-			@ApiParam(name = "perscriptionid", value = "处方编号") @RequestParam(name = "perscriptionid") Long pid,
+			@ApiParam(name = "barcode", value = "处方条码") @RequestParam(name = "barcode") String barcode,
 			HttpServletRequest request, HttpServletResponse response) {
-		
+		if( null == barcode || barcode.isEmpty()) {
+			return Response.Error(ErrorCode.ARG_ERROR, "请扫描或输入取药码");
+		}
 		try{
 			Integer userid = SessionUtil.getUserId(request);
+			
+			Long pid = BarcodeUtil.barcode2ID(BarcodeUtil.TYPE_PRESCRIPTION, barcode);
 			
 			Prescription p = prescriptionService.receive(userid, pid);
 	
@@ -203,6 +207,44 @@ public class PrescriptionController {
 		try{
 			Integer uid = SessionUtil.getUserId(request);
 		    List<Prescription> list = prescriptionService.getPrescriptionListByUser(uid, pageIndex, pageSize);		
+		    return Response.OK(list);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getDoctorPrescriptionByID", method = RequestMethod.GET)
+	@ApiOperation(value = "医生获取处方详情", notes = "医生接口")
+	public Response getDoctorPrescriptionByID(
+			@ApiParam(name = "pid", value = "处方id") @RequestParam(name = "pid") Long pid,
+			HttpServletRequest request, HttpServletResponse respons) {
+		try{
+			Integer doctorid = SessionUtil.getDoctorId(request);
+			
+			Prescription detail = prescriptionService.getDoctorPrescriptionDetail(doctorid, pid);		
+			return Response.OK(detail);		
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getDoctorPrescriptionList", method = RequestMethod.GET)
+	@ApiOperation(value = "医生获取处方列表", notes = "医生接口")
+	public Response getDoctorPrescriptionList(
+			@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
+			@ApiParam(name = "pageSize", value = "最大数") @RequestParam(name = "pageSize") int pageSize,
+			HttpServletRequest request, HttpServletResponse respons) {
+		try{
+			Integer doctorid = SessionUtil.getDoctorId(request);
+		    List<Prescription> list = prescriptionService.getPrescriptionListByDoctor(doctorid, pageIndex, pageSize);		
 		    return Response.OK(list);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -336,13 +378,14 @@ public class PrescriptionController {
 			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse response){
 		
+		if(barcode == null || barcode.isEmpty()) {
+			return Response.Error(ErrorCode.ARG_ERROR, "barcode不能为空");
+		}
+		
 		try{
 			Integer storeid = SessionUtil.getStoreId(request);
 			
-			Long pid = null;
-			if(barcode!=null || !barcode.isEmpty()) {
-				pid = BarcodeUtil.barcode2ID(BarcodeUtil.TYPE_PRESCRIPTION,barcode);
-			}
+			Long pid = BarcodeUtil.barcode2ID(BarcodeUtil.TYPE_PRESCRIPTION,barcode);
 			
 			List<Prescription> list = prescriptionService.getStorePrescriptions(storeid, pid, patientName, startDate, endDate, pageIndex, pageSize);
 			return Response.OK(list);

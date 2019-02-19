@@ -348,6 +348,15 @@ public class PrescriptionService {
 		return p;
 	}
 
+	public List<Prescription> getPrescriptionListByDoctor(Integer doctorid, int pageIndex, int pageSize) {
+		Example ex = new Example(Prescription.class);
+		ex.createCriteria().andEqualTo("doctorid", doctorid);
+		ex.setOrderByClause("id DESC");
+		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
+		List<Prescription> plist = pMapper.selectByExampleAndRowBounds(ex, rowBounds);
+		return plist;
+	}
+	
 	public List<Prescription> getPrescriptionListByUser(Integer uid, int pageIndex, int pageSize) {
 		Example ex = new Example(Prescription.class);
 		ex.createCriteria().andEqualTo("userid", uid);
@@ -406,6 +415,15 @@ public class PrescriptionService {
 		
 		Prescription p = getPrescriptionDetail(pid);
 		if(p.getUserid() != uid){
+			throw new HandleException(ErrorCode.DOMAIN_ERROR, "你无权进行此操作");
+		}
+		return p;
+	}
+	
+	public Prescription getDoctorPrescriptionDetail(Integer doctorid, Long pid) {
+		
+		Prescription p = getPrescriptionDetail(pid);
+		if(p.getDoctorid() != doctorid){
 			throw new HandleException(ErrorCode.DOMAIN_ERROR, "你无权进行此操作");
 		}
 		return p;
