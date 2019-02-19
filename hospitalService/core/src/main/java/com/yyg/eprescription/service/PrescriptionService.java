@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yyg.eprescription.context.HandleException;
 import com.yyg.eprescription.entity.CountPrescriptionInfo;
+import com.yyg.eprescription.entity.Patient;
 import com.yyg.eprescription.entity.Prescription;
 import com.yyg.eprescription.entity.PrescriptionDrugs;
 import com.yyg.eprescription.entity.PrescriptionNumber;
@@ -48,12 +49,25 @@ public class PrescriptionService {
 			return p;
 		}else{
 			//TODO 从医院HIS系统中获得相关信息,武胜医院使用武胜的代码
-			Prescription p = CommonHospitalProxy.getHospitalInfo(hospitalNum);
-			if(p != null){
+			hospitalNum = hospitalNum.trim().toLowerCase();
+			if(hospitalNum.startsWith("op")) {
+				Prescription p = CommonHospitalProxy.getHospitalInfo(hospitalNum);
+				if(p != null){
+					p.setSn(generateSN());
+					return p;
+				}else{
+					throw new HandleException(2, "诊断号错误，请检查就诊号信息");
+				}
+			}else {
+				//若是扫描的患者码，则直接从平台提取患者信息
+				Patient patient = PlatformProxy.getPatient(hospitalNum);
+				Prescription p = new Prescription();
 				p.setSn(generateSN());
+				p.setPatientname(patient.getName());
+				p.setPatientphone(patient.getPhone());
+				p.setPatientsex(patient.getSex());
+				p.setPatientage(patient.getAge());
 				return p;
-			}else{
-				throw new HandleException(2, "诊断号错误，请检查就诊号信息");
 			}
 		}
 	}

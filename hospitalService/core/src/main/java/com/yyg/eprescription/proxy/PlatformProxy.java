@@ -12,6 +12,7 @@ import com.yyg.eprescription.context.HandleException;
 import com.yyg.eprescription.context.Response;
 import com.yyg.eprescription.entity.Doctor;
 import com.yyg.eprescription.entity.Drug;
+import com.yyg.eprescription.entity.Patient;
 import com.yyg.eprescription.entity.ShortDrugInfo;
 import com.yyg.eprescription.util.HttpClientUtil;
 import com.yyg.eprescription.util.JSONUtils;
@@ -224,7 +225,7 @@ public class PlatformProxy {
 		HttpClientUtil h = new HttpClientUtil();
 		List<ShortDrugInfo> ret = null;
 		try {
-			h.open(URL2+"/hospital/getDrugsByDoctor", "get");
+			h.open(URL2+"/doctor/getDrugsByDoctor", "get");
 			h.addParameter("hid", hid.toString());
 			h.addParameter("doctorid", doctorid.toString());
 			h.addParameter("type", type.toString());
@@ -241,6 +242,42 @@ public class PlatformProxy {
 					JsonNode dataNode = respNode.get("data");
 					String dataStr = dataNode.toString();
 					ret = JSONUtils.getObjectListByJson(dataStr, ShortDrugInfo.class);
+				}else{
+					JsonNode msgNode = respNode.get("msg");
+					String msg = msgNode.asText();
+					throw new HandleException(4, msg);
+				}
+			}else{
+				throw new HandleException(4, "网络请求异常,status="+status);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new HandleException(4, "网络异常");
+		} finally {
+			h.close();
+		}
+		return ret;
+	}
+	
+	public static Patient getPatient(String barcode) {
+		HttpClientUtil h = new HttpClientUtil();
+		Patient ret = null;
+		try {
+			h.open(URL2+"/user/getPatient", "get");
+			h.addParameter("barcode", barcode);
+			
+			h.setRequestHeader("Content-Type", "application/json;charset=utf-8");
+			
+			int status = h.send();
+			if(status==200){
+				String resp = h.getResponseBodyAsString("utf-8");
+				JsonNode respNode = JSONUtils.getJsonObject(resp);
+				JsonNode codeNode = respNode.get("code");
+				int code = codeNode.asInt();
+				if(code == Response.SUCCESS){
+					JsonNode dataNode = respNode.get("data");
+					String dataStr = dataNode.toString();
+					ret = JSONUtils.getObjectByJson(dataStr, Patient.class);
 				}else{
 					JsonNode msgNode = respNode.get("msg");
 					String msg = msgNode.asText();
