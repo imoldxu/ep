@@ -41,7 +41,8 @@ require.config({
         'angular-qrcode':'libs/angular-qrcode',
 		'signature_pad':'libs/signature_pad.min',
 		'signature':'libs/signature',
-		'oss': 'libs/aliyun-oss-sdk'
+		'oss': 'libs/aliyun-oss-sdk',
+    'infiniteScroll':'libs/ng-infinite-scroll.min'
     },
     shim:{
         "angular":{
@@ -70,6 +71,9 @@ require.config({
 		},
 		"signature":{
 			deps: ["angular","signature_pad"]
+		},
+    "infiniteScroll":{
+			deps: ["angular"]
 		}
     },
 
@@ -80,7 +84,7 @@ require.config({
 
 
 
-require(['jquery','angular','ng-route','ng-cookies','app','fn-route','angularAMD','data','loader','weui','encrypt','io-barcode','qrcode','utf8-qrcode','angular-qrcode','wheader','signature_pad','signature','oss'],function($,angular){
+require(['jquery','angular','ng-route','ng-cookies','app','fn-route','angularAMD','data','loader','weui','encrypt','io-barcode','qrcode','utf8-qrcode','angular-qrcode','infiniteScroll','wheader','signature_pad','signature','oss'],function($,angular){
     $(function () {
         angular.bootstrap(document,["fnApp"]);
     })

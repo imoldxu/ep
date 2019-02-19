@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="css/css/addDrug.css?ver={{cssVer}}">
+
+
+<wheader title="添加处方"></wheader>
+
+<div class="con">
+	<div class="weui-search-bar weui-search-bar_focusing">
+		<form class="weui-search-bar__form">
+			<div class="weui-search-bar__box box">
+				<i class="weui-icon-search"></i>
+				<input type="search" class="weui-search-bar__input" placeholder="输入药品名称搜索" required="" ng-change="searchDrug(key)" ng-model="key">
+				<div class="weui-icon-clear" ng-click="clear()"></div>
+			</div>
+		</form>
+	</div>
+
+	<div class="weui-cells searchbar-result" ng-if="drugList.length>0">
+		<div class="weui-cell weui-cell_access" ng-repeat="x in drugList">
+			<div class="weui-cell__bd weui-cell_primary"  ng-click="add($index)">
+				<span>{{x.showname}}</span>
+			</div>
+		</div>
+	</div>
+
+</div>
+

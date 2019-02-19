@@ -20,40 +20,29 @@ define(['app','angularAMD'], function(app,angularAMD){
             templateUrl: 'js/views/home.html?ver='+ver,
             controllerUrl: "js/controllers/homeCtrl.js"
         }))
-        .state('print',angularAMD.route({
-            url: '/print',
-            templateUrl: 'js/views/print.html?ver='+ver,
-            controllerUrl: "js/controllers/printCtrl.js"
+        .state('pList',angularAMD.route({
+            url: '/pList',
+            templateUrl: 'js/views/pList.html?ver='+ver,
+            controllerUrl: "js/controllers/pListCtrl.js"
 
         }))
-		.state('zyprint',angularAMD.route({
-            url: '/zyprint',
-            templateUrl: 'js/views/zyprint.html?ver='+ver,
-            controllerUrl: "js/controllers/printCtrl.js"
-
+		.state('prescription',angularAMD.route({
+            url: '/prescription/:presdetail',
+            templateUrl: 'js/views/prescription.html?ver='+ver,
+            controllerUrl: "js/controllers/prescriptionCtrl.js"
         }))
-		.state('result',angularAMD.route({
-            url: '/result',
-            templateUrl: 'js/views/result.html?ver='+ver,
-            controllerUrl: "js/controllers/resultCtrl.js"
-
-        }))
-
-
-        .state('register',angularAMD.route({
+		.state('register',angularAMD.route({
             url: '/drug',
             templateUrl: 'js/views/register.html?ver='+ver,
             controllerUrl: "js/controllers/registerCtrl.js"
 
         }))
-
 		.state('updateInfo',angularAMD.route({
             url: '/updateInfo',
             templateUrl: 'js/views/updateInfo.html?ver='+ver,
             controllerUrl: "js/controllers/updateInfoCtrl.js"
 
         }))
-		
 		.state('signaturePad',angularAMD.route({
             url: '/signaturePad',
             templateUrl: 'js/views/signaturePad.html?ver='+ver,
@@ -66,18 +55,22 @@ define(['app','angularAMD'], function(app,angularAMD){
             controllerUrl: "js/controllers/modifyPwdCtrl.js"
 
         }))
-		
-		.state('mprint',angularAMD.route({
-            url: '/mprint',
-            templateUrl: 'js/views/mprint.html?ver='+ver,
-            controllerUrl: "js/controllers/mprintCtrl.js"
+		.state('mydrugs',angularAMD.route({
+            url: '/mydrugs',
+            templateUrl: 'js/views/mydrugs.html?ver='+ver,
+            controllerUrl: "js/controllers/mydrugsCtrl.js"
 
         }))
+		.state('addDrug',angularAMD.route({
+            url: '/addDrug',
+            templateUrl: 'js/views/addDrug.html?ver='+ver,
+            controllerUrl: "js/controllers/addDrugCtrl.js"
 
-		.state('mzyprint',angularAMD.route({
-            url: '/mzyprint',
-            templateUrl: 'js/views/mzyprint.html?ver='+ver,
-            controllerUrl: "js/controllers/mprintCtrl.js"
+        }))
+		.state('result',angularAMD.route({
+            url: '/result',
+            templateUrl: 'js/views/result.html?ver='+ver,
+            controllerUrl: "js/controllers/resultCtrl.js"
 
         }))
 		

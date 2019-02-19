@@ -1,0 +1,63 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.con {
+  /**width: 794px;*/
+  padding-top: 48px;
+  padding-bottom: 50px;
+  width: 100%;
+  height: 100%;
+}
+
+.right_content{
+  text-align: -webkit-right;
+}
+
+.btn_bottom_area{
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  line-height: 50px;
+  z-index: 88;
+}
+
+.btn_bottom_area:before{
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 1px;
+  border-top: 1px solid #D5D5D6;
+  color: #D5D5D6;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  -webkit-transform: scaleY(0.5);
+  transform: scaleY(0.5);
+}
+
+.btn_bottom_area:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 1px;
+    border-bottom: 1px solid #e5e5e5;
+    color: #e5e5e5;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+}
+
+.drug_info{
+  padding-bottom: 5px;
+}
+
+.drug_usage {
+  font-size: 14px;
+  padding: 0 0 5 30px;
+}

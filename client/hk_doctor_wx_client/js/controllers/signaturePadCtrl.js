@@ -48,7 +48,8 @@ define(['app','angular','weui','oss'], function(app, angular, weui, oss){
 		
 		$scope.uploadContent = function (client, content) {
 			var loading = weui.loading('上传中...');
-			var sigImg = "img/"+$scope.doctorObj.id+".sig";
+			var timestamp = (new Date()).getTime();
+			var sigImg = "img/"+$scope.doctorObj.id+timestamp+".sig";//加时间戳到文件名中，保留医生设置过的签名，避免修改的签名覆盖之前的签名
 			return client.put(sigImg, content).then(function (res) {
 				console.log(res);
 				loading.hide();

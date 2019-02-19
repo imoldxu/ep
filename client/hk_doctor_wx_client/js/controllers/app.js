@@ -5,7 +5,7 @@
 
 define(['angular'], function (angular) {
 
-    var app = angular.module('fnApp', ['ui.router','ngCookies','Encrypt','monospaced.qrcode','io-barcode','signature'])
+    var app = angular.module('fnApp', ['ui.router','ngCookies','Encrypt','monospaced.qrcode','io-barcode','signature','infinite-scroll'])
 	.config(['$httpProvider', function($httpProvider) {
 		$httpProvider.defaults.withCredentials = true;  //设置允许跨域传Cookie
 		//更改 Content-Type

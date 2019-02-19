@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="css/css/mydrugs.css?ver={{cssVer}}">
+
+
+<wheader title="常用药品" righticon="./img/add2.png"></wheader>
+
+<div class="con">
+
+	<div class="weui-form-preview pitem" ng-repeat="drug in drugList">
+		<div class="weui-form-preview__hd">
+			<div class="weui-form-preview__item">
+				<label class="weui-form-preview__label">药品名称</label>
+				<em class="weui-form-preview__value">{{drug.drugname}}</em>
+			</div>
+		</div>
+		<div class="weui-form-preview__bd">
+			<div class="weui-form-preview__item">
+				<label class="weui-form-preview__label">规格</label>
+				<span class="weui-form-preview__value">{{drug.standard}}</span>
+			</div>
+			<div class="weui-form-preview__item">
+				<label class="weui-form-preview__label">厂商</label>
+				<span class="weui-form-preview__value">{{drug.company}}</span>
+			</div>
+			<div class="weui-form-preview__item">
+				<label class="weui-form-preview__label">默认用法</label>
+				<span class="weui-form-preview__value">{{drug.defaultusage+','+drug.frequency+',每次'+drug.singledose+drug.doseunit}}</span>
+			</div>
+		</div>
+		<div class="weui-form-preview__ft">
+			<a class="weui-form-preview__btn weui-form-preview__btn_default" ng-click="del($index)">删除</a>
+		</div>
+	</div>
+	
+</div>
+

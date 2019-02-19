@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="css/css/pList.css?ver={{cssVer}}">
+
+
+<wheader title="我的处方"></wheader>
+
+<div class="con">
+
+	<div infinite-scroll='loadMore()' infinite-scroll-disabled="state.isfinish" infinite-scroll-distance='1'>
+		<div class="weui-form-preview pitem" ng-repeat="p in state.pList">
+			<div class="weui-form-preview__hd">
+				<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">处方编号</label>
+					<em class="weui-form-preview__value">{{p.sn}}</em>
+				</div>
+			</div>
+			<div class="weui-form-preview__bd">
+				<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">医院</label>
+					<span class="weui-form-preview__value">{{p.hospitalname}}</span>
+				</div>
+				<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">患者</label>
+					<span class="weui-form-preview__value">{{p.patientname+' '+p.patientsex+' '+p.patientage}}</span>
+				</div>
+				<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">创建时间</label>
+					<span class="weui-form-preview__value">{{dateFormat(p.createtime,'yyyy-MM-dd HH:mm')}}</span>
+				</div>
+			</div>
+			<div class="weui-form-preview__ft">
+				<a class="weui-form-preview__btn weui-form-preview__btn_primary" ng-click="gotoDetail(p.id)">查看详情</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="weui-loadmore" ng-if="state.isloading">
+		<i class="weui-loading"></i>
+		<span class="weui-loadmore__tips">正在加载</span>
+	</div>	
+	
+	<div class="weui-loadmore weui-loadmore_line" ng-if="!state.isloading && state.pList.length == 0">
+		<span class="weui-loadmore__tips">暂无数据</span>
+	</div>
+	
+	<div class="weui-loadmore weui-loadmore_line weui-loadmore_dot" ng-if="state.isfinish">
+		<span class="weui-loadmore__tips">后面已经没有数据了</span>
+	</div>
+	
+</div>
+

@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="css/css/prescription.css?ver={{cssVer}}">
+
+<wheader title="处方详情"></wheader>
+
+<div class="con">
+	<div class="weui-cells">
+		<div class="weui-cell">
+			<div class="weui-cell__hd">门诊号</div>
+			<div class="weui-cell__bd right_content">{{prescriptionObj.sn}}</div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__hd">医院</div>
+			<div class="weui-cell__bd right_content">{{prescriptionObj.hospitalname}}</div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__hd">医师</div>
+			<div class="weui-cell__bd right_content">{{prescriptionObj.doctorname+' '+prescriptionObj.department}}</div>
+		</div>
+	</div>
+	<!--div class="weui-cells__title">患者信息</div-->
+	<div class="weui-cells">
+		<div class="weui-cell">
+			<div class="weui-cell__hd">患者</div>
+			<div class="weui-cell__bd right_content">{{prescriptionObj.patientname+'  '+prescriptionObj.patientsex+'  '+prescriptionObj.patientage+'岁'}}</div>
+		</div>
+	</div>
+	<!--div class="weui-cells__title">诊断信息</div-->
+	<div class="weui-cells">
+		<div class="weui-cell">
+			<div class="weui-cell__hd">诊断</div>
+			<div class="weui-cell__bd right_content">{{prescriptionObj.diagnosis}}</div>
+		</div>
+	</div>
+	<div class="weui-cells">
+		<div class="weui-cell">
+			<div class="weui-cell__hd">开具日期</div>
+			<div class="weui-cell__bd right_content">{{dateFormat(prescriptionObj.createtime, 'yyyy-MM-dd HH:mm')}}</div>
+		</div>
+	</div>
+	<div class="weui-cells__title">药品清单</div>
+	<div class="weui-cells">
+		<div ng-repeat="x in drugList">
+			<div class="weui-cell drug_info">
+				<div class="weui-cell__hd">{{x.drugname+'*'+x.standard}}</div>
+				<div class="weui-cell__bd right_content">{{x.number + '' +x.unit}}</div>
+			</div>
+			<div class="drug_usage">{{'用法:'+ x.myusage +','+ x.singledose +',' +x.frequency}}</div>
+		</div>
+	</div>
+
+	<div class="weui-cells">
+		<img ng-src="{{prescriptionObj.signatureurl}}"></img>
+	</div>
+</div>

@@ -1,0 +1,15 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.con {
+  padding-top: 48px;
+  height: 100%;
+  width: 100%;
+  background-color: #f8f8f8;
+}
+
+.con .box{
+  height: auto;	
+}
