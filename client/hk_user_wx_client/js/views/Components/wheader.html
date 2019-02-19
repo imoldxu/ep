@@ -5,18 +5,18 @@
     <div class="header normal">
 
 
-        <div class="header_back" ng-if="header.backShow" ng-click="goBack()">
+        <div class="header_back" ng-if="backShow" ng-click="goBack()">
 
 
             <img class="header_icon" src="img/icon_back.png"/>
 
         </div>
 
-        <div class="header_title" ng-bind="header.title"></div>
+        <div class="header_title" ng-bind="title"></div>
 
-		<div class="header_right_func" ng-if="header.rightIcon != null" ng-click="header.header_right_function()">
+		<div class="header_right_func" ng-if="rightIcon != null" ng-click="header_right_function()">
 
-            <img class="header_icon" ng-src="{{header.rightIcon}}"/>
+            <img class="header_icon" ng-src="{{rightIcon}}"/>
 
         </div>
 

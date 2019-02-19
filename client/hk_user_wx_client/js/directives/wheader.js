@@ -18,15 +18,11 @@ define(['jquery','app'], function ($,app) {
 
             link: function($scope, iElements, iAttrs){
        
-				$scope.header = {};
-	   
-				$scope.header.title = iAttrs.title;
+				$scope.title = iAttrs.title;
 
-                $scope.header.backShow = iAttrs.backshow == 'false'? false : true || true;
+                $scope.backShow = iAttrs.backshow == 'false'? false : true || true;
 
-				//$scope.todo = iAttrs.rightfunc;
-
-				$scope.header.rightIcon = iAttrs.righticon || null;
+				$scope.rightIcon = iAttrs.righticon || null;
 
                 $scope.goBack = function(){
 					$window.history.back();

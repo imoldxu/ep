@@ -13,24 +13,24 @@ define(['jquery','weui','wx'], function($,weui,wx){
 					  $scope.state.tabId = tabId;
 						
 					  if(tabId == '#tab1'){
-						$scope.header.title = "资讯";
-						$scope.header.rightIcon = null;
-						$scope.header.header_right_function = null;
+						$scope.title = "资讯";
+						$scope.rightIcon = null;
+						$scope.header_right_function = null;
 					  }
 					  if(tabId == '#tab2'){
-						$scope.header.title = "我的处方";
-						$scope.header.rightIcon = "./img/scan.png";
-						$scope.header.header_right_function = $scope.scan;
+						$scope.title = "我的处方";
+						$scope.rightIcon = "./img/scan.png";
+						$scope.header_right_function = $scope.scan;
 					  }
 					  if(tabId == '#tab3'){
-						$scope.header.title = "患者";
-						$scope.header.rightIcon = "./img/add2.png";
-						$scope.header.header_right_function = $scope.addPatient;
+						$scope.title = "患者";
+						$scope.rightIcon = "./img/add2.png";
+						$scope.header_right_function = $scope.addPatient;
 					  }
 					  if(tabId == '#tab4'){
-						$scope.header.title = "我";
-						$scope.header.rightIcon = null;
-						$scope.header.header_right_function = null;
+						$scope.title = "我";
+						$scope.rightIcon = null;
+						$scope.header_right_function = null;
 					  }
 					});
 				});
@@ -61,13 +61,15 @@ define(['jquery','weui','wx'], function($,weui,wx){
 				success: function (res) {
 					var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
 					//TODO: 解析出url中的code
+					var code = '';
 					var loading = weui.loading('获取中...');
 			
 					$http({
-						method: 'get',
-						url: URL+'user/logout',
+						method: 'post',
+						url: URL3+'prescription/recieve',
 						requestType: 'json',
-						params: { 
+						data: {
+							barcode: code
 						}
 					})
 					.success(function(resp){
@@ -76,14 +78,18 @@ define(['jquery','weui','wx'], function($,weui,wx){
 
 						if (resp.code == 1){
 
-							dataVer.put('userInfo',{});
+							dataVer.put('homestate', $scope.state);
 					
-							$state.go('login');
+							dataVer.put('prescriptionInfo', resp.data);
+					
+							$state.go('prescription');
 
-						}else{
-						
+						}else if(resp.code == 4){
 							weui.alert(resp.msg);
-						
+							$state.go('login');
+						}else{
+							weui.alert(resp.msg);
+							return false;
 						}
 
 					})
@@ -265,11 +271,11 @@ define(['jquery','weui','wx'], function($,weui,wx){
 
 					$scope.state.pageIndex = $scope.state.pageIndex + 1; 
 
-					console.log(resp.data);
+					//console.log(resp.data);
 
 					$scope.state.pList = $scope.state.pList.concat(resp.data);
 					
-					console.log($scope.state.pList);
+					//console.log($scope.state.pList);
 					
                 } else if(resp.code == 4){
 					weui.alert(resp.msg);
@@ -370,29 +376,25 @@ define(['jquery','weui','wx'], function($,weui,wx){
 			$('[id='+tabId+']').addClass('weui-bar__item_on').siblings().removeClass('weui-bar__item_on');
 			$('.weui-tab__panel').find(tabId).show().siblings().hide();	  
 
-			if($scope.header == undefined){
-				$scope.header = {};
-			}
-
 			if(tabId == '#tab1'){
-				$scope.header.title = "资讯";
-				$scope.header.rightIcon = null;
-				$scope.header.header_right_function = null;
+				$scope.title = "资讯";
+				$scope.rightIcon = null;
+				$scope.header_right_function = null;
 			}
 			if(tabId == '#tab2'){
-				$scope.header.title = "我的处方";
-				$scope.header.rightIcon = "./img/scan.png";
-				$scope.header.header_right_function = $scope.scan;
+				$scope.title = "我的处方";
+				$scope.rightIcon = "./img/scan.png";
+				$scope.header_right_function = $scope.scan;
 			}
 			if(tabId == '#tab3'){
-				$scope.header.title = "患者";
-				$scope.header.rightIcon = "./img/add2.png";
-				$scope.header.header_right_function = $scope.addPatient;
+				$scope.title = "患者";
+				$scope.rightIcon = "./img/add2.png";
+				$scope.header_right_function = $scope.addPatient;
 			}
 			if(tabId == '#tab4'){
-				$scope.header.title = "我";
-				$scope.header.rightIcon = null;
-				$scope.header.header_right_function = null;
+				$scope.title = "我";
+				$scope.rightIcon = null;
+				$scope.header_right_function = null;
 			}
 		}); 
     }];
