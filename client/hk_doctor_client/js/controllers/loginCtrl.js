@@ -37,7 +37,7 @@ define([], function(){
 
                     dataVer.put('doctorInfo',data.data);
 					
-					$state.go('index');
+					$location.path('/index').replace();
 
                     return false
 
