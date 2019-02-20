@@ -19,7 +19,6 @@ define(['weui'], function(weui){
 			//FIXME: 暂时屏蔽
 			//pwd = Md5.b64_hmac_md5("hk",pwd);//使用md5对密码加密,并转换为HEX
 			
-			//$rootScope.myloader = true;
 			var loading = weui.loading("登陆中...");
 			
             $http({
@@ -32,7 +31,6 @@ define(['weui'], function(weui){
             })
             .success(function(resp){
 				
-				//$rootScope.myloader = false;
 				loading.hide();
 
                 if (resp.code == 1){
@@ -42,7 +40,7 @@ define(['weui'], function(weui){
                     dataVer.put('doctorInfo',resp.data);
 					
 					if(resp.data.signatureurl != null && resp.data.name != null && resp.data.department != null){
-						$state.go('home');
+						$location.path('/home').replace();
 					}else{
 						$state.go('updateInfo');
 					}
@@ -59,7 +57,6 @@ define(['weui'], function(weui){
             })
 			.error(function(data){
 				
-				//$rootScope.myloader = false;
 				loading.hide();
 				
 				weui.alert('系统服务异常，请联系管理员');
