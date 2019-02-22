@@ -263,7 +263,7 @@ public class PlatformProxy {
 		HttpClientUtil h = new HttpClientUtil();
 		Patient ret = null;
 		try {
-			h.open(URL2+"/user/getPatient", "get");
+			h.open(URL+"/user/getPatient", "get");
 			h.addParameter("barcode", barcode);
 			
 			h.setRequestHeader("Content-Type", "application/json;charset=utf-8");
