@@ -11,6 +11,7 @@ import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.entity.Hospital;
 import com.ly.service.mapper.HospitalMapper;
+import com.ly.service.utils.PasswordUtil;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -31,7 +32,11 @@ public class HospitalService {
 		h.setEmail(managerEmail);
 		h.setName(name);
 		h.setAddress(address);
-		h.setPassword(password);
+		
+		String nonce = PasswordUtil.generateNonce();
+		h.setPwdnonce(nonce);
+		String newPwd = PasswordUtil.generatePwd(password, nonce);
+		h.setPassword(newPwd);
 		h.setLatitude(latitude);
 		h.setLongitude(longitude);
 		
