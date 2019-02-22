@@ -50,7 +50,7 @@ public class Patient {
 	private String birthday;
 		
 	@Transient
-	private int age;
+	private Integer age;
 
 	@Column(name = "phone")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
@@ -130,12 +130,12 @@ public class Patient {
 	}
 
 
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
 
 
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 
