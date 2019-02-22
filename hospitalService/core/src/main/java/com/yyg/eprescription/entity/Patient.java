@@ -19,7 +19,7 @@ public class Patient {
 	
 	private String birthday;
 		
-	private int age;
+	private Integer age;
 
 	private String phone;
 
@@ -95,12 +95,12 @@ public class Patient {
 	}
 
 
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
 
 
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 
