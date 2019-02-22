@@ -22,10 +22,10 @@ public class PatientService {
 	PatientMapper patientMapper;
 	
 	public Patient add(int uid, String name, String sex, String phone, int idcardtype, String idcardnum, String birthday){
-		if(idcardtype != User.TYPE_IDCARD && idcardtype != User.TYPE_JG){
+		if(idcardtype != Patient.TYPE_IDCARD && idcardtype != Patient.TYPE_JG){
 			throw new HandleException(ErrorCode.ARG_ERROR, "证件类型异常,请检查客户端");
 		}
-		if(idcardtype==User.TYPE_IDCARD){
+		if(idcardtype==Patient.TYPE_IDCARD){
 			if(!idcardnum.isEmpty() && !IdCardUtil.isIDCard(idcardnum)){
 				throw new HandleException(ErrorCode.NORMAL_ERROR, "身份证号有误,请检查");
 			}
@@ -73,10 +73,10 @@ public class PatientService {
 		if(uid != p.getUserid()){
 			throw new HandleException(ErrorCode.ARG_ERROR, "你无权操作此记录");
 		}
-		if(p.getIdcardtype() != User.TYPE_IDCARD && p.getIdcardtype() != User.TYPE_JG){
+		if(p.getIdcardtype() != Patient.TYPE_IDCARD && p.getIdcardtype() != Patient.TYPE_JG){
 			throw new HandleException(ErrorCode.ARG_ERROR, "证件类型异常,请检查客户端");
 		}
-		if(p.getIdcardtype()==User.TYPE_IDCARD){
+		if(p.getIdcardtype()==Patient.TYPE_IDCARD){
 			if(!IdCardUtil.isIDCard(p.getIdcardnum())){
 				throw new HandleException(ErrorCode.NORMAL_ERROR, "身份证号有误,请检查");
 			}
@@ -98,6 +98,17 @@ public class PatientService {
 
 	public Patient getPatient(Long pid) {
 		Patient p = patientMapper.selectByPrimaryKey(pid);
+		if(p.getIdcardtype() == Patient.TYPE_IDCARD){
+			String idcardNum = p.getIdcardnum();
+			if(idcardNum !=null && !idcardNum.isEmpty()) {
+				try {
+					int age = IdCardUtil.getAge(idcardNum);
+					p.setAge(age);
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
 		return p;
 	}
 
@@ -106,7 +117,7 @@ public class PatientService {
 		if(patient.getUserid() != uid) {
 			throw new HandleException(ErrorCode.ARG_ERROR, "你无权操作此记录");
 		}
-		if(idcardtype != User.TYPE_IDCARD && idcardtype != User.TYPE_JG){
+		if(idcardtype != Patient.TYPE_IDCARD && idcardtype != Patient.TYPE_JG){
 			throw new HandleException(ErrorCode.ARG_ERROR, "证件类型异常,请检查客户端");
 		}
 		if(idcardtype==User.TYPE_IDCARD){
