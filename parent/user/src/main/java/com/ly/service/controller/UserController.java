@@ -152,7 +152,7 @@ public class UserController{
 	}
 
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getPatient", method = RequestMethod.POST)
+	@RequestMapping(value = "/getPatient", method = RequestMethod.GET)
 	@ApiOperation(value = "获取患者信息", notes = "通用接口")
 	public Response getPatient(
 			@ApiParam(name = "barcode", value = "患者一维码") @RequestParam(name = "barcode") String barcode,
