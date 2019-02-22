@@ -378,14 +378,13 @@ public class PrescriptionController {
 			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse response){
 		
-		if(barcode == null || barcode.isEmpty()) {
-			return Response.Error(ErrorCode.ARG_ERROR, "barcode不能为空");
+		Long pid = null;
+		if(barcode != null && !barcode.isEmpty()) {
+			pid = BarcodeUtil.barcode2ID(BarcodeUtil.TYPE_PRESCRIPTION,barcode);
 		}
 		
 		try{
 			Integer storeid = SessionUtil.getStoreId(request);
-			
-			Long pid = BarcodeUtil.barcode2ID(BarcodeUtil.TYPE_PRESCRIPTION,barcode);
 			
 			List<Prescription> list = prescriptionService.getStorePrescriptions(storeid, pid, patientName, startDate, endDate, pageIndex, pageSize);
 			return Response.OK(list);
