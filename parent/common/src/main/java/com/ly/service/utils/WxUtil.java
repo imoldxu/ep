@@ -4,6 +4,8 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Map;
@@ -15,19 +17,20 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 public class WxUtil {
-
-	public static final String grant_type = "client_credential";
-	public static final String appid = "wx163c4c3d188f8ee5";
-	public static final String secret = "b930acfb50a02e11d1c55882ac813a05";
 	
-	public static final String app_appid = "wxc342d56bf6ebb44e";
-	public static final String app_secret = "3557c60cb7981b2bd5165fe75696b584";
+	public static final String grant_type = "client_credential";
+	public static final String appid = "wxda3d0bef1e385508";
+	public static final String secret = "74703e0869ecad07aaa45c2cd3d427e8";
+	
+	public static final String app_appid = "";
+	public static final String app_secret = "";
 
-	public static Map<String, String> sign(String url) {
-		String token = getToken(grant_type, appid, secret);
-		String ticket = getTicket(token);
-		return sign(ticket, url);
-	}
+//	
+//	public static Map<String, String> sign(String url) {
+//		String token = getToken();
+//		String ticket = getTicket(token);
+//		return sign(ticket, url);
+//	}
 
 	private static String getToken(String grant_type, String appid, String secret) {
 		HttpClientUtil h = new HttpClientUtil();
@@ -43,13 +46,14 @@ public class WxUtil {
 			if(status == 200){
 				String context = h.getResponseBodyAsString("utf-8");
 				node = JSONUtils.getJsonObject(context);
+				return node.get("access_token").asText();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			h.close();
 		}
-		return node.get("access_token").asText();
+		return null;
 	}
 
 	public static String getTicket(String token) {
@@ -75,6 +79,12 @@ public class WxUtil {
 		return node.get("ticket").asText();
 	}
 
+	/**
+	   * 公众号调用wx，jsapi需要先进行签名
+	 * @jsapi_ticket
+	 * @param url
+	 * @return
+	 */
 	public static Map<String, String> sign(String jsapi_ticket, String url) {
 		Map<String, String> ret = new HashMap<String, String>();
 		String nonce_str = create_nonce_str();
@@ -97,8 +107,7 @@ public class WxUtil {
 			e.printStackTrace();
 		}
 
-		ret.put("url", url);
-		ret.put("jsapi_ticket", jsapi_ticket);
+		ret.put("appId", appid);
 		ret.put("nonceStr", nonce_str);
 		ret.put("timestamp", timestamp);
 		ret.put("signature", signature);
@@ -124,10 +133,20 @@ public class WxUtil {
 		return Long.toString(System.currentTimeMillis() / 1000);
 	}
 
+	/**
+	 * 公众号获取access_token
+	 * @return
+	 */
 	public static String getToken() {
 		return getToken(grant_type, appid, secret);
 	}
 
+	/**
+	   * 服务号获取授权
+	 * @param wxCode
+	 * @return
+	 * @throws IOException
+	 */
 	public static JsonNode getOauthInfo(String wxCode) throws IOException {
 		HttpClientUtil h = new HttpClientUtil();
 		JsonNode ret = null;
@@ -254,6 +273,11 @@ public class WxUtil {
 		}
 	}
 	
+	/**
+	    * 处理微信昵称中的特殊符号
+	 * @param wxnick
+	 * @return
+	 */
 	public static String converWxNick(String wxnick){
 		String regEx = "[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]";
 		Pattern p = Pattern.compile(regEx);
