@@ -33,6 +33,9 @@ public class DoctorController {
 		
 		try {
 			Doctor doctor = PlatformProxy.login(phone, password);
+			if(isEmpty(doctor.getName()) || isEmpty(doctor.getDepartment()) || isEmpty(doctor.getSignatureurl())) {
+				return new Response(Response.ERROR, null, "请扫码进入医生管理端完善个人信息");
+			}
 			return new Response(Response.SUCCESS, doctor, Response.SUCCESS_MSG);
 		}catch(HandleException e){	
 			return new Response(e.getErrorCode(), null, e.getMessage());
@@ -41,6 +44,13 @@ public class DoctorController {
 			return Response.SystemError();
 		}
 		
+	}
+	
+	private boolean isEmpty(String s) {
+		if(s == null || s.isEmpty() ) {
+			return true;
+		}
+		return false;
 	}
 	
 	
