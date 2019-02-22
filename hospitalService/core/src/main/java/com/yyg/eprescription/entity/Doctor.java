@@ -17,6 +17,8 @@ public class Doctor {
 	
 	private String phone;//电话
 
+	private String signatureurl;//医生的电子签名
+
 	private int subscribe;//是否关注公众号
 	
 	private String sessionID;
@@ -78,5 +80,11 @@ public class Doctor {
 		this.department = department;
 	}
 	
-	
+	public String getSignatureurl() {
+		return signatureurl;
+	}
+
+	public void setSignatureurl(String signatureurl) {
+		this.signatureurl = signatureurl;
+	}
 }
