@@ -57,3 +57,13 @@
   font-size: 14px;
   float: left;
 }
+
+.qrcode_area {
+  padding: 2px;
+  border: solid 1px;
+  position: absolute;
+  background-color: white;
+  top: 50%;
+  right: 20px;
+  margin-top: -72px;
+}
