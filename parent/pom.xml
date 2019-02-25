@@ -19,6 +19,7 @@
 		<module>common</module>
 		<module>prescription</module>
 		<module>user</module>
+		<module>system</module>
 	</modules>
 
 	<properties>
@@ -85,6 +86,13 @@
 				<groupId>commons-httpclient</groupId>
 				<artifactId>commons-httpclient</artifactId>
 				<version>3.1</version>
+			</dependency>
+
+			<!-- ali云 -->
+			<dependency>
+			    <groupId>com.aliyun</groupId>
+			    <artifactId>aliyun-java-sdk-core</artifactId>
+			    <version>4.0.3</version>
 			</dependency>
 
 			<dependency>

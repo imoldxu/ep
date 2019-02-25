@@ -16,10 +16,14 @@ public class WxTask {
 	//每隔一个小时刷新一次wx的token和jsapi_ticket
 	@Scheduled(fixedRate=3600000)
 	public void refreshAccessToken() {
-		String token = WxUtil.getToken();
-		redisson.set("wechat_access_token", token, 7200000L);
-		
-		String jsapi_ticket = WxUtil.getTicket(token);
-		redisson.set("wechat_access_token", jsapi_ticket, 7200000L);
+		try {
+			String token = WxUtil.getToken();
+			redisson.set("wechat_access_token", token, 7200000L);
+			
+			String jsapi_ticket = WxUtil.getTicket(token);
+			redisson.set("wechat_access_token", jsapi_ticket, 7200000L);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

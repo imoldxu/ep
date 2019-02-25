@@ -19,6 +19,7 @@ import com.ly.service.context.Response;
 import com.ly.service.entity.Doctor;
 import com.ly.service.service.DoctorService;
 import com.ly.service.utils.SessionUtil;
+import com.ly.service.utils.ValidDataUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -163,6 +164,90 @@ public class DoctorController {
 			Doctor doctor = doctorService.bind(doctorID, phone, password);
 			
 			SessionUtil.setDoctorId(request, doctor.getId());
+			
+			return Response.OK(doctor);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/verifyCode", method = RequestMethod.POST)
+	@ApiOperation(value = "验证手机验证码", notes = "医生接口")
+	public Response verifyCode(@ApiParam(name="phone", value="登陆电话号码") @RequestParam(name="phone") String phone,
+			@ApiParam(name="code", value="验证码") @RequestParam(name="code") String code,
+			HttpServletRequest request, HttpServletResponse response){
+		try{
+			String authCode = doctorService.verifyCode(phone, code);
+			
+			return Response.OK(authCode);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/getVerifyCode", method = RequestMethod.GET)
+	@ApiOperation(value = "获取身份验证码", notes = "医生接口，忘记密码，修改手机号可以调用")
+	public Response getVerifyCode(@ApiParam(name="phone", value="登陆电话号码") @RequestParam(name="phone") String phone,
+			HttpServletRequest request, HttpServletResponse response){
+//		if(!ValidDataUtil.isPhone(phone)) {
+//			return Response.Error(ErrorCode.ARG_ERROR, "手机号格式不正确");
+//		}
+		
+		try{
+			
+			doctorService.getVerifyCode(phone);
+			
+			return Response.OK(null);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/resetPwd", method = RequestMethod.POST)
+	@ApiOperation(value = "重置密码", notes = "医生接口")
+	public Response resetPwd(@ApiParam(name="phone", value="登陆电话号码") @RequestParam(name="phone") String phone,
+			@ApiParam(name="code", value="授权码") @RequestParam(name="code") String code,
+			@ApiParam(name="newPwd", value="新密码") @RequestParam(name="newPwd") String newPwd,
+			HttpServletRequest request, HttpServletResponse response){
+		try{
+			
+			doctorService.resetPwd(phone, code, newPwd);
+			
+			return Response.OK(null);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/modifyPhone", method = RequestMethod.POST)
+	@ApiOperation(value = "修改手机号", notes = "医生接口")
+	public Response modifyPhone(@ApiParam(name="phone", value="登陆电话号码") @RequestParam(name="phone") String phone,
+			@ApiParam(name="pwd", value="登陆密码") @RequestParam(name="pwd") String pwd,
+			HttpServletRequest request, HttpServletResponse response){
+//		if(!ValidDataUtil.isPhone(phone)) {
+//			return Response.Error(ErrorCode.ARG_ERROR, "手机号格式不正确");
+//		}
+		
+		try{
+			Integer doctorid = SessionUtil.getDoctorId(request);
+			
+			Doctor doctor = doctorService.modifyPhone(doctorid, phone, pwd);
 			
 			return Response.OK(doctor);
 		}catch (HandleException e) {

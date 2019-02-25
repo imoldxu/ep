@@ -1,10 +1,8 @@
 package com.ly.service.entity;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.ibatis.type.JdbcType;
 
@@ -13,29 +11,39 @@ import tk.mybatis.mapper.annotation.ColumnType;
 @Table(name="t_user_tag")
 public class UserTag {
 
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "uid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer id;
+	private Integer uid;
 	
-	@Column(name = "tag")
-	@ColumnType(jdbcType = JdbcType.VARCHAR)
-	private String tag;
+	@Column(name = "tagid")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private Integer tagid;
+	
+	@Transient
+	private String tarname;
 
-	public Integer getId() {
-		return id;
+	public String getTarname() {
+		return tarname;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setTarname(String tarname) {
+		this.tarname = tarname;
 	}
 
-	public String getTag() {
-		return tag;
+	public Integer getTagid() {
+		return tagid;
 	}
 
-	public void setTag(String tag) {
-		this.tag = tag;
+	public void setTagid(Integer tagid) {
+		this.tagid = tagid;
 	}
+
+	public Integer getUid() {
+		return uid;
+	}
+
+	public void setUid(Integer uid) {
+		this.uid = uid;
+	}
+	
 }

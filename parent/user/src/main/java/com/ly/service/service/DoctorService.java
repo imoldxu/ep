@@ -2,6 +2,7 @@ package com.ly.service.service;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import com.ly.service.entity.Doctor;
 import com.ly.service.mapper.DoctorMapper;
 import com.ly.service.utils.PasswordUtil;
 import com.ly.service.utils.RedissonUtil;
+import com.ly.service.utils.ValidDataUtil;
 import com.ly.service.utils.WxUtil;
 
 import tk.mybatis.mapper.entity.Example;
@@ -23,6 +25,8 @@ public class DoctorService {
 
 	@Autowired
 	DoctorMapper doctorMapper;
+	@Autowired
+	SMSService sms;
 	@Autowired
 	RedissonUtil redissonUtil;
 	
@@ -187,6 +191,85 @@ public class DoctorService {
 			doctorMapper.updateByPrimaryKey(doctor);
 		}else{
 			throw new HandleException(ErrorCode.NORMAL_ERROR, "旧密码错误");
+		}
+	}
+	
+	/**
+	 * 忘记密码
+	 * @param doctorid
+	 */
+	public void getVerifyCode(String phone) {
+		Example ex = new Example(Doctor.class);
+		ex.createCriteria().andEqualTo("phone", phone);
+		Doctor doctor = doctorMapper.selectOneByExample(ex);
+		if(doctor == null) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "用户不存在");
+		}
+		
+		Random r = new Random();
+		int number = r.nextInt(999999);
+		String code = String.format("%06d", number);
+		//十分钟内有效，覆盖无效
+		redissonUtil.set("DOCTOR_VERIFY_CODE_"+phone, code, 10*60*1000L);
+		
+		System.out.println(code);
+		//sms.sendSMS(phone, code);
+	}
+	
+	public String verifyCode(String phone, String code) {
+		String rawcode = (String) redissonUtil.get("DOCTOR_VERIFY_CODE_"+phone);
+		if(rawcode == null) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "验证码已失效");
+		}
+		if(rawcode.equals(code)) {
+			Random r = new Random();
+			int number = r.nextInt(999999999);
+			String newcode = String.format("%09d", number);
+			//十分钟内有效，覆盖无效
+			redissonUtil.set("DOCTOR_AUTH_CODE_"+phone, newcode, 10*60*1000L);
+			return newcode;			
+		}else {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "验证码错误，重复请求请输入最后一次的验证码");
+			
+		}
+	}
+	
+	public void resetPwd(String phone, String code, String newPwd) {
+		Example ex = new Example(Doctor.class);
+		ex.createCriteria().andEqualTo("phone", phone);
+		Doctor doctor = doctorMapper.selectOneByExample(ex);
+		if(doctor == null) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "用户不存在");
+		}
+		
+		String rawcode = (String) redissonUtil.get("DOCTOR_AUTH_CODE_"+phone);
+		if(rawcode == null) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "授权已过期");
+		}
+		if(rawcode.equals(code)) {
+			String nPwd = PasswordUtil.generatePwd(newPwd, doctor.fetchPwdnonce());
+			doctor.setPassword(nPwd);
+			doctorMapper.updateByPrimaryKey(doctor);
+			return;			
+		}else {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "授权错误");
+			
+		}	
+	}
+
+	public Doctor modifyPhone(Integer doctorid, String phone, String pwd) {
+		
+		Doctor doctor = doctorMapper.selectByPrimaryKey(doctorid);
+		if(doctor == null){
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "用户不存在");
+		}else{
+			if(PasswordUtil.isEqual(doctor.fetchPassword(), pwd, doctor.fetchPwdnonce())){
+				doctor.setPhone(phone);
+				doctorMapper.updateByPrimaryKey(doctor);
+				return doctor;
+			}else{
+				throw new HandleException(ErrorCode.NORMAL_ERROR, "用户密码错误");
+			}
 		}
 	}
 	
