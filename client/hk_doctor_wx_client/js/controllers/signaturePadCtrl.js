@@ -1,7 +1,7 @@
 
-define(['app','angular','weui','oss'], function(app, angular, weui, oss){
+define(['jquery','app','angular','weui','oss'], function($, app, angular, weui, oss){
 
-    return ['$scope', '$http','$window', '$cookieStore','$location','$rootScope','dataVer' ,'$state', function($scope, $http, $window, $cookieStore,$location,$rootScope,dataVer,$state,AppCtrl,ossService){
+    return ['$scope', '$http','$window', '$document', '$cookieStore','$location','$rootScope','dataVer' ,'$state', function($scope, $http, $window, $document, $cookieStore,$location,$rootScope,dataVer,$state,AppCtrl,ossService){
 
 		$scope.doctorObj = dataVer.get('doctorInfo');
 
@@ -33,6 +33,11 @@ define(['app','angular','weui','oss'], function(app, angular, weui, oss){
 			var base64 = dataUrl.split(',')[1];
 			var fileType = dataUrl.split(';')[0].split(':')[1];
 			
+			if(base64==null || base64.length==0){
+				weui.topTips("请手写签名", 3000);
+				return false;
+			}
+			
 			// base64转blob
 			var blob = $scope.toBlob(base64,fileType);
 			
@@ -57,14 +62,15 @@ define(['app','angular','weui','oss'], function(app, angular, weui, oss){
 				var sigurl = client.signatureUrl(sigImg);
 				$scope.doctorObj.signatureurl = sigurl;
 				dataVer.put('doctorInfo', $scope.doctorObj);//在每次进入修改页之前，应该使用doctor数据初始化signatureurl
-				$state.go('updateInfo');
+				$window.history.back();
+				//$state.go('updateInfo');
 			}, function(resp){
 				loading.hide();
 				weui.alert('上传失败,请稍后再试');
 			});
 		};
 		
-		var appServer = "http://127.0.0.1:9210";
+		//var appServer = "http://127.0.0.1:9210";
 		var bucket = 'zumeng';
 		var region = 'oss-cn-shenzhen';
 
@@ -97,6 +103,57 @@ define(['app','angular','weui','oss'], function(app, angular, weui, oss){
 				weui.alert('服务器异常,请稍后再试');
 			});
 		}
+	
+		/**
+		强制切换横屏，canvas切换后悔乱画
+		$scope.handleLandOrPortrait	= function() {
+				var width =  $document.context.documentElement.clientWidth;
+				var height =   $document.context.documentElement.clientHeight;
+				$land =  $('.land');
+				if( width > height ){
+				   
+					$land.width(width);
+					$land.height(height);
+					$land.css('top',  0 );
+					$land.css('left',  0 );
+					$land.css('transform' , 'none');
+					$land.css('transform-origin' , '50% 50%');
+				}else{
+					$land.width(height);
+					$land.height(width);
+					$land.css('top',  (height-width)/2 );
+					$land.css('left',  0-(height-width)/2 );
+					$land.css('transform' , 'rotate(90deg)');
+					$land.css('transform-origin' , '50% 50%');
+				 }
+				
+			}
+		
+		$scope.$watch('$viewContentLoaded', function() {
+			var width = $document.context.documentElement.clientWidth;
+			var height = $document.context.documentElement.clientHeight;
+			if( width < height ){
+				console.log(width + " " + height);
+				$land =  $('.land');
+				$land.width(height);
+				$land.height(width);
+				$land.css('top',  (height-width)/2 );
+				$land.css('left',  0-(height-width)/2 );
+				$land.css('transform' , 'rotate(90deg)');
+				$land.css('transform-origin' , '50% 50%');
+			}
+			
+			var evt = "onorientationchange" in $window ? "orientationchange" : "resize";
+			
+			$window.addEventListener(evt, $scope.handleLandOrPortrait, false);
+		});
+		
+		$scope.$on("$destroy", function() {
+		   var evt = "onorientationchange" in $window ? "orientationchange" : "resize";
+			
+		   $window.removeEventListener(evt, $scope.handleLandOrPortrait, false);
+		})
+		*/
     }];
 
 });

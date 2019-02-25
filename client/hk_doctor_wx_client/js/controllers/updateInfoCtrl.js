@@ -48,7 +48,11 @@ define(['weui'], function(weui){
 
                     dataVer.put('doctorInfo',resp.data);
 					
-					$state.go('home');
+					if($window.history.length>0){
+						$window.history.back();
+					}else{
+						$state.go('home');
+					}
 
                     return false
 

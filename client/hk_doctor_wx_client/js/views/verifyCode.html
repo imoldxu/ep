@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="css/css/verifyCode.css?ver={{cssVer}}">
+
+
+<wheader title="身份验证"></wheader>
+
+<div class="con">
+
+	<div class="hint">短信验证码将发送至{{verfiyInfo.phone}},请注意查收</div>
+	<div class="weui-cells weui-cells_from">
+		<div class="weui-cell  weui-cell_vcode">
+			<div class="weui-cell__hd">
+				<label class="weui-label">验证码</label>
+			</div>
+			<div class="weui-cell__bd">
+				<input class="weui-input" type="tel" maxlength="6" ng-model="code" placeholder="请输入验证码"></input>
+			</div>
+			<div class="weui-cell__fd">
+				<button class="weui-vcode-btn" ng-click="getCode()" ng-disabled="vcodeEnable == false" >{{vcodelabel}}</button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="weui-btn-area">
+		<a class="weui-btn weui-btn_primary" ng-click="verifyCode(code)">提交</a>
+	</div>
+	
+</div>
+

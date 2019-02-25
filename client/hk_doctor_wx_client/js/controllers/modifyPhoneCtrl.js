@@ -3,38 +3,33 @@ define(['weui'], function(weui){
 
     return ['$scope', '$http', '$window', '$cookieStore','$location','$rootScope','dataVer' ,'$state', 'Md5', function($scope, $http, $window, $cookieStore,$location,$rootScope,dataVer,$state,Md5){
 
-        //默认值
-		$scope.doctorObj = dataVer.get('doctorInfo');
+        $scope.modifyPhone = function(pwd, phone){
 
-        $scope.modifyPwd = function(oldPwd, newPwd){
-
-            if (oldPwd == undefined || oldPwd == null || oldPwd == ''){
-                weui.topTips('请输入旧密码', 3000);
+            if (pwd == undefined || pwd == null || pwd == ''){
+                weui.topTips('请输入登陆密码', 3000);
 				return false;
             }
-			if (newPwd == undefined || newPwd == null || newPwd == ''){
-                weui.topTips('请输入新密码', 3000);
+			if (phone == undefined || phone == null || phone == ''){
+                weui.topTips('请输入手机号', 3000);
 				return false;
             }
-			if (oldPwd == newPwd){
-                weui.topTips('新旧密码不能一致', 3000);
+			if (phone.length != 11){
+                weui.topTips('请输入正确的手机号码', 3000);
 				return false;
             }
 			
-			//$rootScope.myloader = true;
 			var loading = weui.loading('提交中...');
 			
             $http({
                 method: 'post',
-                url: URL+'doctor/modifyPwd',
+                url: URL+'doctor/modifyPhone',
                 data: {
-					oldPwd: oldPwd,
-					newPwd: newPwd
+					pwd: pwd,
+					phone: phone
                 }
             })
             .success(function(resp){
 				
-				//$rootScope.myloader = false;
 				loading.hide();
 
                 if (resp.code == 1){

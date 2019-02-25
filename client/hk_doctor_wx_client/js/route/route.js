@@ -73,7 +73,28 @@ define(['app','angularAMD'], function(app,angularAMD){
             controllerUrl: "js/controllers/resultCtrl.js"
 
         }))
-		
+		.state('forgetPwd',angularAMD.route({
+            url: '/forgetPwd',
+            templateUrl: 'js/views/forgetPwd.html?ver='+ver,
+            controllerUrl: "js/controllers/forgetPwdCtrl.js"
+
+        }))
+		.state('resetPwd',angularAMD.route({
+            url: '/resetPwd/:authInfo',
+            templateUrl: 'js/views/resetPwd.html?ver='+ver,
+            controllerUrl: "js/controllers/resetPwdCtrl.js"
+
+        }))
+		.state('verifyCode',angularAMD.route({
+            url: '/verifyCode/:verifyInfo',
+            templateUrl: 'js/views/verifyCode.html?ver='+ver,
+            controllerUrl: "js/controllers/verifyCodeCtrl.js"
+        }))
+		.state('modifyPhone',angularAMD.route({
+            url: '/modifyPhone',
+            templateUrl: 'js/views/modifyPhone.html?ver='+ver,
+            controllerUrl: "js/controllers/modifyPhoneCtrl.js"
+        }))
     }])
 
 

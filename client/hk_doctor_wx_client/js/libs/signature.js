@@ -77,7 +77,7 @@ angular.module('signature').directive('signaturePad', ['$interval', '$timeout', 
 
         canvas.width = width;
         canvas.height = height;
-
+		
         scope.signaturePad = new SignaturePad(canvas);
 
         scope.setDataUrl = function(dataUrl) {

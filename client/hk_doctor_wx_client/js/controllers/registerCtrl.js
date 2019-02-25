@@ -36,11 +36,11 @@ define(['weui'], function(weui){
 
                 if (resp.code == 1){
 
-                    weui.toast('注册成功');
+                    weui.toast('注册成功',1000);
 					
 					dataVer.put('doctorInfo', resp.data);
 					
-					$state.go('updateInfo');
+					$location.path('updateInfo').replace();
 
                     return false;
 

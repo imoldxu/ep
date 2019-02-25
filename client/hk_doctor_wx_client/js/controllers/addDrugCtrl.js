@@ -80,7 +80,7 @@ define(['weui'], function(weui){
 
 					if (resp.code == 1){
 
-						weui.toast('添加成功',3000);
+						weui.toast('添加成功',1000);
 						
 					} else if(resp.code == 4){
 						weui.alert(resp.msg);

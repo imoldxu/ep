@@ -4,6 +4,11 @@ define(['weui'], function(weui){
     return ['$scope', '$http', '$cookieStore','$location','$rootScope','dataVer' ,'$state', 'Md5', function($scope, $http, $cookieStore,$location,$rootScope,dataVer,$state,Md5){
 
         //默认值
+		$scope.phone = dataVer.get('dloginname');
+
+		$scope.gotoPage = function(page){
+			$state.go(page);
+		}
 
         $scope.login = function( phone, pwd){
 
@@ -36,6 +41,8 @@ define(['weui'], function(weui){
                 if (resp.code == 1){
 
 					weui.toast('登陆成功', 3000);
+
+					dataVer.put('dloginname', phone);
 
                     dataVer.put('doctorInfo',resp.data);
 					
