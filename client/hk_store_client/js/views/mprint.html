@@ -47,11 +47,11 @@
 
         <span class="r">R.</span>
 
-        <div class="infoList" ng-repeat="x in drugList">
-            <div>{{x.drugname}}</div>
-            <div>{{x.standard +'*' +x.number + '' +x.unit}}</div>
+        <div class="infoList" ng-repeat="x in drugList" ng-if="x.soldnumber > 0">
+			<div>{{x.drugname}}</div>
+            <div>{{x.standard +'*' +x.soldnumber + '' +x.unit}}</div>
             <p>{{'sig:'+ x.myusage +','+ x.singledose +',' +x.frequency}}</p>
-        </div>
+		</div>
 
 
 

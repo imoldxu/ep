@@ -226,7 +226,6 @@ define(['jquery'], function($){
 					if(resp.data.length == 0){
 						if($scope.searchopt.pageindex == 1){
 							alert("暂无数据");
-							return false;
 						}else{
 							$scope.searchopt.pageindex = $scope.searchopt.pageindex - 1;
 							alert("已经是最后一页");
@@ -234,7 +233,7 @@ define(['jquery'], function($){
 						}
 					}
 				
-                    $scope.gMod = true;
+                    //$scope.gMod = true;
 
                     $scope.drugList = resp.data;
 					

@@ -41,7 +41,8 @@ define([], function(){
 
                     dataVer.put('storeInfo',data.data);
 					
-					$state.go('index');
+					//$state.go('index');
+					$location.path('index').replace();
 
                     return false
 

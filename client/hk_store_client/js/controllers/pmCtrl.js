@@ -148,7 +148,7 @@ define(['jquery'], function($){
                 requestType: 'json',
                 params: {
 					barcode: $scope.searchopt.barcode || '',
-					patientname: $scope.searchopt.patientname || '',
+					patientName: $scope.searchopt.patientname || '',
 				    startDate : $scope.searchopt.startdate || '',
 					endDate : $scope.searchopt.enddate || '',
                     pageIndex : $scope.searchopt.pageindex,
