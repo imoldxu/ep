@@ -65,7 +65,16 @@ define(['app','angularAMD'], function(app,angularAMD){
             templateUrl: 'js/views/showPatientCode.html?ver='+ver,
             controllerUrl: "js/controllers/showPatientCodeCtrl.js"
         }))
-		
+		.state('wxQrcode',angularAMD.route({
+            url: '/wxQrcode',
+            templateUrl: 'js/views/wxQrcode.html?ver='+ver,
+            controllerUrl: "js/controllers/wxQrcodeCtrl.js"
+        }))
+		.state('article',angularAMD.route({
+            url: '/article/:articleId',
+            templateUrl: 'js/views/article.html?ver='+ver,
+            controllerUrl: "js/controllers/articleCtrl.js"
+        }))
     }])
 
 

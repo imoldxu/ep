@@ -12,6 +12,7 @@ define(['angular','layer'], function(angular,layer){
 		}
 
         $scope.searchDrugs = function(){
+			dataVer.put('locationInfo',null);//进入搜索页面总是以当前位置查找
 		
 			$state.go('result');
 			/*

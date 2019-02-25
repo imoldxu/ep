@@ -39,9 +39,9 @@ define(['weui'], function(weui){
 
                 if (resp.code == 1){
 
-                    weui.toast("修改成功",3000);
+                    weui.toast("修改成功",1000);
 					
-					$state.go('home');
+					$state.goBack();
 
                     return false
 

@@ -20,6 +20,7 @@
   position: fixed;
   bottom: 0;
   line-height: 50px;
+  background-color: white;
   z-index: 88;
 }
 

@@ -13,6 +13,7 @@
   height: 100%;
   width: 100%;
   background-color: #f8f8f8;
+  position: relative;
 }
 
 .plist .pitem {
@@ -21,4 +22,56 @@
 
 .patientlist .pitem {
   margin: 0 0 30 0px;/*留出卡片的间距*/
+}
+
+.list-group {
+ height: calc(100% + 1px);
+}
+
+.article_list{
+  position: relative;
+  top: 48;
+  right: 0;
+  bottom: 48;
+  left: 0;
+  overflow: auto;
+  height: 100%;
+  background-color: #fff;
+  -webkit-backface-visibility: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.article_item{
+  padding: 5 20px;
+  background-color: white;
+  position: relative;
+}
+
+.article_item .article_title{
+  font-size: 20px;
+  font-weight: 540;
+  margin: 5 0px;
+}
+
+.article_item img{
+  height: 100px;
+}
+
+.article_item::after{
+  content: " ";
+  position: absolute;
+  left: 10px;
+  bottom: 0;
+  right: 10px;
+  height: 1px;
+  border-bottom: 1px solid #e5e5e5;
+  color: #e5e5e5;
+  -webkit-transform-origin: 0 100%;
+  transform-origin: 0 100%;
+  -webkit-transform: scaleY(.5);
+  transform: scaleY(.5);
+}
+
+.article_item span{
+  margin: 3px;
 }

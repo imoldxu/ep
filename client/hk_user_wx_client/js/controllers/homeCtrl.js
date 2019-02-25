@@ -1,7 +1,7 @@
 
-define(['jquery','weui','wx'], function($,weui,wx){
+define(['jquery','weui'], function($,weui){
 
-    return ['$scope', '$http', '$cookieStore','$location','$rootScope','dataVer' ,'$state', function($scope, $http, $cookieStore,$location,$rootScope,dataVer,$state){
+    return ['$scope', '$http','$window', '$cookieStore','$location','$rootScope','dataVer' ,'$state','$stateParams', function($scope, $http,$window, $cookieStore,$location,$rootScope,dataVer,$state,$stateParams){
 
 		$(function(){
 			$('.weui-tabbar__item').on('click', function () {
@@ -39,71 +39,118 @@ define(['jquery','weui','wx'], function($,weui,wx){
         //默认值
 		$scope.userObj = dataVer.get('userInfo');
 		
-		$scope.state = dataVer.get('homestate') || {tabId: '#tab1', pageIndex:1, pList:[], isfinish: false, isloading: true} //初始化
-		
-		//$scope.state.tabId = '#tab1';
-		
-		//$scope.state.pageIndex = 1;
-		
-		//$scope.state.pList = [];
-
-		//$scope.state.isfinish = false;
-		
-		//$scope.state.isloading = true;
-		
+		$scope.state = dataVer.get('homestate'); //初始化
+			
 		$scope.patientList = [];
 
-
-		$scope.scan = function(){
-			wx.scanQRCode({
-				needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-				scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-				success: function (res) {
-					var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-					//TODO: 解析出url中的code
-					var code = '';
-					var loading = weui.loading('获取中...');
+		//文章相关接口
+		$scope.refreshArticle = function(){
+		
+			$scope.state.articlePageIndex = 1;
 			
-					$http({
-						method: 'post',
-						url: URL3+'prescription/recieve',
-						requestType: 'json',
-						data: {
-							barcode: code
-						}
-					})
-					.success(function(resp){
-
-						loading.hide();
-
-						if (resp.code == 1){
-
-							dataVer.put('homestate', $scope.state);
-					
-							dataVer.put('prescriptionInfo', resp.data);
-					
-							$state.go('prescription');
-
-						}else if(resp.code == 4){
-							weui.alert(resp.msg);
-							$state.go('login');
-						}else{
-							weui.alert(resp.msg);
-							return false;
-						}
-
-					})
-					.error(function(data){
-						
-						loading.hide();
-						
-						weui.alert('系统服务异常，请联系管理员');
-						
-					});
-				}
-			});
+			$scope.state.articleisfinish = false;
+			
+			$scope.getArticleList();
 		}
+		
+		$scope.showArticle = function(index){
+			var article = $scope.state.articleList[index];
+			//dataVer.put('articleInfo', article);			
+			dataVer.put('homestate', $scope.state);
+			$state.go('article', {articleId: article.articleid});
+			//$window.location = article.url;
+		}
+		
+		$scope.getDateDiff = function(dateTimeStamp) {
+            var minute = 1000 * 60;
+            var hour = minute * 60;
+            var day = hour * 24;
+            var halfamonth = day * 15;
+            var month = day * 30;
+            var now = new Date().getTime();
+            var diffValue = now - dateTimeStamp;
+            if (diffValue < 0) {
+                //若日期不符则弹窗口告之,结束日期不能小于开始日期！
+            }
+            var monthC = diffValue / month;
+            var weekC = diffValue / (7 * day);
+            var dayC = diffValue / day;
+            var hourC = diffValue / hour;
+            var minC = diffValue / minute;
+            if (monthC >= 1) {
+                result = parseInt(monthC) + "个月前";
+            }
+            else if (weekC >= 1) {
+                result = parseInt(weekC) + "周前";
+            }
+            else if (dayC >= 1) {
+                result = parseInt(dayC) + "天前";
+            }
+            else if (hourC >= 1) {
+                result = parseInt(hourC) + "个小时前";
+            }
+            else if (minC >= 1) {
+                result = parseInt(minC) + "分钟前";
+            } else
+                result = "最新";
+            return result;
+        }
+		
+		$scope.getArticleList = function(){
 
+			$scope.state.articleisloading = true;
+
+            $http({
+                method: 'get',
+                url: URL+'article/getArticleList',
+                requestType: 'json',
+                params: {
+					pageIndex: $scope.state.articlePageIndex,
+					pageSize: 10
+                }
+            })
+			.success(function(resp){
+
+				$scope.state.articleisloading = false;
+
+                if (resp.code == 1){
+
+					if(resp.data.length != 10){
+						$scope.state.articleisfinish = true;
+					}else{
+						$scope.state.articleisfinish = false;
+					}
+
+					$scope.state.articlePageIndex = $scope.state.articlePageIndex + 1; 
+
+					//console.log(resp.data);
+
+					
+					console.log(resp.data);
+
+					$scope.state.articleList = $scope.state.articleList.concat(resp.data);
+					
+                } else if(resp.code == 4){
+					weui.alert(resp.msg);
+					
+					$state.go('login');
+				} else{
+					weui.alert(resp.msg);
+				}
+
+            })
+			.error(function(data){
+				
+				$scope.state.articleisloading = false;
+				
+				weui.alert('系统服务异常，请联系管理员');
+				
+			})
+
+        };
+
+
+		
 		$scope.gotoPage = function(page){
 			dataVer.put('homestate', $scope.state);
 			
@@ -241,7 +288,66 @@ define(['jquery','weui','wx'], function($,weui,wx){
         };
 
 		//处方相关接口
-        $scope.showPrescriptionCode = function(barcode){
+        $scope.scan = function(){
+			$window.wx.ready(function(){
+				$window.wx.scanQRCode({
+					needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+					scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+					success: function (res) {
+						var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+						//解析出url中的barcode
+						var pattern = new RegExp("[?&]" + state + "\=([^&]+)", "g");
+						var code = pattern.exec(result);
+						
+						if(code==null){
+							weui.alert('请扫描正确的二维码获取处方');
+							return false;
+						}
+						
+						var loading = weui.loading('获取中...');
+				
+						$http({
+							method: 'post',
+							url: URL3+'prescription/recieve',
+							requestType: 'json',
+							data: {
+								barcode: code
+							}
+						})
+						.success(function(resp){
+
+							loading.hide();
+
+							if (resp.code == 1){
+
+								dataVer.put('homestate', $scope.state);
+						
+								dataVer.put('prescriptionInfo', resp.data);
+						
+								$state.go('prescription');
+
+							}else if(resp.code == 4){
+								weui.alert(resp.msg);
+								$state.go('login');
+							}else{
+								weui.alert(resp.msg);
+								return false;
+							}
+
+						})
+						.error(function(data){
+							
+							loading.hide();
+							
+							weui.alert('系统服务异常，请联系管理员');
+							
+						});
+					}
+				});
+			});
+		}
+		
+		$scope.showPrescriptionCode = function(barcode){
 			dataVer.put('homestate', $scope.state);
 			$state.go('myBarcode', {code: barcode});
 		}
@@ -368,7 +474,7 @@ define(['jquery','weui','wx'], function($,weui,wx){
 		
 		$scope.$watch('$viewContentLoaded', function() {
 
-			// 页面加载完执行
+			// 页面加载完执行，刷新患者列表
 			$scope.getPatientList();
 			
 			//初始化tab，以应对history.back回到之前的页面上
@@ -396,7 +502,10 @@ define(['jquery','weui','wx'], function($,weui,wx){
 				$scope.rightIcon = null;
 				$scope.header_right_function = null;
 			}
-		}); 
+			
+		});
+
+		console.log($window.wx);
     }];
 
 });

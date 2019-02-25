@@ -1,5 +1,5 @@
 
-define(['angular','layer','weui','wx'], function(angular,layer,weui,wx){
+define(['angular','layer','weui'], function(angular,layer,weui){
 
     return ['$scope', '$http', '$window','$location','$rootScope','dataVer' ,'$state', function($scope, $http, $window,$location,$rootScope,dataVer,$state){
 
@@ -129,8 +129,9 @@ define(['angular','layer','weui','wx'], function(angular,layer,weui,wx){
 
 		$scope.$watch('$viewContentLoaded', function() {
 			// 页面加载完执行
-			wx.ready(function(){
-				wx.getLocation({
+
+			$window.wx.ready(function(){
+				$window.wx.getLocation({
 					type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
 					success: function (res) {
 						$scope.location.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
