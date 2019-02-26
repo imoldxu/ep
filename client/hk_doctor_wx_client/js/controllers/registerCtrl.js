@@ -6,11 +6,11 @@ define(['weui'], function(weui){
         //默认值
         $scope.registe = function(phone, pwd){
 
-            if (phone == '' || phone == undefined){
+            if (phone == undefined || phone == ''){
                 weui.topTips('请输入登录手机号', 3000);
 				return false;
             }
-			if (pwd == '' || pwd == undefined){
+			if (pwd == undefined || pwd == ''){
                 weui.topTips('请设置登录密码', 3000);
 				return false;
             }
@@ -18,8 +18,7 @@ define(['weui'], function(weui){
 			//FIXME: 暂时屏蔽
 			//pwd = Md5.b64_hmac_md5("hk",pwd);//使用md5对密码加密,并转换为HEX
 			
-			//$rootScope.myloader = true;
-			var loading = weui.loading('注册中...');
+			var loading = weui.loading("注册中...");
 			
             $http({
                 method: 'post',
@@ -31,7 +30,6 @@ define(['weui'], function(weui){
             })
             .success(function(resp){
 				
-				//$rootScope.myloader = false;
 				loading.hide();
 
                 if (resp.code == 1){
@@ -54,7 +52,6 @@ define(['weui'], function(weui){
             })
 			.error(function(data){
 				
-				//$rootScope.myloader = false;
 				loading.hide();
 				
 				weui.alert('系统服务异常，请联系管理员');

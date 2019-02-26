@@ -12,11 +12,11 @@ define(['weui'], function(weui){
 
         $scope.login = function( phone, pwd){
 
-            if (phone == '' || phone == undefined){
+            if (phone == undefined || phone == ''){
                 weui.topTips('请输入登录手机号', 3000);
 				return false;
             }
-			if (pwd == '' || pwd == undefined){
+			if (pwd == undefined || pwd == '' ){
                 weui.topTips('请输入登录密码', 3000);
 				return false;
             }

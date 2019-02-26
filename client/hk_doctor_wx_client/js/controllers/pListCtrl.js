@@ -6,6 +6,12 @@ define(['weui'], function(weui){
         //默认值
 		$scope.state = dataVer.get('pliststate') || {pageIndex:1, pList:[], isfinish: false, isloading: true} //初始化
 		
+		$scope.refreshPList = function(){
+			$scope.state.pageIndex = 1;
+			$scope.state.pList = [];
+			$scope.loadMore();
+		}
+		
 		$scope.loadMore = function(){
 
 			$scope.state.isloading = true;
@@ -27,6 +33,8 @@ define(['weui'], function(weui){
 
 					if(resp.data.length != 10){
 						$scope.state.isfinish = true;
+					}else{
+						$scope.state.isfinish = false;
 					}
 
 					$scope.state.pageIndex = $scope.state.pageIndex + 1; 

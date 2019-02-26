@@ -5,7 +5,8 @@
 
 <div class="con">
 
-	<div infinite-scroll='loadMore()' infinite-scroll-disabled="state.isfinish" infinite-scroll-distance='1'>
+	<div class="prescription_list" infinite-scroll='loadMore()' infinite-scroll-disabled="state.isfinish" infinite-scroll-distance='1'>
+		<div pull-to-refresh="refreshPList()"></div>
 		<div class="weui-form-preview pitem" ng-repeat="p in state.pList">
 			<div class="weui-form-preview__hd">
 				<div class="weui-form-preview__item">

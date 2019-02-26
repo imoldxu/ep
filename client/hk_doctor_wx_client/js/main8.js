@@ -14,6 +14,7 @@
 //var URL = 'http://192.168.31.187:9201/';  // 请求地址;
 //var URL2 = 'http://192.168.31.187:9202/'  // 药品服务
 //var URL3 = 'http://192.168.31.187:9203/'  // 处方服务
+//var URL4 = 'http://192.168.31.187:9204/'  // 系统服务
 var URL = 'http://192.168.43.39:9201/';  // 请求地址;
 var URL2 = 'http://192.168.43.39:9202/'  // 药品服务
 var URL3 = 'http://192.168.43.39:9203/'  // 处方服务
@@ -37,8 +38,8 @@ require.config({
         'layer':'libs/layer/layer',
 	    'loader':'directives/loader',
 	    'wheader':'directives/wheader',
+		'pull2refresh':'libs/angular-pull-to-refresh',
 		'weui':'libs/weui.min',
-		'wx':'libs/jweixin-1.4.0',
 		'encrypt':'libs/encrypt',
 		'qrcode':'libs/qrcode',
 		'utf8-qrcode':'libs/qrcode_UTF8',
@@ -78,6 +79,9 @@ require.config({
 		},
     "infiniteScroll":{
 			deps: ["angular"]
+		},
+    "pull2refresh":{
+			deps: ["angular"]
 		}
     },
 
@@ -88,7 +92,7 @@ require.config({
 
 
 
-require(['jquery','angular','ng-route','ng-cookies','app','fn-route','angularAMD','data','loader','weui','encrypt','io-barcode','qrcode','utf8-qrcode','angular-qrcode','infiniteScroll','wheader','signature_pad','signature','oss'],function($,angular){
+require(['jquery','angular','ng-route','ng-cookies','app','fn-route','angularAMD','data','loader','weui','encrypt','io-barcode','qrcode','utf8-qrcode','angular-qrcode','infiniteScroll','wheader','pull2refresh','signature_pad','signature','oss'],function($,angular){
     $(function () {
         angular.bootstrap(document,["fnApp"]);
     })
