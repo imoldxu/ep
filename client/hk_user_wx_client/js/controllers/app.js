@@ -34,7 +34,7 @@ define(['angular'], function (angular) {
 			method:"get",
 			requestType: 'json',
 			params: {
-				url: $location.absUrl()
+				url: $location.absUrl().split('#')[0]
 			}
 		})
 		.success(function(resp){

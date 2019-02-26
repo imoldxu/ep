@@ -36,7 +36,8 @@
 		
 		<div id="tab2" class="plist">
 			<div class="con">
-				<div infinite-scroll='loadMore()' infinite-scroll-disabled="state.isfinish" infinite-scroll-distance='1'>
+				<div class="prescription_list" infinite-scroll='loadMore()' infinite-scroll-disabled="state.isfinish" infinite-scroll-distance='1'>
+					<div class="list-group list-group-table" pull-to-refresh="refreshPList()"></div>
 					<div class="weui-form-preview pitem" ng-repeat="p in state.pList">
 						<div class="weui-form-preview__hd">
 							<div class="weui-form-preview__item">
@@ -63,21 +64,21 @@
 							<a class="weui-form-preview__btn weui-form-preview__btn_primary" ng-click="gotoDetail(p.id)">查看详情</a>
 						</div>
 					</div>
+					
+					<div class="weui-loadmore" ng-if="state.isloading">
+						<i class="weui-loading"></i>
+						<span class="weui-loadmore__tips">正在加载</span>
+					</div>	
+					
+					<div class="weui-loadmore weui-loadmore_line" ng-if="!state.isloading && state.pList.length == 0">
+						<span class="weui-loadmore__tips">暂无数据</span>
+					</div>
+					
+					<div class="weui-loadmore weui-loadmore_line weui-loadmore_dot" ng-if="state.isfinish">
+						<span class="weui-loadmore__tips">后面已经没有数据了</span>
+					</div>
 				</div>
 
-				<div class="weui-loadmore" ng-if="state.isloading">
-					<i class="weui-loading"></i>
-					<span class="weui-loadmore__tips">正在加载</span>
-				</div>	
-				
-				<div class="weui-loadmore weui-loadmore_line" ng-if="!state.isloading && state.pList.length == 0">
-					<span class="weui-loadmore__tips">暂无数据</span>
-				</div>
-				
-				<div class="weui-loadmore weui-loadmore_line weui-loadmore_dot" ng-if="state.isfinish">
-					<span class="weui-loadmore__tips">后面已经没有数据了</span>
-				</div>
-				
 			</div>
 		</div>
 		

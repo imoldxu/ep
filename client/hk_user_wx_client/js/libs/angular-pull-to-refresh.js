@@ -51,14 +51,14 @@
 			scrollElement.bind('touchstart',function(ev){
 				var touch = event.targetTouches[0];						
 				scope._start = touch.pageY;
-				console.log('ystart' + scope._start);
+				//console.log('ystart' + scope._start);
 			});
             scrollElement.bind('touchmove', function (ev) {
 				var touch = event.targetTouches[0];
 				scope._end = (scope._start - touch.pageY);
 				//下滑才执行操作
 				if (scope._end < 0) {
-					console.log('scope._end==='+scope._end);
+					//console.log('scope._end==='+scope._end);
 					var moveMargin = 0;
 					if (scrollElement[0].scrollTop <= 0) {//保障一定是顶部往下拉
 						if (scope._end <= -80) {

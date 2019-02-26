@@ -34,11 +34,12 @@ define(['weui'], function(weui){
 				
                 if (resp.code == 1){
 
-                    weui.toast('注册成功', 3000);
+                    weui.toast('注册成功', 1000);
 					
-					dataVer.put('doctorInfo', resp.data);
+					dataVer.put('userInfo', resp.data);
+          dataVer.put('homestate',{tabId: '#tab1', pageIndex:1, pList:[], isfinish: false, isloading: true, articleList:[], articlePageIndex:1, articleisfinish: false, articleisloading: true});//清空首页状态
 					
-					$state.go('updateInfo');
+                    $location.path('home').replace();
 
                     return false
 

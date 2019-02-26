@@ -4,7 +4,7 @@
 
 
 define(['jquery','app'], function ($,app) {
-    app.directive('wheader', ['$window',function ($window) {
+    app.directive('wheader', ['$window','$state',function ($window, $state) {
         return {
 
             restrict: 'E',
@@ -14,9 +14,7 @@ define(['jquery','app'], function ($,app) {
             transclude: true,
 
             replace:true,
-
-
-            link: function($scope, iElements, iAttrs){
+			link: function($scope, iElements, iAttrs){
        
 				$scope.title = iAttrs.title;
 
@@ -25,7 +23,11 @@ define(['jquery','app'], function ($,app) {
 				$scope.rightIcon = iAttrs.righticon || null;
 
                 $scope.goBack = function(){
-					$window.history.back();
+					if($window.history.length>0){
+						$window.history.back();
+					}else{
+						$state.go('home');//若history没有内容则返回home页
+					}
 				};
 
             }

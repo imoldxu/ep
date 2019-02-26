@@ -286,6 +286,12 @@ define(['jquery','weui'], function($,weui){
         };
 
 		//处方相关接口
+		$scope.refreshPList = function(){
+			$scope.state.pageIndex = 1;
+			$scope.state.pList = [];
+			$scope.loadMore();
+		}
+		
         $scope.scan = function(){
 			$window.wx.ready(function(){
 				$window.wx.scanQRCode({
@@ -371,6 +377,8 @@ define(['jquery','weui'], function($,weui){
 
 					if(resp.data.length != 10){
 						$scope.state.isfinish = true;
+					}else{
+						$scope.state.isfinish = false;
 					}
 
 					$scope.state.pageIndex = $scope.state.pageIndex + 1; 
