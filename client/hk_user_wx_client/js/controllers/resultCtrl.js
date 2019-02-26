@@ -129,22 +129,23 @@ define(['angular','layer','weui'], function(angular,layer,weui){
 
 		$scope.$watch('$viewContentLoaded', function() {
 			// 页面加载完执行
-
-			$window.wx.ready(function(){
-				$window.wx.getLocation({
-					type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-					success: function (res) {
-						$scope.location.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-						$scope.location.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-						var speed = res.speed; // 速度，以米/每秒计
-						$scope.location.place = res.accuracy; // 位置精度
-									
-						$scope.searchDrugs();
-					}
-				});
+			$window.wx.getLocation({
+				type: 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+				success: function (res) {
+					console.log(JSON.stringify(res));
+					$scope.location.latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+					$scope.location.longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+					var speed = res.speed; // 速度，以米/每秒计
+					$scope.location.place = res.accuracy; // 位置精度
+								
+					$scope.searchDrugs();
+				},
+				fail: function(res){
+					$scope.searchDrugs();
+				}
 			});
 			//在微信还不能使用的时候demo触发
-			$scope.searchDrugs();
+			//$scope.searchDrugs();
 		}); 
 		
     }];

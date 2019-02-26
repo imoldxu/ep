@@ -293,62 +293,65 @@ define(['jquery','weui'], function($,weui){
 		}
 		
         $scope.scan = function(){
-			$window.wx.ready(function(){
-				$window.wx.scanQRCode({
-					needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-					scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-					success: function (res) {
-						var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-						//解析出url中的barcode
-						var pattern = new RegExp("[?&]" + state + "\=([^&]+)", "g");
-						var code = pattern.exec(result);
-						
-						if(code==null){
-							weui.alert('请扫描正确的二维码获取处方');
+			$window.wx.scanQRCode({
+				needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+				scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+				success: function (res) {
+					var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+					//解析出url中的barcode
+					var pattern = new RegExp("[?&]" + state + "\=([^&]+)", "g");
+					var code = pattern.exec(result);
+					
+					if(code==null){
+						weui.alert('请扫描正确的二维码获取处方');
+						return false;
+					}
+					
+					var loading = weui.loading('获取中...');
+			
+					$http({
+						method: 'post',
+						url: URL3+'prescription/recieve',
+						requestType: 'json',
+						data: {
+							barcode: code
+						}
+					})
+					.success(function(resp){
+
+						loading.hide();
+
+						if (resp.code == 1){
+
+							dataVer.put('homestate', $scope.state);
+					
+							dataVer.put('prescriptionInfo', resp.data);
+					
+							$state.go('prescription');
+
+						}else if(resp.code == 4){
+							weui.alert(resp.msg);
+							$state.go('login');
+						}else{
+							weui.alert(resp.msg);
 							return false;
 						}
+
+					})
+					.error(function(data){
 						
-						var loading = weui.loading('获取中...');
-				
-						$http({
-							method: 'post',
-							url: URL3+'prescription/recieve',
-							requestType: 'json',
-							data: {
-								barcode: code
-							}
-						})
-						.success(function(resp){
-
-							loading.hide();
-
-							if (resp.code == 1){
-
-								dataVer.put('homestate', $scope.state);
+						loading.hide();
 						
-								dataVer.put('prescriptionInfo', resp.data);
+						weui.alert('系统服务异常，请联系管理员');
 						
-								$state.go('prescription');
-
-							}else if(resp.code == 4){
-								weui.alert(resp.msg);
-								$state.go('login');
-							}else{
-								weui.alert(resp.msg);
-								return false;
-							}
-
-						})
-						.error(function(data){
-							
-							loading.hide();
-							
-							weui.alert('系统服务异常，请联系管理员');
-							
-						});
-					}
-				});
+					});
+				},
+				fail:function(res){
+					console.log(JSON.stringify(res));
+					//启动微信扫一扫失败，应该尝试使用输入框
+				}
 			});
+			
 		}
 		
 		$scope.showPrescriptionCode = function(barcode){

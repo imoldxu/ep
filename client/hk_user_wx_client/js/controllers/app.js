@@ -81,8 +81,15 @@ define(['angular'], function (angular) {
 					'openCard',
 				]// 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 			});
-;
-			console.log('微信sdk初始化成功');
+			
+			$window.wx.error(function(res){
+				//alert('微信sdk初始化失败:'+res);
+				console.log('微信sdk初始化失败');
+			});
+			$window.wx.ready(function(){
+				//alert('微信sdk初始化成功111');
+				console.log('微信sdk初始化完成');
+			})
 		})
 		.error(function(resp){
 			console.log('微信sdk初始化失败');
