@@ -47,9 +47,7 @@ define(['jquery','weui'], function($,weui){
 		$scope.refreshArticle = function(){
 		
 			$scope.state.articlePageIndex = 1;
-			
-			$scope.state.articleisfinish = false;
-			
+			$scope.state.articleList = [];
 			$scope.getArticleList();
 		}
 		

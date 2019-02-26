@@ -7,8 +7,9 @@
 	<div class="weui-tab__panel">
 		<div id="tab1">
 			<div class="con">
-				<div class="article_list" infinite-scroll='getArticleList()' infinite-scroll-disabled="state.articleisfinish" infinite-scroll-distance='1'>
-					<div class="list-group list-group-table" pull-to-refresh="refreshArticle()">
+					<div class="article_list" infinite-scroll='getArticleList()' infinite-scroll-disabled="state.articleisfinish" infinite-scroll-distance='1'>
+						<div class="list-group list-group-table" pull-to-refresh="refreshArticle()"></div>
+					
 						<div class="article_item" ng-repeat="x in state.articleList" ng-click="showArticle($index)">
 							<div class="article_title">{{x.title}}</div>
 							<div class="weui-flex" ng-if="x.piclist != null">
@@ -29,9 +30,7 @@
 						<div class="weui-loadmore weui-loadmore_line weui-loadmore_dot" ng-if="state.articleisfinish">
 							<span class="weui-loadmore__tips">后面已经没有数据了</span>
 						</div>
-					</div>
-				</div>
-				
+					</div>				
 			</div>
 		</div>
 		

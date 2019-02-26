@@ -24,21 +24,13 @@
   margin: 0 0 30 0px;/*留出卡片的间距*/
 }
 
-.list-group {
- height: calc(100% + 1px);
-}
-
 .article_list{
   position: relative;
-  top: 48;
-  right: 0;
-  bottom: 48;
-  left: 0;
   overflow: auto;
   height: 100%;
   background-color: #fff;
-  -webkit-backface-visibility: none;
-  -webkit-overflow-scrolling: touch;
+  /**-webkit-backface-visibility: none;
+  -webkit-overflow-scrolling: touch;*/
 }
 
 .article_item{
