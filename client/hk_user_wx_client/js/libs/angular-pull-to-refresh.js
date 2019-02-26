@@ -52,6 +52,7 @@
 				var touch = event.targetTouches[0];						
 				scope._start = touch.pageY;
 				//console.log('ystart' + scope._start);
+				return;
 			});
             scrollElement.bind('touchmove', function (ev) {
 				var touch = event.targetTouches[0];
@@ -73,11 +74,13 @@
 							setStatus('release');
 						}else{
 							setStatus('pull');
-						}						
+						}
+						return false;	//阻止默认行为，防止微信整体页面下拉					
 					} else {
 						return; 
 					}
 				}
+				return;
 				/*
               var top = scrollElement[0].scrollTop;
               if (top < -config.treshold && !shouldReload) {
@@ -104,6 +107,7 @@
                   scope.status = 'pull';
                 }, elapsed < config.debounce ? config.debounce - elapsed : 0);
               });
+			  return false;
             });
             scope.$on('$destroy', function () {
 			  scrollElement.unbind('touchstart');
