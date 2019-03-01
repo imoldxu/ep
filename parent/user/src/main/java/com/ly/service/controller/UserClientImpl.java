@@ -16,6 +16,7 @@ import com.ly.service.entity.Doctor;
 import com.ly.service.entity.Hospital;
 import com.ly.service.entity.Store;
 import com.ly.service.feign.client.UserClient;
+import com.ly.service.service.DoctorCommentService;
 import com.ly.service.service.DoctorService;
 import com.ly.service.service.HospitalService;
 import com.ly.service.service.PatientService;
@@ -39,6 +40,8 @@ public class UserClientImpl implements UserClient{
 	HospitalService hospitalService;
 	@Autowired
 	StoreService storeService;
+	@Autowired
+	DoctorCommentService doctorCommentService;
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/addPatient", method = RequestMethod.POST)
@@ -126,7 +129,7 @@ public class UserClientImpl implements UserClient{
 	@Override
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getStoreByGPS", method = RequestMethod.GET)
-	@ApiOperation(value = "根据药品获取附近的药店", notes = "由用户调用")
+	@ApiOperation(value = "根据药品获取附近的药店", notes = "内部接口")
 	public Response getStoreByGPS(@ApiParam(name = "drugListStr", value = "药品清单") @RequestParam(name = "drugListStr") String drugListStr,
 			@ApiParam(name = "latitude", value = "纬度") @RequestParam(name = "latitude") Double latitude,
 			@ApiParam(name = "longitude", value = "经度") @RequestParam(name = "longitude") Double longitude,
@@ -142,6 +145,26 @@ public class UserClientImpl implements UserClient{
 		try{
 			List<Store> list = storeService.getStoreByGPS(latitude, longitude, drugList,size);
 			return Response.OK(list);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		} catch(Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@Override
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/commitDoctorComment", method = RequestMethod.POST)
+	@ApiOperation(value = "提交医生评论", notes = "内部接口")
+	public Response commitDoctorComment(@ApiParam(name = "doctorid", value = "医生id") @RequestParam(name = "doctorid") Integer doctorid,
+			@ApiParam(name = "uid", value = "评论用户id") @RequestParam(name = "uid") Integer uid,
+			@ApiParam(name = "content", value = "内容") @RequestParam(name = "content") String content,
+			@ApiParam(name = "star", value = "评分") @RequestParam(name = "star") Integer star){
+		
+		try{
+			doctorCommentService.commitService(content, uid, doctorid, star);
+			return Response.OK(null);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		} catch(Exception e){

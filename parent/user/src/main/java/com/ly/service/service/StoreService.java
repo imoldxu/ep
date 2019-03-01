@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
-import com.ly.service.context.Response;
 import com.ly.service.entity.Store;
 import com.ly.service.entity.StoreDrug;
 import com.ly.service.feign.client.DrugClient;
@@ -58,9 +56,7 @@ public class StoreService {
 		String drugListStr = JSONUtils.getJsonString(drugList);
 		for(int i=(list.size()-1); i>=0; i--){
 			Store store = list.get(i);
-			Response resp = drugClient.getDrugsInStore(store.getId(), drugListStr);
-			ObjectMapper om = new ObjectMapper();
-			List<StoreDrug> drugs = om.convertValue(resp.fetchOKData(), new TypeReference<List<StoreDrug>>() {});
+			List<StoreDrug> drugs = drugClient.getDrugsInStore(store.getId(), drugListStr).fetchOKData(new TypeReference<List<StoreDrug>>() {});
 			if(drugs.isEmpty()){
 				list.remove(store);//若是药房没有镀银的药则屏蔽掉该药房
 			}else{

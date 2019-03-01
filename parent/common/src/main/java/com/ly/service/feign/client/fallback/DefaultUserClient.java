@@ -38,4 +38,9 @@ public class DefaultUserClient implements UserClient {
 	public Response getStoreByGPS(String drugListStr, Double latitude, Double longitude, int size) {
 		return Response.Error(ErrorCode.MODULE_ERROR, "用户模块服务异常");
 	}
+
+	@Override
+	public Response commitDoctorComment(Integer doctorid, Integer uid, String content, Integer star) {
+		return Response.Error(ErrorCode.MODULE_ERROR, "用户模块服务异常");
+	}
 }

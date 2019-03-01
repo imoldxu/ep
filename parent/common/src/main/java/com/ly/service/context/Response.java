@@ -1,5 +1,9 @@
 package com.ly.service.context;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ly.service.utils.JSONUtils;
+
 public class Response {
 	
     public static final String SUCCESS_MSG = "成功";
@@ -53,9 +57,19 @@ public class Response {
 		this.data = data;
 	}
 
-	public Object fetchOKData(){
+	public <T> T fetchOKData(Class<T> toValueType){
 		if(code ==  ErrorCode.OK){
-			return data;
+			ObjectMapper mapper = JSONUtils.getMapper();
+			return mapper.convertValue(this.data, toValueType);
+		}else{
+			throw new HandleException(code, msg);
+		}
+	}
+	
+	public <T> T fetchOKData(TypeReference<?> toValueTypeRef){
+		if(code ==  ErrorCode.OK){
+			ObjectMapper mapper = JSONUtils.getMapper();
+			return mapper.convertValue(this.data,  toValueTypeRef);
 		}else{
 			throw new HandleException(code, msg);
 		}

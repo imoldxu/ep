@@ -37,7 +37,7 @@
 	</div>
 	
 	<div class="info" ng-repeat="x in storeList">
-		<div ng-if="x.name != null" class="storename">{{x.name}}<span><i class="ls"></i>（距离医院：</span>{{x.distance}}<span>米）</span></div>
+		<div ng-if="x.name != null" class="storename">{{x.name}}<span><i class="ls"></i>（距离医院：</span>{{formatDistance(x.distance)}}<span>）</span></div>
 		<div ng-if="x.address != null"><span>地址:</span>{{x.address}}</div>
 		<div>药品目录:</div>
 		<div class="drugInfo">
@@ -61,7 +61,7 @@
 
 	<div class="con">
 		<div>
-			<qrcode data="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf0e81c3bee622d60&redirect_uri=http%3A%2F%2Fxxx.com%2Fuwx%2Findex%23%2Flogin&response_type=code&scope=snsapi_userinfo&state={{prescriptionObj.barcode}}#wechat_redirect" version="2" error-correction-level="Q" size="140"></qrcode>
+			<qrcode data="http://192.168.43.39/utemp/index.html#/myBarcode/{{prescriptionObj.barcode}}" version="2" error-correction-level="Q" size="140"></qrcode>
 		</div>
 		<div>患者微信扫码获取处方,查看更多药房</div>
 		

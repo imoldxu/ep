@@ -1,0 +1,72 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.con {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.barcode_area{
+  text-align: -webkit-center;
+  text-align: center;
+  margin:80 auto;
+}
+
+.barcode_area .barcode_show{
+  font-size: 26px;
+  margin: 5px;
+}
+
+.hint{
+  font-size: 20px;
+  color: #505050;
+  margin-top: 5px;
+}
+
+.op_hint_area{
+  margin: 20 15px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.btn_bottom_area{
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  line-height: 50px;
+  background-color: white;
+  z-index: 88;
+}
+
+.btn_bottom_area:before{
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 1px;
+  border-top: 1px solid #D5D5D6;
+  color: #D5D5D6;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  -webkit-transform: scaleY(0.5);
+  transform: scaleY(0.5);
+}
+
+.btn_bottom_area:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 1px;
+    border-bottom: 1px solid #e5e5e5;
+    color: #e5e5e5;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+}

@@ -34,6 +34,14 @@ define(['angular','layer'], function(angular,layer){
 			return ( num / 100 ).toFixed( 2 );
 		}
 
+		$scope.formatDistance = function(distance){
+			if( distance < 1000){
+				return distance+'米';
+			}else{
+				return (distance / 1000).toFixed ( 1 ) + '公里';
+			}
+		}
+
         $scope.print = function(){
 		
 			if(document.execCommand("print") == true){

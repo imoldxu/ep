@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ly.service.context.Response;
 import com.ly.service.feign.client.fallback.DefaultUserClient;
 
+
 @FeignClient(name="user-service", fallback=DefaultUserClient.class)
 public interface UserClient {
 
@@ -38,4 +39,11 @@ public interface UserClient {
 			@RequestParam(name = "latitude")Double latitude,
 			@RequestParam(name = "longitude")Double longitude,
 			@RequestParam(name = "size") int size);
+
+	@RequestMapping(value = "/internal/commitDoctorComment", method = RequestMethod.POST)
+	public Response commitDoctorComment(@RequestParam(name = "doctorid") Integer doctorid,
+			@RequestParam(name = "uid") Integer uid,
+			@RequestParam(name = "content") String content,
+			@RequestParam(name = "star") Integer star);
+	
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ly.service.mapper.DoctorCommentMapper" >
+
+	<select id="getAvgStar" resultType="java.lang.Double">
+		SELECT AVG(star) FROM t_doctor_comment WHERE doctorid = #{doctorid, jdbcType=INTEGER};
+	</select>
+
+	<select id="getCommentsByDoctor" resultType="com.ly.service.entity.DoctorComment">
+		SELECT t_doctor_comment.commentid, t_doctor_comment.content, t_doctor_comment.createtime, t_doctor_comment.doctorid, t_doctor_comment.star, t_doctor_comment.uid, t_user.nick AS userNick, t_user.headimgurl AS userHeadImgUrl FROM t_doctor_comment LEFT JOIN t_user ON t_doctor_comment.uid = t_user.id WHERE t_doctor_comment.doctorid = #{doctorid, jdbcType=INTEGER} ORDER BY t_doctor_comment.commentid DESC LIMIT #{offset, jdbcType=INTEGER}, #{size, jdbcType=INTEGER};
+	</select>
+	
+</mapper>

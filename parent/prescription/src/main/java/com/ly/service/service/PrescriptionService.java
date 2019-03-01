@@ -146,8 +146,8 @@ public class PrescriptionService {
 
 	@Transactional
 	public Prescription commit(int doctorid, int hospitalid, Prescription perscription, List<PrescriptionDrug> drugList, Map<String, String> signMap, String sign) {	
-		ObjectMapper om = new ObjectMapper();
-		Hospital hospital = om.convertValue(userClient.getHospital(hospitalid).fetchOKData(), Hospital.class);
+
+		Hospital hospital = userClient.getHospital(hospitalid).fetchOKData(Hospital.class);
 		
 		if(!SignUtil.isSignatureValid(signMap, hospital.getSecretkey(), sign)) {
 			throw new HandleException(ErrorCode.NORMAL_ERROR, "验签失败");
@@ -163,7 +163,7 @@ public class PrescriptionService {
 		Date now = new Date();
 		perscription.setCreatetime(now);
 		perscription.setDoctorid(doctorid);
-		Doctor doctor = om.convertValue(userClient.getDoctor(doctorid).fetchOKData(), Doctor.class);
+		Doctor doctor = userClient.getDoctor(doctorid).fetchOKData(Doctor.class);
 		perscription.setDoctorname(doctor.getName());
 		perscription.setDepartment(doctor.getDepartment());
 		perscription.setSignatureurl(doctor.getSignatureurl());//医生签名
@@ -176,7 +176,7 @@ public class PrescriptionService {
 		List<Integer> drugidList = new ArrayList<Integer>();
 		for(PrescriptionDrug pdrug : drugList){
 			pdrug.setPrescriptionid(pid);
-			HospitalDrug hospitalDrug = om.convertValue(drugClient.getHospitalDrug(pdrug.getDrugid(), perscription.getHospitalid()).fetchOKData(), HospitalDrug.class);
+			HospitalDrug hospitalDrug = drugClient.getHospitalDrug(pdrug.getDrugid(), perscription.getHospitalid()).fetchOKData(HospitalDrug.class);
 			//FIXME:药名名称，规格从系统获取
 			pdrug.setSoldnumber(0);
 			pdrug.setDrugname(hospitalDrug.getDrugname());
@@ -190,7 +190,7 @@ public class PrescriptionService {
 		
 		
 		String drugidListStr = JSONUtils.getJsonString(drugidList);
-		List<StoreAndDrugInfo> storeList = om.convertValue(drugClient.getStoresByDrugs(drugidListStr, hospital.getLatitude(), hospital.getLongitude(), 3).fetchOKData(), new TypeReference<List<StoreAndDrugInfo>>() {});
+		List<StoreAndDrugInfo> storeList = drugClient.getStoresByDrugs(drugidListStr, hospital.getLatitude(), hospital.getLongitude(), 3).fetchOKData(new TypeReference<List<StoreAndDrugInfo>>() {});
 		
 		drugClient.addDoctorDrugs(drugidListStr, doctorid);
 		
@@ -261,7 +261,6 @@ public class PrescriptionService {
 
 	@Transactional
 	public Order buyFromStore(Integer storeid, Long pid, List<TransactionDrug> transList) {
-		ObjectMapper om = new ObjectMapper();
 		Prescription p = null;
 		boolean islock = redissonUtil.tryLock("BUY_PRESCRIPTION_"+pid, TimeUnit.MILLISECONDS, 1000, 1500);
 		if(islock){
@@ -289,7 +288,7 @@ public class PrescriptionService {
 					    tDrug.setDoctorname(p.getDoctorname());
 					    tDrug.setHospitalid(p.getHospitalid());
 					    //FIXME:获取医院名称
-					    Hospital hospital = om.convertValue(userClient.getHospital(p.getHospitalid()).fetchOKData(), Hospital.class);
+					    Hospital hospital = userClient.getHospital(p.getHospitalid()).fetchOKData(Hospital.class);
 					    tDrug.setHospitalname(hospital.getName());
 					    
 					    tDrug.setDrugname(pDrug.getDrugname());
@@ -325,7 +324,7 @@ public class PrescriptionService {
 		}
 		String drugsStr = JSONUtils.getJsonString(drugs);
 		ObjectMapper om = new ObjectMapper();
-		List<StoreDrug> storeDrugList = om.convertValue(drugClient.getDrugsInStore(storeid, drugsStr).fetchOKData(), new TypeReference<List<StoreDrug>>() {});
+		List<StoreDrug> storeDrugList = drugClient.getDrugsInStore(storeid, drugsStr).fetchOKData(new TypeReference<List<StoreDrug>>() {});
 		
 		//药房显示的处方仅包含药房有的药品
 		
@@ -461,6 +460,18 @@ public class PrescriptionService {
 		}
 
 		salesRecordService.refund(storeid, pid, refundDrugs);
+	}
+
+	@Transactional
+	public void commitComment(Integer uid, Long pid, int star, String content) {
+		Prescription p = pMapper.selectByPrimaryKey(pid);
+		if(p.getIscomment() == 1) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "一个处方只允许评论一次");
+		}else {
+			p.setIscomment(1);
+			pMapper.updateByPrimaryKey(p);
+			userClient.commitDoctorComment(p.getDoctorid(), uid, content, star).fetchOKData(Object.class);
+		}
 	}
 	
 }

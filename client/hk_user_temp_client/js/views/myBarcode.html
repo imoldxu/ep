@@ -1,0 +1,27 @@
+
+
+<link rel="stylesheet" href="css/css/myBarcode.css?ver={{cssVer}}">
+
+<div class="con" ng-click="goBack()">
+	<div id="out_img" >
+		<div class="barcode_area">
+			<io-barcode code="{{barcode}}" type="CODE128B" options="{height:100}"></io-barcode>
+			<div class="barcode_show">取药码:{{barcode}}</div>
+			<div class="hint">向药房出示取药码</div>
+		</div>
+
+		<!--div class="barcode_area">
+			<qrcode data="http://192.168.43.39/utemp/index.html#/myBarcode/{{barcode}}" version="5" error-correction-level="Q" size="180"></qrcode>
+			<div class="hint">微信扫码或识别二维码查看处方</div>
+		</div-->
+	</div>
+	
+	<div class="op_hint_area">请务必收藏处方,以便随时在微信的收藏夹中可以查看</div>
+</div>
+
+<div class="weui-flex btn_bottom_area">
+	
+	<a class="weui-form-preview__btn weui-form-preview__btn_primary" ng-click="gotoSearch()">搜药</a>
+	<a class="weui-form-preview__btn weui-form-preview__btn_primary" ng-click="saveImg()">收藏处方</a>
+
+</div>

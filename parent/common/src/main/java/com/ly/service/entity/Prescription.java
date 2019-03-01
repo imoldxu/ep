@@ -114,6 +114,18 @@ public class Prescription implements Serializable{
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String signatureurl;
 	
+	@Column(name = "iscomment")
+	@ColumnType(jdbcType = JdbcType.TINYINT)
+	private int iscomment;
+	
+	public int getIscomment() {
+		return iscomment;
+	}
+
+	public void setIscomment(int iscomment) {
+		this.iscomment = iscomment;
+	}
+
 	@Transient
 	private String barcode;//取药码
 	

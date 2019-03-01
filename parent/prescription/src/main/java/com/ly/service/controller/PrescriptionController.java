@@ -131,6 +131,31 @@ public class PrescriptionController {
 		}
 	}
 	
+	//临时通用接口，待微信公众号OK，将不再提供支持
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/receiveonly", method = RequestMethod.GET)
+	@ApiOperation(value = "用户领取处方", notes = "用户接口")
+	public Response receiveonly(
+			@ApiParam(name = "barcode", value = "处方条码") @RequestParam(name = "barcode") String barcode,
+			HttpServletRequest request, HttpServletResponse response) {
+		if( null == barcode || barcode.isEmpty()) {
+			return Response.Error(ErrorCode.ARG_ERROR, "请扫描或输入取药码");
+		}
+		try{
+			Long pid = BarcodeUtil.barcode2ID(BarcodeUtil.TYPE_PRESCRIPTION, barcode);
+			
+			Prescription p = prescriptionService.getPrescriptionDetail(pid);
+	
+			return Response.OK(p);
+			
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();		
+		}
+	}
+	
 	//管理工具用
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getPrescriptionList", method = RequestMethod.GET)
@@ -415,4 +440,25 @@ public class PrescriptionController {
 		}
 	}
 
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/commitComment", method = RequestMethod.POST)
+	@ApiOperation(value = "提交处方评论", notes = "获取接口")
+	public Response getStorePrescriptionDetail(@ApiParam(name="pid", value="处方id") @RequestParam(name="pid") Long pid,
+			@ApiParam(name="star", value="评分0-5分") @RequestParam(name="star") int star,
+			@ApiParam(name="content", value="评论内容") @RequestParam(name="content") String content,
+			HttpServletRequest request, HttpServletResponse response){
+		
+		try{
+			Integer uid = SessionUtil.getUserId(request);
+			
+			prescriptionService.commitComment(uid, pid, star, content);
+			return Response.OK(null);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();		
+		}
+	}
+	
 }

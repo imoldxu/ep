@@ -1,0 +1,117 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.con {
+  /**width: 794px;*/
+  padding-bottom: 48px;
+  height: auto;
+  font-size: 16px;
+  text-align: center;
+}
+
+.fix_box{
+  height: auto;
+  width: auto;
+}
+
+.con .right_content{
+	text-align: right;
+}
+
+.con .storeItem{
+  margin: 0 0 30 0px;
+  padding: 0 0 10 0px;
+  text-align: left;
+  height: auto;
+  font-size: 18px;
+  background-color: #fff;
+}
+
+.con .storeItem img{
+  width: 20px
+}
+
+.con .title{
+  font-size: 24px;
+}
+
+.con .storeItem  .drugInfo{
+	padding: 0 40 0 30px;
+}
+
+.con  .storeItem  .drugInfo table {
+  font-size: 14px;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.con  .storeItem  .drugInfo table td {
+  /*border-top: 1px solid #d7e9f0;*/
+  height: 20px;
+  line-height: 20px;
+}
+.con  .storeItem  .drugInfo table tr:last-child td {
+  /*border-bottom: 1px solid #d7e9f0;*/
+}
+
+.con  .storeItem .ls {
+  width: 1em;
+  display: inline-block;
+}
+
+.btn_bottom_area{
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  line-height: 50px;
+  background-color: white;
+  z-index: 88;
+}
+
+.btn_bottom_area:before{
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 1px;
+  border-top: 1px solid #D5D5D6;
+  color: #D5D5D6;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  -webkit-transform: scaleY(0.5);
+  transform: scaleY(0.5);
+}
+
+.btn_bottom_area:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 1px;
+    border-bottom: 1px solid #e5e5e5;
+    color: #e5e5e5;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+}
+
+.barcode_area{
+  margin: 10 auto;
+  text-align: -webkit-center;
+  text-align: center;
+}
+
+.barcode_area .barcode_show{
+  font-size: 16px;
+  margin: 5px;
+}
+
+.barcode_area .hint{
+  font-size: 20px;
+  color: #505050;
+  margin-top: 10px;
+}

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.SimpleDrugInfo;
@@ -44,8 +43,7 @@ public class DoctorDrugService {
 	public List<Drug> getDrugListByDoctor(Integer doctorid, int type) {
 		List<Drug> ret;
 		
-		ObjectMapper om = new ObjectMapper();
-		Doctor doctor = om.convertValue(userClient.getDoctor(doctorid).fetchOKData(),Doctor.class);
+		Doctor doctor = userClient.getDoctor(doctorid).fetchOKData(Doctor.class);
 		
 		if(type==1){
 			ret = drugMapper.getDrugListByDoctor(doctor.getHospitalid(), doctorid);

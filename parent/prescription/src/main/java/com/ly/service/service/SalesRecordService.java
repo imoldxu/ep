@@ -84,14 +84,13 @@ public class SalesRecordService {
 			record.setOrderid(order.getId());
 			record.setPrescriptionid(transdrug.getPrescriptionid());
 			
-			ObjectMapper om = new ObjectMapper();
-			Store store = om.convertValue(userClient.getStore(storeid).fetchOKData(), Store.class);
+			Store store = userClient.getStore(storeid).fetchOKData(Store.class);
 			record.setStorename(store.getName());
 			record.setNum(transdrug.getNum());
 			double rate = store.getRate();
 			
 			//FIXME 采用费率计算出结算价格，而没有采用单个药品的结算费用，此方案在调整费率时比较容易实现，采用单个药品的结算费用更灵活多变
-			StoreDrug storeDrug = om.convertValue(drugClient.getDrugByStore(storeid, transdrug.getDrugid()).fetchOKData(), StoreDrug.class);
+			StoreDrug storeDrug = drugClient.getDrugByStore(storeid, transdrug.getDrugid()).fetchOKData(StoreDrug.class);
 			record.setPrice(storeDrug.getPrice());
 			record.setSettlementprice(getInt(storeDrug.getPrice()*rate));
 			record.setTotalsettlementprice(record.getSettlementprice()*transdrug.getNum());
