@@ -1,0 +1,31 @@
+
+
+<link rel="stylesheet" href="css/css/commitDoctorComment.css?ver={{cssVer}}">
+
+
+<wheader title="评论"></wheader>
+
+<div class="con">
+	<div class="star_rating_area">
+		<starrating ng-model="ratingValue"></starrating>
+	</div>
+	
+	<div class="tag_area">
+		<div class="tag_item" ng-click="addContent('医术高超')">医术高超</div>
+		<div class="tag_item" ng-click="addContent('服务态度好')">服务态度好</div>
+		<div class="tag_item" ng-click="addContent('花小钱治大病')">花小钱治大病</div>
+		<div class="tag_item" ng-click="addContent('妙手仁心')">妙手仁心</div>
+	</div>
+	
+	<div class="weui-cells weui-cells_form">
+		<div class="weui-cell">
+			<div class="weui-cell__bd">
+				<textarea class="weui-textarea" placeholder="说点什么..." rows="3" ng-model="content"></textarea>
+				<div class="weui-textarea-counter"><span>{{content.length}}</span>/80</div>
+			</div>
+		</div>
+	</div>
+	<div class="weui-btn-area">
+		<a class="weui-btn weui-btn_primary" ng-click="commit()">提交</a>
+	</div>
+</div>

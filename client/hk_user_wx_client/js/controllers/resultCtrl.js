@@ -127,6 +127,14 @@ define(['angular','layer','weui'], function(angular,layer,weui){
 			return ( num / 100 ).toFixed( 2 );
 		}
 
+		$scope.formatDistance = function(distance){
+			if( distance < 1000){
+				return distance+'米';
+			}else{
+				return (distance / 1000).toFixed ( 1 ) + '公里';
+			}
+		}
+
 		$scope.$watch('$viewContentLoaded', function() {
 			// 页面加载完执行
 			$window.wx.getLocation({
@@ -145,7 +153,7 @@ define(['angular','layer','weui'], function(angular,layer,weui){
 				}
 			});
 			//在微信还不能使用的时候demo触发
-			//$scope.searchDrugs();
+			$scope.searchDrugs();
 		}); 
 		
     }];

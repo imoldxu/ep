@@ -1,0 +1,27 @@
+.star_rating .my-stars-list{
+    height: 34px;
+    line-height: 34px;
+	margin: 5 auto;
+    display: table;
+}
+.star_rating .my-stars-items{
+    cursor:pointer;
+    font-size:0;
+    width: 34px;
+    line-height: 34px;
+    height:34px;
+    background-image: url(../../img/star-off-big.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+	display: inline-block;
+}
+.star_rating .myStarHover.my-stars-items{
+    background-image: url(../../img/star-on-big.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.star_rating .myStarsSel.my-stars-items{
+    background-image: url(../../img/star-on-big.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+}

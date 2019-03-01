@@ -39,6 +39,7 @@ require.config({
         'data':'services/data',
         'layer':'libs/layer/layer',
 	    'wheader':'directives/wheader',
+		'starRating':'directives/starRating',
 		'pull2refresh':'libs/angular-pull-to-refresh',
 		'weui':'libs/weui.min',
 		'encrypt':'libs/encrypt',
@@ -87,7 +88,7 @@ require.config({
 
 
 
-require(['jquery','angular','ng-route','ng-cookies','app','fn-route','angularAMD','data','weui','encrypt','io-barcode','qrcode','utf8-qrcode','angular-qrcode','infiniteScroll','wheader','pull2refresh'],function($,angular){
+require(['jquery','angular','ng-route','ng-cookies','app','fn-route','angularAMD','data','weui','encrypt','io-barcode','qrcode','utf8-qrcode','angular-qrcode','infiniteScroll','wheader','starRating','pull2refresh'],function($,angular){
     $(function () {
         angular.bootstrap(document,["fnApp"]);
     })

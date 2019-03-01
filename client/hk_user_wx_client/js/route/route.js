@@ -75,6 +75,11 @@ define(['app','angularAMD'], function(app,angularAMD){
             templateUrl: 'js/views/article.html?ver='+ver,
             controllerUrl: "js/controllers/articleCtrl.js"
         }))
+		.state('commitDoctorComment',angularAMD.route({
+            url: '/commitDoctorComment/:pid',
+            templateUrl: 'js/views/commitDoctorComment.html?ver='+ver,
+            controllerUrl: "js/controllers/commitDoctorCommentCtrl.js"
+        }))
     }])
 
 

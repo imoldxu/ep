@@ -21,7 +21,7 @@
 	<div class="weui-cells storeItem" ng-repeat="x in storeList">
 		<div class="weui-cell">
 			<div class="weui-cell__hd title">{{x.name}}</div>
-			<div class="weui-cell__bd right_content">{{x.distance}}米</div>
+			<div class="weui-cell__bd right_content">{{formatDistance(x.distance)}}</div>
 			<div class="weui-cell__fd" ng-click="gotoNav($index)"><img src="img/navigator.png"></img></div>
 		</div>
 		<div class="weui-cell">

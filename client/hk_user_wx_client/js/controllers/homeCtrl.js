@@ -411,6 +411,12 @@ define(['jquery','weui'], function($,weui){
 
         };
 
+		$scope.gotoComment = function(pid){
+			dataVer.put('homestate', $scope.state);
+					
+			$state.go('commitDoctorComment',{pid: pid});
+			return false;
+		}
 		
 		$scope.gotoDetail = function(pid){
 			
