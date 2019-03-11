@@ -2,6 +2,7 @@ package com.ly.service.controller;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
 import com.ly.service.entity.Doctor;
 import com.ly.service.service.DoctorService;
+import com.ly.service.utils.JSONUtils;
 import com.ly.service.utils.SessionUtil;
 import com.ly.service.utils.ValidDataUtil;
 
@@ -94,7 +96,7 @@ public class DoctorController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(path="/register", method = RequestMethod.POST)
 	@ApiOperation(value = "注册账户", notes = "医生调用")
-	public Response register(@ApiParam(name="phone", value="微信授权码") @RequestParam(name="phone") String phone,
+	public Response register(@ApiParam(name="phone", value="手机号") @RequestParam(name="phone") String phone,
 			@ApiParam(name="password", value="密码") @RequestParam(name="password") String password,
 			HttpServletRequest request, HttpServletResponse response){
 		try{
@@ -250,6 +252,92 @@ public class DoctorController {
 			Doctor doctor = doctorService.modifyPhone(doctorid, phone, pwd);
 			
 			return Response.OK(doctor);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/getDoctors", method = RequestMethod.GET)
+	@ApiOperation(value = "查询医生", notes = "管理接口")
+	public Response getDoctors(@ApiParam(name="phone", value="电话号码") @RequestParam(name="phone") String phone,
+			@ApiParam(name="name", value="姓名") @RequestParam(name="name") String name,
+			@ApiParam(name="hospitalid", value="医院id") @RequestParam(name="hospitalid") Integer hospitalid,
+			@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") Integer pageIndex,
+			@ApiParam(name="pageSize", value="每页最大数量") @RequestParam(name="pageSize") Integer pageSize,
+			HttpServletRequest request, HttpServletResponse response){		
+		try{
+			SessionUtil.getManagerId(request);
+			
+			List<Doctor> doctors = doctorService.getDoctors(phone, name, hospitalid, pageIndex, pageSize);
+			
+			return Response.OK(doctors);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/add", method = RequestMethod.POST)
+	@ApiOperation(value = "添加医生", notes = "管理接口")
+	public Response getDoctors(@ApiParam(name="phone", value="电话号码") @RequestParam(name="phone") String phone,
+			@ApiParam(name="name", value="姓名") @RequestParam(name="name") String name,
+			@ApiParam(name="department", value="科室") @RequestParam(name="department") String department,
+			@ApiParam(name="hospitalid", value="医院id") @RequestParam(name="hospitalid") Integer hospitalid,
+			@ApiParam(name="password", value="密码") @RequestParam(name="password") String password,
+			HttpServletRequest request, HttpServletResponse response){		
+		try{
+			SessionUtil.getManagerId(request);
+			
+			Doctor doctor = doctorService.add(phone, password, name, department, hospitalid);
+			
+			return Response.OK(doctor);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/modify", method = RequestMethod.POST)
+	@ApiOperation(value = "编辑医生", notes = "编辑接口")
+	public Response modify(@ApiParam(name="jsdoctor", value="医生jsonStr") @RequestParam(name="jsdoctor") String jsdoctor,
+			HttpServletRequest request, HttpServletResponse response){		
+		try{
+			SessionUtil.getManagerId(request);
+			
+			Doctor doctor = JSONUtils.getObjectByJson(jsdoctor, Doctor.class);
+			
+			doctor = doctorService.modify(doctor);
+			
+			return Response.OK(doctor);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/del", method = RequestMethod.POST)
+	@ApiOperation(value = "删除医生", notes = "删除接口")
+	public Response del(@ApiParam(name="doctorid", value="医生id") @RequestParam(name="doctorid") Integer doctorid,
+			HttpServletRequest request, HttpServletResponse response){		
+		try{
+			SessionUtil.getManagerId(request);
+			
+			doctorService.del(doctorid);
+			
+			return Response.OK(null);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e){

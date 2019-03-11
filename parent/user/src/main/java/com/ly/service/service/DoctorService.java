@@ -2,8 +2,10 @@ package com.ly.service.service;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import com.ly.service.utils.ValidDataUtil;
 import com.ly.service.utils.WxUtil;
 
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 
 @Service
 public class DoctorService {
@@ -270,6 +273,70 @@ public class DoctorService {
 			}else{
 				throw new HandleException(ErrorCode.NORMAL_ERROR, "用户密码错误");
 			}
+		}
+	}
+
+	public List<Doctor> getDoctors(String phone, String name, Integer hospitalid, Integer pageIndex, Integer pageSize) {
+		Example ex = new Example(Doctor.class);
+		Criteria c = ex.createCriteria();
+		if(!phone.trim().isEmpty()) {
+			c.andEqualTo("phone", phone);
+		}
+		if(!name.trim().isEmpty()) {
+			c.andLike("name", "%"+name+"%");
+		}
+		c.andEqualTo("hospitalid", hospitalid);
+		
+		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
+		List<Doctor> doctor = doctorMapper.selectByExampleAndRowBounds(ex, rowBounds);
+		return doctor;
+	}
+
+	public Doctor add(String phone, String password, String name, String department, Integer hospitalid) {
+		Example ex = new Example(Doctor.class);
+		ex.createCriteria().andEqualTo("phone", phone);
+		Doctor doctor = doctorMapper.selectOneByExample(ex);
+		if(doctor != null){
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "用户已存在");
+		}else{
+			doctor = new Doctor();
+			doctor.setPhone(phone);
+			
+			String nonce = PasswordUtil.generateNonce();
+			doctor.setPwdnonce(nonce);
+			
+			String newPwd = PasswordUtil.generatePwd(password, nonce);
+			doctor.setPassword(newPwd);
+			doctor.setCreatetime(new Date());
+			doctor.setName(name);
+			doctor.setDepartment(department);
+			doctor.setHospitalid(hospitalid);
+			doctorMapper.insertUseGeneratedKeys(doctor);
+		}
+		return doctor;
+	}
+
+	public Doctor modify(Doctor doctor) {
+		if(doctor.getId() == null) {
+			throw new HandleException(ErrorCode.ARG_ERROR, "参数错误");
+		}
+		doctor.setPassword(null);//不修改密码
+		int ret = 0;
+		try {
+			ret = doctorMapper.updateByPrimaryKeySelective(doctor);
+		}catch (Exception e) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "更新失败，该手机号可能已存在");
+		}
+		if(ret!=1) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "更新失败");
+		}
+		return doctor;
+	}
+
+	public void del(Integer doctorid) {
+		int ret = doctorMapper.deleteByExample(doctorid);
+		if(ret!=1) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "删除失败");
 		}
 	}
 	
