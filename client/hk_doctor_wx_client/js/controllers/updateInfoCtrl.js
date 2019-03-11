@@ -3,6 +3,7 @@ define(['weui'], function(weui){
 
     return ['$scope', '$http', '$window', '$cookieStore','$location','$rootScope','dataVer' ,'$state', 'Md5', function($scope, $http, $window, $cookieStore,$location,$rootScope,dataVer,$state,Md5){
 
+		weui.alert($window.history.length);
         //默认值
 		$scope.doctorObj = dataVer.get('doctorInfo');
 
@@ -48,7 +49,7 @@ define(['weui'], function(weui){
 
                     dataVer.put('doctorInfo',resp.data);
 					
-					if($window.history.length>0){
+					if($window.history.length>2){//chrome本身就是1，把当前页面压进history了就是2
 						$window.history.back();
 					}else{
 						$state.go('home');
