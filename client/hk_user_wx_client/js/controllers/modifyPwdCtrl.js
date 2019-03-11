@@ -21,7 +21,9 @@ define(['weui'], function(weui){
 				return false;
             }
 			
-			//$rootScope.myloader = true;
+			newPwd = Md5.b64_hmac_md5("hk",newPwd);//使用md5对密码加密,并转换为HEX
+			oldPwd = Md5.b64_hmac_md5("hk",oldPwd);//使用md5对密码加密,并转换为HEX
+			
 			var loading = weui.loading('提交中...');
 			
             $http({

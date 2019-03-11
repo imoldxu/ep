@@ -15,8 +15,7 @@ define(['weui'], function(weui){
 				return false;
             }
 			
-			//FIXME: 暂时屏蔽
-			//pwd = Md5.b64_hmac_md5("hk",pwd);//使用md5对密码加密,并转换为HEX
+			pwd = Md5.b64_hmac_md5("hk",pwd);//使用md5对密码加密,并转换为HEX
 			
 			var loading = weui.loading("注册中...");
 			
