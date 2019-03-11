@@ -92,6 +92,10 @@ public class MoneyUtil {
             amLong = Long.valueOf((currency.substring(0, index+1)).replace(".", "")+"00");    
         }    
         return amLong.toString();    
-    }    
+    }  
+    
+    public static Double amountF2Y(Integer price) {
+        return BigDecimal.valueOf(Long.valueOf(price)).divide(new BigDecimal(100)).doubleValue();
+    }
 	
 }
