@@ -42,4 +42,8 @@ public class ManagerService {
 		}
 	}
 
+	public ManagerUser getManagerById(Integer managerid) {
+		return managerMapper.selectByPrimaryKey(managerid);
+	}
+
 }

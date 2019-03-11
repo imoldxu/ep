@@ -29,6 +29,23 @@ public class ManagerController {
 	ManagerService managerService;
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getInfo", method = RequestMethod.GET)
+	@ApiOperation(value = "获取用户信息", notes = "管理员接口")
+	public Response getInfo(HttpServletRequest request, HttpServletResponse response){
+		
+		try{
+			Integer managerid = SessionUtil.getManagerId(request);
+			ManagerUser manager = managerService.getManagerById(managerid);
+			return Response.OK(manager);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		} catch(Exception e){
+			return Response.Error(-1, "系统异常");
+		}
+			
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ApiOperation(value = "登录", notes = "登录")
 	public Response login(@ApiParam(name = "phone", value = "手机号") @RequestParam(name = "phone")String phone,
