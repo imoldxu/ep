@@ -367,7 +367,7 @@ define(['app','angular'], function(app,angular){
 
                     $scope.sel.y = $scope.drugObj.defaultusage;
 
-					$scope.sel.singledose = $scope.drugObj.singledose+$scope.drugObj.doseunit
+					$scope.sel.singledose = '每次'+$scope.drugObj.singledose+$scope.drugObj.doseunit;
 						
                     $scope.ipt.drug = '';
 
