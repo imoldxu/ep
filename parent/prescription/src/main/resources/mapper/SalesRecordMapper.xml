@@ -25,9 +25,30 @@
 	    <result column="zyfrequence" property="zyfrequence" jdbcType="VARCHAR" />
 	    <result column="zymode" property="zymode" jdbcType="VARCHAR" />
   	</resultMap-->
+  	
+  	<resultMap id="pieData" type="com.ly.service.context.PieData" >
+	    <result column="label" property="label" jdbcType="VARCHAR" />
+	    <result column="data" property="data" jdbcType="INTEGER" />
+  	</resultMap>
 
 	<select id="getSalesRecordForRefund" resultType="com.ly.service.entity.SalesRecord">
 		SELECT * FROM t_sales_record WHERE t_sales_record.drugid = #{drugid, jdbcType=INTEGER} AND t_sales_record.storeid = #{storeid, jdbcType=INTEGER} AND t_sales_record.prescriptionid = #{pid, jdbcType=BIGINT} AND t_sales_record.num > 0 AND(t_sales_record.num - t_sales_record.refundnum) > 0 ORDER BY t_sales_record.price
+	</select>
+	
+	<select id="getIncomeByDay" resultType="java.lang.Integer">
+		SELECT SUM(totalsettlementprice) FROM t_sales_record WHERE DATE(createtime) = #{day, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getIncomeByMonth" resultType="java.lang.Integer">
+		SELECT SUM(totalsettlementprice) FROM t_sales_record WHERE month(createtime) = #{month, jdbcType=INTEGER} AND YEAR(createtime) = #{year, jdbcType=INTEGER}
+	</select>
+	
+	<select id="getSalesByDrug" resultMap="pieData">
+		select drugname as label, sum(num) as data FROM t_sales_record WHERE createtime  &gt; #{startTime,jdbcType=VARCHAR} AND createtime  &lt; #{endTime,jdbcType=VARCHAR} GROUP BY drugid ORDER BY data DESC LIMIT #{size,jdbcType=INTEGER}
+	</select>
+	
+	<select id="getSalesByStore" resultMap="pieData">
+		SELECT storename as label, CONVERT(sum(price*num)/100,decimal(15,2)) as data FROM t_sales_record WHERE createtime  &gt; #{startTime,jdbcType=VARCHAR} AND createtime  &lt; #{endTime,jdbcType=VARCHAR} GROUP BY storeid ORDER BY data DESC LIMIT #{size,jdbcType=INTEGER}
 	</select>
 	
 </mapper>

@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONArray;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
+import com.ly.service.context.PieData;
 import com.ly.service.context.TransactionDrug;
 import com.ly.service.entity.Order;
 import com.ly.service.entity.Prescription;
@@ -24,7 +26,9 @@ import com.ly.service.entity.StoreDrug;
 import com.ly.service.feign.client.DrugClient;
 import com.ly.service.feign.client.UserClient;
 import com.ly.service.mapper.SalesRecordMapper;
+import com.ly.service.utils.DateUtils;
 import com.ly.service.utils.JSONUtils;
+import com.ly.service.utils.MoneyUtil;
 import com.ly.service.utils.RedissonUtil;
 
 import tk.mybatis.mapper.entity.Example;
@@ -95,7 +99,7 @@ public class SalesRecordService {
 			record.setSettlementprice(getInt(storeDrug.getPrice()*rate));
 			record.setTotalsettlementprice(record.getSettlementprice()*transdrug.getNum());
 			record.setStoreid(storeid);
-			
+			record.setRefundnum(0);
 			recordList.add(record);
 		}
 
@@ -174,8 +178,19 @@ public class SalesRecordService {
 //		return list;
 //	}
 
-	public List<SalesRecord> getRecords(int pageIndex, int pageSize) {
+	public List<SalesRecord> getRecords(String startDate, String endDate, int pageIndex, int pageSize) {
 		Example ex = new Example(SalesRecord.class);
+		if(startDate==null || startDate.isEmpty()){
+			startDate = "1970-01-01 00:00:00";
+		}else{
+			startDate = DateUtils.UTCStringtODefaultString(startDate)+" 00:00:00";
+		}
+		if(endDate==null || endDate.isEmpty()){
+			endDate = "2099-12-31 24:00:00";
+		}else{
+			endDate = DateUtils.UTCStringtODefaultString(endDate)+" 24:00:00";
+		}
+		ex.createCriteria().andGreaterThanOrEqualTo("createtime", startDate+" 00:00:00").andLessThanOrEqualTo("createtime", endDate+" 24:00:00");
 		ex.setOrderByClause("id DESC");
 		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
 		List<SalesRecord> list = recordMapper.selectByExampleAndRowBounds(ex, rowBounds);
@@ -251,4 +266,69 @@ public class SalesRecordService {
 		accountService.settleSalesRecords(refundRecordList);
 	}
 
+	public JSONArray getDaysIncome(Date now, int size) {
+		JSONArray ret = new JSONArray();
+		for(int i=size, j=0; i>=1; i--,j++) {
+			String day = null;
+			if(j==0) {
+				day = DateUtils.formatDate(now);
+			}else {
+				day = DateUtils.formatDate(DateUtils.reduceDays(now, j));
+			}
+			Integer income = recordMapper.getIncomeByDay(day);
+			if(income == null) {
+				income = 0;
+			}
+			
+			JSONArray temp = new JSONArray();
+			temp.add(i);
+			temp.add(MoneyUtil.amountF2Y(income));
+			ret.add(temp);
+		}
+		return ret;
+	}
+
+	public JSONArray getMonthsIncome(Date date, int size) {
+		JSONArray ret = new JSONArray();
+		
+		for(int i=size, j=0; i>=1; i--,j++) {
+			int month;
+			int year;
+			if(j==0) {
+				month = DateUtils.getMonth(date);
+				year = DateUtils.getYear(date);
+			}else {
+				Date tempDate = DateUtils.addMonths(date, 0-j);
+				month = DateUtils.getMonth(tempDate);
+				year = DateUtils.getYear(tempDate);
+			}
+			Integer income = recordMapper.getIncomeByMonth(month, year);
+			if(income == null) {
+				income = 0;
+			}
+			JSONArray temp = new JSONArray();
+			temp.add(i);
+			temp.add(MoneyUtil.amountF2Y(income));
+			ret.add(temp);
+		}
+		return ret;
+	}
+	
+	public List<PieData> getSalesByDrug(Date startDate,Date endDate, int size){
+		
+		String startTime = DateUtils.formatDate(startDate)+" 00:00:00";
+		String endTime = DateUtils.formatDate(endDate)+" 24:00:00";
+		
+		List<PieData> ret = recordMapper.getSalesByDrug(startTime, endTime, size);
+		return ret;
+	}
+	
+	public List<PieData> getSalesByStore(Date startDate,Date endDate, int size){
+		
+		String startTime = DateUtils.formatDate(startDate)+" 00:00:00";
+		String endTime = DateUtils.formatDate(endDate)+" 24:00:00";
+		
+		List<PieData> ret = recordMapper.getSalesByStore(startTime, endTime, size);
+		return ret;
+	}
 }
