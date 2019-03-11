@@ -68,6 +68,7 @@ public class HospitalService {
 		if(hospital.getId() == null){
 			throw new HandleException(ErrorCode.ARG_ERROR, "参数错误");
 		}
+		hospital.setPassword(null);//不能修改密码
 		hospitalMapper.updateByPrimaryKeySelective(hospital);
 		return hospital;
 	}
@@ -83,5 +84,27 @@ public class HospitalService {
 		List<Hospital> ret = hospitalMapper.selectByExample(ex);
 		return ret;
 	
+	}
+
+	public List<Hospital> getHospitalsByName(String name, Integer pageIndex, Integer pageSize) {
+		Example ex = new Example(Hospital.class);
+		ex.createCriteria().andLike("name", "%"+name+"%");
+		ex.setOrderByClause("id DESC");
+		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize,pageSize);
+		List<Hospital> ret = hospitalMapper.selectByExampleAndRowBounds(ex, rowBounds);
+		return ret;
+	}
+
+	public void resetPwd(Integer hospitalid) {
+		Hospital hospital = hospitalMapper.selectByPrimaryKey(hospitalid);
+		
+		String nonce = hospital.fetchPwdnonce();
+		
+		
+		String clientPwd = PasswordUtil.generateClientPwd("123456");
+		String newPwd = PasswordUtil.generatePwd(clientPwd, nonce);
+		hospital.setPassword(newPwd);
+		
+		hospitalMapper.updateByPrimaryKey(hospital);
 	}
 }
