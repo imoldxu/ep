@@ -1,0 +1,25 @@
+<div class="modal-body wrapper-md">
+  <div class="row">
+    <div class="col-sm-12">
+      <h3 class="m-t-none m-b font-thin">编辑医生</h3>
+      <p>编辑医生信息</p>
+      <form role="form">
+		<div class="form-group">
+          <label>姓名</label>
+          <input type="text" class="form-control" placeholder="请输入医生的姓名" ng-model="doctor.name">
+        </div>
+		<div class="form-group">
+          <label>科室</label>
+          <input type="text" class="form-control" placeholder="请输入药房的地址" ng-model="doctor.department">
+        </div>
+        <div class="form-group">
+          <label>手机号</label>
+          <input type="tel" maxlength="11" class="form-control" placeholder="请输入医生登陆账号" ng-model="doctor.phone">
+        </div>
+        <div class="m-t-lg">
+          <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()"><strong>提交</strong></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

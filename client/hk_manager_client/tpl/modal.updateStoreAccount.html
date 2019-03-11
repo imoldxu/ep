@@ -1,0 +1,24 @@
+<div class="modal-body wrapper-md">
+  <div class="row">
+    <div class="col-sm-12">
+      <h3 class="m-t-none m-b font-thin">调账</h3>
+      <p>增加或减少{{store.name}}账户余额</p>
+      <form role="form">
+		<div class="form-group">
+          <label>调账方式</label>
+          <select type="text" class="form-control" ng-model="update.type">
+			<option value="1">增加</option>
+			<option value="2">减少</option>
+		  </select>
+        </div>
+		<div class="form-group">
+          <label>调账金额</label>
+          <input type="num"  class="form-control" placeholder="请输入调账金额" ng-model="update.amount">
+        </div>
+        <div class="m-t-lg">
+          <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()"><strong>提交</strong></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

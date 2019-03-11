@@ -1,0 +1,106 @@
+<div ng-controller="StoreAccountCtrl">
+  <div class="wrapper-md bg-light b-b">
+    <h1 class="m-n font-thin h3">药房账户</h1>
+  </div>
+  <div class="hbox hbox-auto-xs ng-scope" ng-init="
+	  app.settings.asideFixed = true;
+	  app.settings.asideDock = false;
+	  app.settings.container = false;
+	  app.hideAside = false;
+	  app.hideFooter = false;
+	  ">
+	  <div class="col w-xxl w-auto-xs bg-light lter b-r">
+		<div class="wrapper">
+		  <div class="clearfix m-b">
+			<form class="form-inline ng-pristine ng-valid" role="form">
+			  <div class="form-group">
+				<input type="text" class="form-control" id="inputStoreName" placeholder="请输入药房名称" ng-model="name">
+			  </div>
+			  <button type="submit" class="btn btn-sm" ng-click="getStoreList()">搜索</button>
+			</form>
+		  </div>
+		  <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table table-striped b-t b-light">
+				<thead>
+				  <tr>
+					<th>药房名称</th>
+					<th>地址</th>
+					<th>账户余额</th>
+					<th>操作</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr ng-repeat="store in storeList" ng-click="selectStore($index)">
+					<td>{{store.name}}</td>
+					<td>{{store.address}}</td>
+					<td>{{f2y(store.balance)}}</td>
+					<td><span ng-click="updateAccount($index,'md')">
+					  <script type="text/ng-template" id="updateStoreAccountModalContent.html">
+						<div ng-include="'tpl/modal.updateStoreAccount.html'"></div>
+					  </script>
+					  调账
+					</span></td>
+				  </tr>
+				</tbody>
+			  </table>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	  <div class="col">
+		<div class="wrapper">
+			<div class="clearfix m-b pull-right m-t-n-xs">
+				<form class="form-inline ng-pristine ng-valid" role="form">
+				  <div class="form-group">
+					<input type="date" class="form-control" placeholder="请输入起始时间" ng-model="startDate">
+				  </div>
+				  <div class="form-group">
+					<input type="date" class="form-control" placeholder="请输入结束时间" ng-model="endDate">
+				  </div>
+				  <button type="submit" class="btn btn-default" ng-click="getStoreRecords()">搜索</button>
+				</form>
+			</div>
+			<h3 class="m-n font-thin h3">{{selectedStore.name}}</h3>
+		</div>
+		<div class="wrapper">
+		  <div class="panel panel-default">
+			<div class="panel-heading">
+			  账户记录
+			</div>
+			<div class="table-responsive">
+			  <table class="table table-striped b-t b-light">
+				<thead>
+				  <tr>
+					<th>类型</th>
+					<th>金额(元)</th>
+					<th>内容</th>
+					<th>创建时间</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr ng-repeat="record in recordList">
+					<td>{{record.type == 1? '收入' : '支出'}}</td>
+					<td>{{f2y(record.amount)}}</td>
+					<td>{{record.msg}}</td>
+					<td>{{dateFormat(record.createtime,'yyyy-MM-dd HH:mm:ss')}}</td>
+				  </tr>
+				</tbody>
+			  </table>
+			</div>
+			<footer class="panel-footer">
+			  <div class="row">
+				<div class="col-sm-11 text-right text-center-xs">                
+				  <ul class="pagination pagination-sm m-t-none m-b-none">
+					<li><a ng-if="pageIndex != 1" ng-click="prePage()"><i class="fa fa-chevron-left"></i></a></li>
+					<li><a ng-if="hasNextPage" ng-click="nextPage()"><i class="fa fa-chevron-right"></i></a></li>
+				  </ul>
+				</div>
+			  </div>
+			</footer>
+		  </div>
+		</div>
+		  
+	  </div>
+  </div>
+</div>

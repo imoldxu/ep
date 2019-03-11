@@ -1,0 +1,128 @@
+<div ng-controller="HospitalDrugCtrl">
+  <div class="wrapper-md bg-light b-b">
+    <h1 class="m-n font-thin h3">医院药品</h1>
+  </div>
+  <div class="hbox hbox-auto-xs ng-scope" ng-init="
+	  app.settings.asideFixed = true;
+	  app.settings.asideDock = false;
+	  app.settings.container = false;
+	  app.hideAside = false;
+	  app.hideFooter = false;
+	  ">
+	  <div class="col w-md w-auto-xs bg-light lter b-r">
+		<div class="wrapper">
+		  <div class="clearfix m-b">
+			<form class="form-inline ng-pristine ng-valid" role="form">
+			  <div class="form-group">
+				<input type="text" class="form-control" placeholder="请输入医院名称" ng-model="name">
+			  </div>
+			  <button type="submit" class="btn btn-sm" ng-click="getHospitalList()">搜索</button>
+			</form>
+		  </div>
+		  <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table table-striped b-t b-light">
+				<thead>
+				  <tr>
+					<th>名称</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr ng-repeat="hospital in hospitalList" ng-click="selectHospital($index)">
+					<td>{{hospital.name}}</td>
+				  </tr>
+				</tbody>
+			  </table>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	  <div class="col">
+		<div class="wrapper">
+			<div class="clearfix m-b pull-right m-t-n-xs">
+				<form class="form-inline ng-pristine ng-valid" role="form">
+				  <div class="form-group">
+					<input type="text" class="form-control" placeholder="请输入药品名称" ng-model="keys">
+				  </div>
+				  <button type="submit" class="btn btn-default" ng-click="searchDrug()">搜索</button>
+				</form>
+			</div>
+			<h3 class="m-n font-thin h3">{{selectedHospital.name}}</h3>
+		</div>
+		<div class="wrapper col-sm-8">
+		  <div class="panel panel-default">
+			<div class="panel-heading">
+			  医院药品
+			</div>
+			<div class="table-responsive">
+			  <table class="table table-striped b-t b-light">
+				<thead>
+				  <tr>
+					<th>名称</th>
+					<th>规格</th>
+					<th>厂家</th>
+					<th>扩展</th>
+					<th colspan="2">操作</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr ng-repeat="drug in hospitalDrugList">
+					<td>{{drug.drugname}}</td>
+					<td>{{drug.drugstandard}}</td>
+					<td>{{drug.drugcompany}}</td>
+					<td>{{drug.exid}}</td>
+					<td><span ng-click="edit($index, 'md')">
+						<script type="text/ng-template" id="modifyHospitalDrugModalContent.html">
+							<div ng-include="'tpl/modal.modifyHospitalDrug.html'"></div>
+						</script>
+						<i class="fa fa-edit"></i>
+						</span>
+					</td>
+					<td><i ng-click="delHospitalDrug($index)" class="icon-arrow-right"></td>
+				  </tr>
+				</tbody>
+			  </table>
+			</div>
+			<footer class="panel-footer">
+			  <div class="row">
+				<div class="col-sm-4 text-right text-center-xs">                
+				  <ul class="pagination pagination-sm m-t-none m-b-none">
+					<li><a ng-if="pageIndex != 1" ng-click="prePage()"><i class="fa fa-chevron-left"></i></a></li>
+					<li><a ng-if="hasNextPage" ng-click="nextPage()"><i class="fa fa-chevron-right"></i></a></li>
+				  </ul>
+				</div>
+			  </div>
+			</footer>
+		  </div>
+		</div>
+		<div class="wrapper col-sm-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+				  药品库
+				</div>
+				<div class="table-responsive">
+				  <table class="table table-striped b-t b-light">
+					<thead>
+					  <tr>
+						<th>操作</th>
+						<th>药品名称</th>
+						<th>规格</th>
+						<th>厂家</th>
+					  </tr>
+					</thead>
+					<tbody>
+					  <tr ng-repeat="drug in drugList">
+						<td><i ng-click="addHospitalDrug($index)" class="icon-arrow-left"></td>
+						<td>{{drug.drugname}}</td>
+						<td>{{drug.standard}}</td>
+						<td>{{drug.company}}</td>
+					  </tr>
+					</tbody>
+				  </table>
+				</div>
+			</div>
+		</div>
+		  
+	  </div>
+  </div>
+</div>

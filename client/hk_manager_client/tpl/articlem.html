@@ -1,0 +1,92 @@
+<div ng-controller="ArticlemCtrl">
+  <div class="wrapper-md bg-light b-b">
+	<span class="ng-scope pull-right m-t-n-xs">
+	  <script type="text/ng-template" id="addArticleModalContent.html">
+		<div ng-include="'tpl/modal.addArticle.html'"></div>
+	  </script>
+	  <button class="btn btn-success" ng-click="add('md')">发表文章</button>
+	</span>
+    <h1 class="m-n font-thin h3">文章列表</h1>
+  </div>
+  <div class="hbox hbox-auto-xs hbox-auto-sm">
+    <div class="col wrapper-md">
+      <div class="clearfix m-b">
+        <form class="form-inline ng-pristine ng-valid" role="form">
+	      <div class="form-group">
+			<label class="sr-only" for="inputArticleTitle">文章标题</label>
+			<input type="text" class="form-control" id="inputArticleTitle" placeholder="请输入文章标题" ng-model="title">
+		  </div>
+	      <button type="submit" class="btn btn-default" ng-click="search()">搜索</button>
+		</form>
+      </div>
+      <div class="panel panel-default">
+		<div class="panel-heading">
+		  文章
+		</div>
+		<div class="table-responsive">
+		  <table class="table table-striped b-t b-light">
+			<thead>
+			  <tr>
+				<th>title</th>
+				<th>图片</th>
+				<th>创建时间</th>
+				<th>状态</th>
+				<th colspan="2">操作</th>
+			  </tr>
+			</thead>
+			<tbody>
+			  <tr ng-repeat="article in articleList" ng-click="selectArticle($index)">
+				<td>{{article.title}}</td>
+				<td><img width="60" ng-repeat="pic in article.piclist" ng-src="{{pic}}"></img></td>
+				<td>{{dateFormat(article.createtime, 'yyyy-MM-dd HH:mm:ss')}}</td>
+				<td>{{article.state == 1? '上架':'下架'}}</td>
+				<td><span class="ng-scope" ng-click="edit($index, 'md')">
+					  <script type="text/ng-template" id="modifyArticleModalContent.html">
+						<div ng-include="'tpl/modal.modifyArticle.html'"></div>
+					  </script>
+					  编辑
+					</span>
+				</td>
+				<td><span ng-click="preview($index)">预览</span></td>
+				<td><span ng-click="changeState($index)"><i ng-if="article.state == 0" class="icon-arrow-up"></i><i ng-if="article.state == 1" class="icon-arrow-down"></i></span></td>
+			  </tr>
+			</tbody>
+		  </table>
+		</div>
+		<footer class="panel-footer">
+		  <div class="row">
+			<div class="col-sm-4 text-right text-center-xs">                
+			  <ul class="pagination pagination-sm m-t-none m-b-none">
+				<li><a ng-if="pageIndex != 1" ng-click="prePage()"><i class="fa fa-chevron-left"></i></a></li>
+				<li><a ng-if="hasNextPage" ng-click="nextPage()"><i class="fa fa-chevron-right"></i></a></li>
+			  </ul>
+			</div>
+		  </div>
+		</footer>
+	  </div>
+    </div>
+	<div class="col w-xl">
+		<div class="row wrapper">
+			<h4>预览</h4>
+		</div>
+		
+		<div class="row wrapper bg-white b-b">
+			<div style="padding: 5 20px;background-color: white;position: relative;">
+				<div style="font-size: 20px;font-weight: 540;margin: 5 0px;">{{selectedArticle.title}}</div>
+				<div class="display: flex" ng-if="selectedArticle.piclist != null">
+					<img height="100" ng-repeat="i in selectedArticle.piclist" ng-src="{{i}}"></img>
+				</div>
+				<div><span style="margin: 3px" ng-if="selectedArticle.source != null && selectedArticle.source.length>0">{{selectedArticle.source+' |'}}</span><span ng-if="selectedArticle.createtime != null" style="margin: 3px">{{getDateDiff(selectedArticle.createtime)}}</span></div>
+			</div>
+		</div>
+		
+		<link rel="stylesheet" href="css/weui.min.css?ver={{app.version}}">
+		
+		<div class="row wrapper bg-white b-b">
+			<div id="article_content" style="height:640px;overflow:scroll" class="weui-article">
+				<div>点击预览查看文章内容</div>
+			</div>
+		</div>
+	</div>
+  </div>
+</div>

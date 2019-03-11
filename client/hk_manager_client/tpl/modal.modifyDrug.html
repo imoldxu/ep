@@ -1,0 +1,71 @@
+<div class="modal-body wrapper-md">
+  <form role="form">	
+	  <div class="row wrapper">
+		<h3 class="m-t-none m-b font-thin">编辑药品</h3>
+	  </div>
+	  <div class="row">
+		<div class="col-sm-6 b-r wrapper">
+		  <p>基础信息</p>
+		  <div class="form-group">
+			  <label>名称</label>
+			  <input type="text" class="form-control" placeholder="请输入药品的全称" ng-model="drug.drugname">
+			</div>
+			<div class="form-group">
+			  <label>简称</label>
+			  <input type="text" class="form-control" placeholder="请输入药品的简称" ng-model="drug.shortname">
+			</div>
+			<div class="form-group">
+			  <label>规格</label>
+			  <input type="text" class="form-control" placeholder="请输入药品的规格" ng-model="drug.standard">
+			</div>
+			<div class="form-group">
+			  <label>计价单位</label>
+			  <input type="text" class="form-control" placeholder="请输入药品的计价单位" ng-model="drug.unit">
+			</div>
+			<div class="form-group">
+			  <label>分类</label>
+			  <input type="text" class="form-control" placeholder="请设置药品的分类" ng-model="drug.category">
+			</div>
+			<div class="form-group">
+			  <label>剂型</label>
+			  <input type="text" class="form-control" placeholder="请设置药品剂型" ng-model="drug.form">
+			</div>
+			<div class="form-group">
+			  <label>全称拼音缩写</label>
+			  <input type="text" class="form-control" placeholder="请设置全称拼音首字母缩写" ng-model="drug.fullkeys">
+			</div>
+			<div class="form-group">
+			  <label>简称拼音缩写</label>
+			  <input type="text" class="form-control" placeholder="请设置简称拼音首字母缩写" ng-model="drug.shortnamekeys">
+			</div>
+		</div>
+		<div class="col-sm-6 wrapper">
+		  <h3 class="m-t-none m-b font-thin"></h3>
+		  <p>默认(成人)用法用量</p>
+			<div class="form-group">
+			  <label>用法</label>
+			  <input type="text" class="form-control" placeholder="请输入药品默认(成人)用法" ng-model="drug.defaultusage">
+			</div>
+			<div class="form-group">
+			  <label>单次用量</label>
+			  <input type="text" class="form-control" placeholder="请输入药品的单次用量" ng-model="drug.singledose">
+			</div>
+			<div class="form-group">
+			  <label>用量单位</label>
+			  <input type="text" class="form-control" placeholder="请输入药品的单次用量单位" ng-model="drug.doseunit">
+			</div>
+			<div class="form-group">
+			  <label>频次</label>
+			  <input type="text" class="form-control" placeholder="请输入药品的默认使用频次" ng-model="drug.frequency">
+			</div>
+			
+		</div>
+	  </div>
+	  <div class="row wrapper">
+		<div class="m-t-lg">
+			<button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()"><strong>提交</strong></button>
+		</div>
+	  </div>
+  </form>
+		
+</div>

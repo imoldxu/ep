@@ -1,0 +1,225 @@
+<!-- list -->
+<ul class="nav">
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span>运营数据</span>
+  </li>
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
+      <span class="font-bold">概况</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>概况</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.dashboard-v1">
+          <span>运营状态</span>
+        </a>
+      </li>
+	  <!--li ui-sref-active="active">
+        <a ui-sref="app.dashboard-hospital">
+          <span>医院概况</span>
+        </a>
+      </li-->
+    </ul>
+  </li>
+  <li ui-sref-active="active">
+    <a ui-sref="app.prescriptionm">
+      <i class="glyphicon glyphicon-calendar icon text-info-dker"></i>
+      <span class="font-bold">处方管理</span>
+    </a>
+  </li>
+  <li ui-sref-active="active">
+    <a ui-sref="app.salesRecord">
+      <!--b class="badge bg-info pull-right">9</b-->
+      <i class="glyphicon glyphicon-envelope icon text-info-lter"></i>
+      <span class="font-bold">售药记录</span>
+    </a>
+  </li>
+  <li>
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-th-large icon text-success"></i>
+      <span class="font-bold">账户管理</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>账户管理</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.storeAccount">
+          <span>药房账户</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+
+  <li class="line dk"></li>
+
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span>系统配置</span>
+  </li>
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <!--b class="badge bg-info pull-right">3</b-->
+      <i class="glyphicon glyphicon-th"></i>
+      <span>药品配置</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>药品配置</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.drugm">
+          <span>药品列表</span>
+        </a>
+      </li>     
+    </ul>
+  </li>
+  <li ng-class="{active:$state.includes('app.storem')}">
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-briefcase icon"></i>
+      <span>药房配置</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>药房配置</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.storem">
+          <span>药房列表</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.storedrug({pageIndex:1,keys:''})">
+          <!--b class="badge bg-info pull-right">3</b-->
+          <span>药房药品</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li ng-class="{active:$state.includes('app.hospitalm')}">
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <!--b class="label bg-primary pull-right">2</b-->
+      <i class="glyphicon glyphicon-list"></i>
+      <span>医院配置</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>医院配置</span>
+        </a>
+      </li>
+	  <li ui-sref-active="active">
+        <a ui-sref="app.hospitalm">
+          <span>医院列表</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.hospitaldrug">
+          <span>医院药品</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li ng-class="{active:$state.includes('app.doctorm')}">
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-edit"></i>
+      <span>医生配置</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>医生配置</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.doctorm">
+          <span>医生列表</span>
+        </a>
+      </li>
+	  <!--li ui-sref-active="active">
+        <a ui-sref="app.doctordrug">
+          <span>医生药品</span>
+        </a>
+      </li-->
+    </ul>
+  </li>
+  <li ng-class="{active:$state.includes('app.page')}">
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-file icon"></i>
+      <span>文章管理</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>文章管理</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.articlem">
+          <span>文章列表</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li ng-class="{active:$state.includes('app.page')}">
+    <a href class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-file icon"></i>
+      <span>基础数据</span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li class="nav-sub-header">
+        <a href>
+          <span>基础数据</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.page.profile">
+          <span>标签管理</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+</ul>
+<!-- / list -->

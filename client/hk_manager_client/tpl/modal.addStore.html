@@ -1,0 +1,41 @@
+<div class="modal-body wrapper-md">
+  <div class="row">
+    <div class="col-sm-12">
+      <h3 class="m-t-none m-b font-thin">添加药房</h3>
+      <p>新增一个药房</p>
+      <form role="form">
+		<div class="form-group">
+          <label>名称</label>
+          <input type="text" class="form-control" placeholder="请输入药房的全称" ng-model="store.name">
+        </div>
+		<div class="form-group">
+          <label>地址</label>
+          <input type="text" class="form-control" placeholder="请输入药房的地址" ng-model="store.address">
+        </div>
+		<div class="form-group">
+          <label>维度</label>
+          <input type="text" class="form-control" placeholder="请输入药房的维度坐标" ng-model="store.latitude">
+        </div>
+		<div class="form-group">
+          <label>经度</label>
+          <input type="text" class="form-control" placeholder="请输入药房的经度坐标" ng-model="store.longitude">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" class="form-control" placeholder="请输入管理员的邮箱" ng-model="store.email">
+        </div>
+        <div class="form-group">
+          <label>管理员密码</label>
+          <input type="password" class="form-control" placeholder="请输入管理员密码" ng-model="store.password">
+        </div>
+		<div class="form-group">
+          <label>费率</label>
+          <input type="text" class="form-control" placeholder="请设置费率,如1%设置为0.01" ng-model="store.rate">
+        </div>
+        <div class="m-t-lg">
+          <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()"><strong>提交</strong></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,123 @@
+.con {
+  width: 794px;
+  margin: auto;
+  border-top: 1px solid #000;
+  height: 559px;
+  background-color: #fff;
+}
+.con h3 {
+  text-align: center;
+  padding-top: 20px;
+}
+.con .conHead {
+  width: 90%;
+  margin: auto;
+  height: auto;
+  overflow: auto;
+  font-size: 16px;
+  border-bottom: 1px solid #000;
+}
+.con .conHead .row {
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  zoom: 1;
+}
+.con .conHead .row .dia {
+  width: 100%;
+}
+.con .conHead .row div {
+  width: 25%;
+  height: 25px;
+  line-height: 25px;
+  float: left;
+}
+.con .conHead .row:after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+.con .conInfo {
+  position: relative;
+  width: 90%;
+  margin: auto;
+  height: 290px;
+  padding: 10px 5px;
+  border-bottom: 1px solid black;
+}
+.con .conInfo .r {
+  position: absolute;
+  left: 5px;
+  font-weight: bolder;
+  top: 0;
+  font-size: 12px;
+}
+.con .conInfo .infoList {
+  width: 95%;
+  margin: auto;
+  height: auto;
+  overflow: auto;
+  font-size: 12px;
+  margin-bottom: 5px;
+  zoom: 1;
+}
+.con .conInfo .infoList:after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+.con .conInfo .infoList div {
+  width: 50%;
+  font-size: 14px;
+  float: left;
+  text-align: right;
+}
+.con .conInfo .infoList div:first-child {
+  text-align: left;
+}
+.con .conInfo .infoList p {
+  font-size: 12px;
+  text-indent: 2em;
+}
+.con .conFoot {
+  width: 90%;
+  margin: auto;
+  height: auto;
+  overflow: auto;
+  font-size: 12px;
+}
+.con .conFoot .row {
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+}
+.con .conFoot .row div {
+  font-size:16px;	
+  width: 50%;
+  height: 40px;
+  line-height: 40px;
+  float: left;
+}
+.con .conFoot .row:after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+}
+.con .conFoot p {
+  margin-top: 5px;
+  font-size: 13px;
+  font-weight: bolder;
+}
+
+.signature{
+	position: absolute;
+	height:50px
+}

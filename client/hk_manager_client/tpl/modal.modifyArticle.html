@@ -1,0 +1,33 @@
+<div class="modal-body wrapper-md">
+  <div class="row">
+    <div class="col-sm-12">
+      <h3 class="m-t-none m-b font-thin">发表文章</h3>
+      <p>发表一篇新的文章</p>
+      <form role="form">
+		<div class="form-group">
+          <label>标题</label>
+          <input type="text" class="form-control" placeholder="请输入文章的标题" ng-model="article.title">
+        </div>
+		<div class="form-group">
+          <label>列表图1 URL</label>
+          <input type="text" class="form-control" placeholder="请输入列表图片URL" ng-model="article.pic0">
+        </div>
+		<div class="form-group">
+          <label>列表图2 URL</label>
+          <input type="text" class="form-control" placeholder="请输入列表图片URL" ng-model="article.pic1">
+        </div>
+		<div class="form-group">
+          <label>列表图3 URL</label>
+          <input type="text" class="form-control" placeholder="请输入列表图片URL" ng-model="article.pic2">
+        </div>
+		<div class="form-group">
+          <label>内容</label>
+          <textarea type="text" class="form-control" placeholder="请输入文章的内容" ng-model="article.content"></textarea>
+        </div>
+        <div class="m-t-lg">
+          <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()"><strong>提交</strong></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="css/prescription.css?ver={{app.version}}">
+
+<div class="modal-body wrapper-md">
+      <div class="con">
+
+		<h3>{{prescription.hospitalname}}处方签</h3>
+
+		<div class="conHead">
+
+			<div class="row">
+
+				<div>门诊号:{{prescription.sn}}</div>
+				<div>科室:{{prescription.department}}</div>
+				<div></div>
+				<div>费别:\</div>
+				<div>姓名:{{prescription.patientname}}</div>
+				<div>性别:{{prescription.patientsex}}</div>
+				<div>年龄:{{prescription.patientage}}</div>
+				<div>开具日期:{{format(prescription.createtime,"yyyy-MM-dd")}}</div>
+				<div class="dia">诊断:{{prescription.diagnosis}}</div>
+
+			</div>
+
+		</div>
+
+		<div class="conInfo">
+
+			<span class="r">R.</span>
+
+			<div class="infoList" ng-repeat="x in drugList">
+				<div>{{x.drugname}}</div>
+				<div>{{x.standard +'*' +x.number+'(已售:'+x.soldnumber+') ' +x.unit}}</div>
+				<p>{{'sig:'+ x.myusage +','+ x.singledose +',' +x.frequency}}</p>
+			</div>
+
+
+
+		</div>
+
+		<div class="conFoot">
+
+			<div class="row">
+
+				<div>医师:<img class="signature" ng-src="{{prescription.signatureurl}}"></img></div>
+				<div>金额:{{f2y(price)}}元</div>
+				<div>药师(审核,核对,发药):</div>
+				<div>药师/士(调配):</div>
+
+			</div>
+
+			<p>特别提示:按卫生部,国家中医药管理局卫医发[2002]24号文件规定:为保证患者用药安全,药品一经发出,不得退换.</p>
+
+		</div>
+
+	</div>
+</div>

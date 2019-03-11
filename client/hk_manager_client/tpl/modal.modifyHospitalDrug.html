@@ -1,0 +1,17 @@
+<div class="modal-body wrapper-md">
+  <div class="row">
+    <div class="col-sm-12">
+      <h3 class="m-t-none m-b font-thin">编辑医院药品</h3>
+      <p>编辑{{drug.drugname}}</p>
+      <form role="form">
+		<div class="form-group">
+          <label>扩展信息</label>
+          <input type="text" class="form-control" placeholder="请设置扩展id" ng-model="drug.exid">
+        </div>
+        <div class="m-t-lg">
+          <button type="submit" class="btn btn-sm btn-success pull-right text-uc m-t-n-xs" ng-click="ok()"><strong>提交</strong></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

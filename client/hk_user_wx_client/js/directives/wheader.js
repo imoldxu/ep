@@ -23,7 +23,7 @@ define(['jquery','app'], function ($,app) {
 				$scope.rightIcon = iAttrs.righticon || null;
 
                 $scope.goBack = function(){
-					if($window.history.length>0){
+					if($window.history.length>1){//chrome缺省就是1
 						$window.history.back();
 					}else{
 						$state.go('home');//若history没有内容则返回home页
