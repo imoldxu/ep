@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ly.service.context.ErrorCode;
+import com.ly.service.context.HandleException;
 import com.ly.service.context.SimpleDrugInfo;
 import com.ly.service.entity.HospitalDrug;
 import com.ly.service.mapper.HospitalDrugMapper;
@@ -18,7 +20,7 @@ public class HospitalDrugService {
 	@Autowired
 	HospitalDrugMapper drugMapper;
 	
-	public HospitalDrug setHospitalDrug(int exid, int drugid, String drugname, String drugstandard, String drugcompany, int hospitalid, String hospitalname){
+	public HospitalDrug addHospitalDrug(int exid, int drugid, String drugname, String drugstandard, String drugcompany, int hospitalid, String hospitalname){
 		Example ex = new Example(HospitalDrug.class);
 		ex.createCriteria().andEqualTo("drugid", drugid).andEqualTo("hospitalid", hospitalid);
 		HospitalDrug hdrug = drugMapper.selectOneByExample(ex);
@@ -33,14 +35,7 @@ public class HospitalDrugService {
 			hdrug.setExid(exid);
 			drugMapper.insertUseGeneratedKeys(hdrug);
 		}else{
-			hdrug.setHospitalid(hospitalid);
-			hdrug.setHospitalname(hospitalname);
-			hdrug.setDrugid(drugid);
-			hdrug.setDrugname(drugname);
-			hdrug.setDrugstandard(drugstandard);
-			hdrug.setDrugcompany(drugcompany);
-			hdrug.setExid(exid);
-			drugMapper.updateByPrimaryKey(hdrug);
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "药品已存在，无需重复添加");
 		}
 		return hdrug;
 	}
@@ -111,6 +106,14 @@ public class HospitalDrugService {
 		}else{
 			ret = drugMapper.getZyDrugByTag(hid, tag);	
 		}
+		return ret;
+	}
+
+	public List<HospitalDrug> getHospitalDrugsByHospital(Integer hospitalid, String key, Integer pageIndex,
+			Integer pageSize) {
+		int offset = (pageIndex-1)*pageSize;
+		key = '%'+key+'%';
+		List<HospitalDrug> ret = drugMapper.getHospitalDrugsByKeys(hospitalid, key, offset, pageSize);
 		return ret;
 	}
 

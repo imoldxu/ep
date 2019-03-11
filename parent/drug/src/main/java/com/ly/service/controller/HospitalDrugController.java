@@ -47,7 +47,7 @@ public class HospitalDrugController {
 		try{
 			SessionUtil.getManagerId(request);
 			
-			HospitalDrug ret = drugService.setHospitalDrug(exid, drugid, drugname, standard, company, hospitalid, hospitalname);
+			HospitalDrug ret = drugService.addHospitalDrug(exid, drugid, drugname, standard, company, hospitalid, hospitalname);
 			return Response.OK(ret);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -60,12 +60,12 @@ public class HospitalDrugController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(path="/modify", method = RequestMethod.POST)
 	@ApiOperation(value = "更新医院的药品", notes = "管理接口")
-	public Response modify(@RequestParam(name="drugStr") String drugStr,
+	public Response modify(@ApiParam(name="jsdrug", value="医院药品对象") @RequestParam(name="jsdrug") String jsdrug,
 			HttpServletRequest request, HttpServletResponse response){
 		
 		HospitalDrug hospitalDrug;
 		try{
-			hospitalDrug = JSONUtils.getObjectByJson(drugStr, HospitalDrug.class);
+			hospitalDrug = JSONUtils.getObjectByJson(jsdrug, HospitalDrug.class);
 		}catch (Exception e) {
 			return Response.Error(ErrorCode.ARG_ERROR, "参数异常");
 		}
@@ -86,14 +86,38 @@ public class HospitalDrugController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(path="/del", method = RequestMethod.POST)
 	@ApiOperation(value = "删除医院投放的药品", notes = "管理接口")
-	public Response del(@RequestParam(name="hdid") Long hdid,
+	public Response del(@RequestParam(name="hospitalDrugId") Long hospitalDrugId,
+			@RequestParam(name="hospitalid") Integer hospitalid,
+			@RequestParam(name="drugid") Integer drugid,
 			HttpServletRequest request, HttpServletResponse response){
 		
 		try{
 			SessionUtil.getManagerId(request);
 			
-			drugService.del(hdid);
+			drugService.del(hospitalDrugId);
 			return Response.OK(null);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();		
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/getHospitalDrugsByHospital", method = RequestMethod.GET)
+	@ApiOperation(value = "删除医院投放的药品", notes = "管理接口")
+	public Response getHospitalDrugsByHospital(@RequestParam(name="key") String key,
+			@RequestParam(name="hospitalid") Integer hospitalid,
+			@RequestParam(name="pageIndex") Integer pageIndex,
+			@RequestParam(name="pageSize") Integer pageSize,
+			HttpServletRequest request, HttpServletResponse response){
+		
+		try{
+			SessionUtil.getManagerId(request);
+			
+			List<HospitalDrug> ret = drugService.getHospitalDrugsByHospital(hospitalid, key, pageIndex, pageSize);
+			return Response.OK(ret);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		}catch (Exception e) {
