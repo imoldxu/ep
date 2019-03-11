@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ly.service.mapper.DrugMapper;
 import com.ly.service.mapper.TagMapMapper;
@@ -102,6 +103,7 @@ public class DrugService {
 		return opRet;
 	}
 	
+	@Transactional
 	public int uploadDrugList(List<Drug> drugList){
     	//drugMapper.insertDrugs(drugList);
 		int opRet = drugMapper.insertList(drugList);

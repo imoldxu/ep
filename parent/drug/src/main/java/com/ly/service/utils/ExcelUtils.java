@@ -11,6 +11,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ly.service.context.ErrorCode;
+import com.ly.service.context.HandleException;
 import com.ly.service.entity.Drug;
 
 
@@ -155,17 +157,17 @@ public class ExcelUtils {
 			XSSFCell standardCell = row.getCell(2); // 规格列
 			XSSFCell formCell = row.getCell(3);//剂型
 			//XSSFCell priceCell = row.getCell(4); // 价格列
-			XSSFCell unitCell = row.getCell(5); // 计价单位
-			XSSFCell categoryCell = row.getCell(6); // 分类
+			XSSFCell unitCell = row.getCell(4); // 计价单位
+			XSSFCell categoryCell = row.getCell(5); // 分类
 			//XSSFCell subCategoryCell = row.getCell(7);//子类
-			XSSFCell singledoseCell = row.getCell(8);
-			//XSSFCell doseunitCell = row.getCell(8);
-			XSSFCell usageCell = row.getCell(9);
-			XSSFCell frequencyCell = row.getCell(10);
-			XSSFCell companyCell = row.getCell(11);
+			XSSFCell singledoseCell = row.getCell(6);
+			XSSFCell doseunitCell = row.getCell(7);
+			XSSFCell usageCell = row.getCell(8);
+			XSSFCell frequencyCell = row.getCell(9);
+			XSSFCell companyCell = row.getCell(10);
 			//XSSFCell fullkeysCell = row.getCell(11); // 拼音缩写
 			//XSSFCell shortNameKeysCell = row.getCell(12); // 简称拼音缩写
-			
+			XSSFCell isZyCell = row.getCell(11);
 			
 			String drugname = nameCell.getStringCellValue();
 			if(drugname!=null){
@@ -222,7 +224,7 @@ public class ExcelUtils {
 			}else if(singledoseCell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC){
 				drug.setSingledose(String.valueOf(singledoseCell.getNumericCellValue()));
 			}
-			//drug.setDoseunit(doseunitCell.getStringCellValue());
+			drug.setDoseunit(doseunitCell.getStringCellValue());
 			String frequency = frequencyCell.getStringCellValue();
 			if(frequency!=null){
 				frequency = frequency.trim();
@@ -243,6 +245,27 @@ public class ExcelUtils {
 				company = company.trim();
 			}
 			drug.setCompany(company);
+			if(isZyCell.getCellType() == XSSFCell.CELL_TYPE_STRING){
+				String isZyStr = isZyCell.getStringCellValue();
+				if(isZyStr!=null){
+					isZyStr = isZyStr.trim();
+				}
+				Integer isZy = Integer.parseInt(isZyStr);
+				if(isZy != 1 && isZy !=2 ) {
+					throw new HandleException(ErrorCode.NORMAL_ERROR, "中西药只能设置为1或2");
+				}
+				drug.setIszy(isZy);
+			}else if(isZyCell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC){
+				int isZy = (int) isZyCell.getNumericCellValue();
+				if(isZy != 1 && isZy !=2 ) {
+					throw new HandleException(ErrorCode.NORMAL_ERROR, "中西药只能设置为1或2");
+				}
+				drug.setIszy(isZy);
+			}else {
+				throw new HandleException(ErrorCode.NORMAL_ERROR, "中西药只能设置为1或2");
+			}
+			
+			
 			drugList.add(drug);
        }
            //添加

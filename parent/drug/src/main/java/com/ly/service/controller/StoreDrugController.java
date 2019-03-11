@@ -39,7 +39,7 @@ public class StoreDrugController {
 	public Response add(@ApiParam(name = "storeid", value = "药店编号") @RequestParam(name = "storeid") int storeid,
 			@ApiParam(name = "drugid", value = "药品id") @RequestParam(name = "drugid") int drugid,
 			@ApiParam(name = "drugName", value = "药品名称") @RequestParam(name = "drugName") String drugName,
-			@ApiParam(name = "stander", value = "药品规格") @RequestParam(name = "standard") String standard,
+			@ApiParam(name = "standard", value = "药品规格") @RequestParam(name = "standard") String standard,
 			@ApiParam(name = "company", value = "药品厂商") @RequestParam(name = "company") String company,
 			@ApiParam(name = "price", value = "药品价格，单位为分") @RequestParam(name = "price") int price,
 			@ApiParam(name = "settlementPrice", value = "药品给平台结算费用，单位为分") @RequestParam(name = "settlementPrice") int settlementPrice,
@@ -50,6 +50,27 @@ public class StoreDrugController {
 			
 			StoreDrug storeDrug = drugService.add(storeid, drugid, drugName, standard, company, price, settlementPrice);
 			return Response.OK(storeDrug);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		} catch(Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/del", method = RequestMethod.POST)
+	@ApiOperation(value = "为药店分配药品", notes = "管理接口")
+	public Response del(@ApiParam(name = "storeid", value = "药店编号") @RequestParam(name = "storeid") int storeid,
+			@ApiParam(name = "drugid", value = "药品id") @RequestParam(name = "drugid") int drugid,
+			@ApiParam(name = "storeDrugId", value = "药店药品编号") @RequestParam(name = "storeDrugId") int storeDrugId,
+			HttpServletRequest request, HttpServletResponse response){
+		
+		try{
+			SessionUtil.getManagerId(request);
+			
+			drugService.del(storeid, drugid, storeDrugId);
+			return Response.OK(null);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		} catch(Exception e){
@@ -112,14 +133,16 @@ public class StoreDrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getAllStoreDrugList", method = RequestMethod.GET)
+	@RequestMapping(value = "/getStoreDrugListByStore", method = RequestMethod.GET)
 	@ApiOperation(value = "获取所有药房的药品清单", notes = "管理接口")
-	public Response getAllStoreDrugList(@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
+	public Response getStoreDrugListByStore(@ApiParam(name = "storeid", value = "商户id") @RequestParam(name = "storeid") Integer storeid,
+			@ApiParam(name = "key", value = "关键字") @RequestParam(name = "key") String key,
+			@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
 			@ApiParam(name = "pageSize", value = "每页数量") @RequestParam(name = "pageSize")int pageSize,
 			HttpServletRequest request, HttpServletResponse response){
 		try{
 			SessionUtil.getManagerId(request);
-			List<StoreDrug> list= drugService.getAllStoreDrugList(pageIndex, pageSize);
+			List<StoreDrug> list= drugService.getStoreDrugList(storeid, key, 0, pageIndex, pageSize);//默认不关心状态
 			return Response.OK(list);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());

@@ -32,5 +32,9 @@
 	<select id="getZyDrugByTag" resultMap="SimpleDrugInfo">
 		SELECT t_drug.id, CONCAT(t_drug.drugname,'--',t_drug.standard,'--',t_drug.company) as showname from t_hospital_drug  LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id LEFT JOIN t_drug_tag_map ON t_drug.id = t_drug_tag_map.drugid LEFT JOIN t_drug_tag ON t_drug_tag.id = t_drug_tag_map.tagid WHERE t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} AND t_drug_tag.tag = #{tag, jdbcType=VARCHAR} and t_drug.iszy = 2;
 	</select>
+	
+	<select id="getHospitalDrugsByKeys" resultType="com.ly.service.entity.HospitalDrug">
+		SELECT t_hospital_drug.*  from t_hospital_drug LEFT JOIN t_drug ON t_hospital_drug.drugid = t_drug.id WHERE t_hospital_drug.hospitalid = #{hid, jdbcType=INTEGER} AND (t_drug.drugname LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.shortname LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.fullkeys LIKE #{mykeys,jdbcType=VARCHAR} OR t_drug.shortnamekeys LIKE #{mykeys,jdbcType=VARCHAR}) ORDER BY t_hospital_drug.id DESC LIMIT #{offset,jdbcType=INTEGER}, #{size,jdbcType=INTEGER};
+	</select>
 
 </mapper>

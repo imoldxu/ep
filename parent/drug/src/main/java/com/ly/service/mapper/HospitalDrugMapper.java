@@ -21,4 +21,7 @@ public interface HospitalDrugMapper extends BaseMapper<HospitalDrug>{
 	    List<SimpleDrugInfo> getDrugByTag(@Param(value="hid")Integer hid, @Param(value="tag")String tag);
 
 	    List<SimpleDrugInfo> getZyDrugByTag(@Param(value="hid")Integer hid, @Param(value="tag")String tag);
+
+	    List<HospitalDrug> getHospitalDrugsByKeys(@Param(value="hid")Integer hid, @Param(value="mykeys")String mykeys,
+	    		@Param(value="offset")Integer offset, @Param(value="size")Integer size);
 }

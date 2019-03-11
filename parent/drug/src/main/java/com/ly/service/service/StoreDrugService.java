@@ -55,19 +55,27 @@ public class StoreDrugService {
 	}
 	
 	public List<StoreDrug> getStoreDrugList(int storeid, String key, int state, int pageIndex, int pageSize){
-		Example ex = new Example(StoreDrug.class);
-		Criteria c = ex.createCriteria().andEqualTo("storeid", storeid);
-		if(key != null && !key.isEmpty()){
-			c = c.andLike("drugname", "%"+key+"%");
+//		Example ex = new Example(StoreDrug.class);
+//		Criteria c = ex.createCriteria().andEqualTo("storeid", storeid);
+//		if(key != null && !key.isEmpty()){
+//			c = c.andLike("drugname", "%"+key+"%");
+//		}
+//		if(state!=0){
+//			c = c.andEqualTo("state", state);
+//		}
+//		ex.setOrderByClause("id DESC");
+//		//分页处理
+//		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
+//		List<StoreDrug> list= storeDrugMapper.selectByExampleAndRowBounds(ex, rowBounds);
+//		
+		List<StoreDrug> list = null;
+		int offset = (pageIndex-1)*pageSize;
+		key = "%"+key+"%";
+		if(state==0) {
+			list = storeDrugMapper.getStoreDrugsByKeys(storeid, key, offset, pageSize);
+		}else {
+			list = storeDrugMapper.getStoreDrugsByKeysAndState(storeid, key, state, offset, pageSize);
 		}
-		if(state!=0){
-			c = c.andEqualTo("state", state);
-		}
-		ex.setOrderByClause("id DESC");
-		//分页处理
-		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
-		List<StoreDrug> list= storeDrugMapper.selectByExampleAndRowBounds(ex, rowBounds);
-		
 		return list;
 	}
 	
@@ -102,7 +110,7 @@ public class StoreDrugService {
 		Store store = userClient.getStore(storeid).fetchOKData(Store.class);
 		
 		ret.setSettlementprice(getInt(store.getRate()*price));//根据药品售价以及药店的费率计算服务费
-		ret.setState(StoreDrug.STATE_UP);
+		ret.setState(StoreDrug.STATE_DOWN);
 		ret.setStoreid(storeid);
 		
 		storeDrugMapper.insertUseGeneratedKeys(ret);
@@ -160,5 +168,14 @@ public class StoreDrugService {
 		return ret;
 		
 		
+	}
+
+	public void del(int storeid, int drugid, int storeDrugId) {
+		Example ex = new Example(StoreDrug.class);
+		ex.createCriteria().andEqualTo("storeid", storeid).andEqualTo("drugid", drugid).andEqualTo("id", storeDrugId);
+		int ret = storeDrugMapper.deleteByExample(ex);
+		if(ret!=1) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "删除失败");
+		}
 	}
 }
