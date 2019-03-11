@@ -4,6 +4,8 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.gateway.discovery.DiscoveryClientRouteDefinitionLocator;
 import org.springframework.cloud.gateway.discovery.DiscoveryLocatorProperties;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -27,10 +29,10 @@ public class RouteConfig {
         return route;
     }
 	
-//	@Bean
-//	public RouteLocator addHanderRouteLocator(RouteLocatorBuilder builder) {
-//		return builder.routes().route("internal", r->r.path("/*/internal/**").uri("http://www.baidu.com")).build();
-//	}
+	@Bean
+	public RouteLocator addHanderRouteLocator(RouteLocatorBuilder builder) {
+		return builder.routes().route("internal", r->r.path("/oss").uri("http://127.0.0.1:9210")).build();
+	}
 	
 	/**
 	 * 与服务发现结合，配置路由
