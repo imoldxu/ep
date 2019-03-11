@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.ly.BaseMapper;
+import com.ly.service.context.PieData;
 import com.ly.service.entity.Prescription;
 
 
@@ -25,4 +26,12 @@ public interface PrescriptionMapper extends BaseMapper<Prescription> {
 			@Param(value="endDate")String endDate,
 			@Param(value="offset")Integer offset,
 			@Param(value="pageSize")Integer pageSize);
+	
+	List<PieData> getPrescriptionNumByHospital(@Param(value="startTime")String startTime,
+			@Param(value="endTime")String endTime,
+			@Param(value="size")Integer size);
+	
+	List<PieData> getPrescriptionNumByDoctor(@Param(value="startTime")String startTime,
+			@Param(value="endTime")String endTime,
+			@Param(value="size")Integer size);
 }

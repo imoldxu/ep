@@ -1,5 +1,6 @@
 package com.ly.service.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ly.service.context.TransactionDrug;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
+import com.ly.service.context.PieData;
 import com.ly.service.context.Response;
 import com.ly.service.context.SearchOption;
 import com.ly.service.entity.Order;
@@ -161,18 +163,23 @@ public class PrescriptionController {
 	@RequestMapping(value = "/getPrescriptionList", method = RequestMethod.GET)
 	@ApiOperation(value = "管理员获取处方列表", notes = "管理接口")
 	public Response getPrescriptionList(
-			@ApiParam(name = "option", value = "查询条件") @RequestParam(name = "option") String option,
+			@ApiParam(name="barcode", value="处方码") @RequestParam(name="barcode") String barcode,
+			@ApiParam(name="doctorName", value="医生姓名") @RequestParam(name="doctorName") String doctorName,
+			@ApiParam(name="startDate", value="开始日期") @RequestParam(name="startDate") String startDate,
+			@ApiParam(name="endDate", value="结束日期，可为''") @RequestParam(name="endDate") String endDate,
+			@ApiParam(name="pageIndex", value="页码1-n") @RequestParam(name="pageIndex") int pageIndex,
+			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse respons) {
-		SearchOption searchOption = null;
-		try{
-			searchOption = JSONUtils.getObjectByJson(option, SearchOption.class);
-		}catch (Exception e) {
-			Response.Error(-1, "参数错误");
-		}
+		
 		try{
 			SessionUtil.getManagerId(request);
 			
-			List<Prescription> plist =  prescriptionService.getPrescriptionListByOption(searchOption);
+			Long pid = null;
+			if(barcode != null && !barcode.isEmpty()) {
+				pid = BarcodeUtil.barcode2ID(BarcodeUtil.TYPE_PRESCRIPTION,barcode);
+			}
+			
+			List<Prescription> plist =  prescriptionService.getPrescriptionListByOption(pid, doctorName, startDate, endDate, pageIndex, pageSize);
 			return Response.OK(plist);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -443,7 +450,7 @@ public class PrescriptionController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/commitComment", method = RequestMethod.POST)
 	@ApiOperation(value = "提交处方评论", notes = "获取接口")
-	public Response getStorePrescriptionDetail(@ApiParam(name="pid", value="处方id") @RequestParam(name="pid") Long pid,
+	public Response commitComment(@ApiParam(name="pid", value="处方id") @RequestParam(name="pid") Long pid,
 			@ApiParam(name="star", value="评分0-5分") @RequestParam(name="star") int star,
 			@ApiParam(name="content", value="评论内容") @RequestParam(name="content") String content,
 			HttpServletRequest request, HttpServletResponse response){
@@ -461,4 +468,45 @@ public class PrescriptionController {
 		}
 	}
 	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getPrescriptionNumByHospital", method = RequestMethod.GET)
+	@ApiOperation(value = "统计医院处方产出数量", notes = "管理接口")
+	public Response getPrescriptionNumByHospital(@ApiParam(name="startDate", value="起始日期") @RequestParam(name="startDate") Long startDate,
+			@ApiParam(name="endDate", value="结束日期") @RequestParam(name="endDate") Long endDate,
+			@ApiParam(name="size", value="期望数据数量") @RequestParam(name="size") int size,
+			HttpServletRequest request, HttpServletResponse response){
+		
+		try{
+			SessionUtil.getManagerId(request);
+			
+			List<PieData> ret = prescriptionService.getPrescriptionNumByHospital(new Date(startDate), new Date(endDate), size);
+			return Response.OK(ret);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();		
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getPrescriptionNumByDoctor", method = RequestMethod.GET)
+	@ApiOperation(value = "统计医院处方产出数量", notes = "管理接口")
+	public Response getPrescriptionNumByDoctor(@ApiParam(name="startDate", value="起始日期") @RequestParam(name="startDate") Long startDate,
+			@ApiParam(name="endDate", value="结束日期") @RequestParam(name="endDate") Long endDate,
+			@ApiParam(name="size", value="期望数据数量") @RequestParam(name="size") int size,
+			HttpServletRequest request, HttpServletResponse response){
+		
+		try{
+			SessionUtil.getManagerId(request);
+			
+			List<PieData> ret = prescriptionService.getPrescriptionNumByDoctor(new Date(startDate), new Date(endDate), size);
+			return Response.OK(ret);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();		
+		}
+	}
 }

@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
+import com.ly.service.context.PieData;
 import com.ly.service.context.Response;
 import com.ly.service.context.SearchOption;
 import com.ly.service.context.StoreAndDrugInfo;
@@ -90,43 +91,41 @@ public class PrescriptionService {
 		return p;
 	}
 	
-	public List<Prescription> getPrescriptionListByOption(SearchOption searchOption){
-		Example ex = new Example(Prescription.class);
-		Criteria criteria = ex.createCriteria();
-		if(searchOption.getNumber() != null && !searchOption.getNumber().isEmpty()){
-			criteria = criteria.andEqualTo("num", searchOption.getNumber());
-		}
-		if(searchOption.getDoctorname() != null && !searchOption.getDoctorname().isEmpty()){
-			criteria = criteria.andEqualTo("doctorname", searchOption.getDoctorname());
-		}
-		if(searchOption.getDepartment() != null && !searchOption.getDepartment().isEmpty()){
-			criteria = criteria.andEqualTo("department", searchOption.getDepartment());	
-		}
-		if(searchOption.getPatientname() != null && !searchOption.getPatientname().isEmpty()){
-			criteria = criteria.andEqualTo("patientname", searchOption.getPatientname());		
-		}
-		if(searchOption.getPatientphone() != null && !searchOption.getPatientphone().isEmpty()){
-			criteria = criteria.andEqualTo("patientphone", searchOption.getPatientphone());
-		}
-		if(searchOption.getStartdate() != null && !searchOption.getStartdate().isEmpty()){
-			String startDate = DateUtils.UTCStringtODefaultString(searchOption.getStartdate());
-			criteria = criteria.andGreaterThanOrEqualTo("createdate", startDate);
-		}
-		if(searchOption.getEnddate() != null && !searchOption.getEnddate().isEmpty()){
-			String endDate = DateUtils.UTCStringtODefaultString(searchOption.getEnddate());
-			criteria = criteria.andLessThanOrEqualTo("createdate", endDate);
-		}
-		if(searchOption.getState() != null && !searchOption.getState().isEmpty()){
-			criteria = criteria.andEqualTo("state", searchOption.getState());
-		}
-		ex.setOrderByClause("id Desc");
+	public List<Prescription> getPrescriptionListByOption(Long pid, String doctorName, String startDate, String endDate, int pageIndex, int pageSize){
+		if(pid!=null) {
+			Prescription p = pMapper.selectByPrimaryKey(pid);
+			List<Prescription> ret = new ArrayList<>();
+			if(null == p) {
+				return ret;
+			}else {
+				ret.add(p);
+				return ret;
+			}
+		}else {
 		
-		int pageIndex = searchOption.getPageindex().intValue();
-		int maxSize = 50;
-		RowBounds rowBounds = new RowBounds(pageIndex*maxSize, maxSize);
-		List<Prescription> plist = pMapper.selectByExampleAndRowBounds(ex, rowBounds);
-		
-		return plist;
+			Example ex = new Example(Prescription.class);
+			Criteria criteria = ex.createCriteria();
+			if(startDate==null || startDate.isEmpty()){
+				startDate = "1970-01-01 00:00:00";
+			}else{
+				startDate = DateUtils.UTCStringtODefaultString(startDate)+" 00:00:00";
+			}
+			if(endDate==null || endDate.isEmpty()){
+				endDate = "2099-12-31 24:00:00";
+			}else{
+				endDate = DateUtils.UTCStringtODefaultString(endDate)+" 24:00:00";
+			}
+			criteria = criteria.andGreaterThanOrEqualTo("createtime", startDate).andLessThanOrEqualTo("createtime", endDate);
+			if(doctorName!=null && !doctorName.isEmpty()) {
+				criteria.andLike("doctorname", doctorName);
+			}
+			ex.setOrderByClause("id Desc");
+			
+			RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
+			List<Prescription> plist = pMapper.selectByExampleAndRowBounds(ex, rowBounds);
+			
+			return plist;
+		}
 	}
 	
 	public Prescription getPrescriptionDetail(Long pid) throws HandleException{
@@ -378,14 +377,14 @@ public class PrescriptionService {
 		}else {
 			int offset = (pageIndex-1)*pageSize;
 			if(startDate==null || startDate.isEmpty()){
-				startDate = "1970-1-1";
+				startDate = "1970-01-01 00:00:00";
 			}else{
-				startDate = DateUtils.UTCStringtODefaultString(startDate);
+				startDate = DateUtils.UTCStringtODefaultString(startDate)+" 00:00:00";
 			}
 			if(endDate==null || endDate.isEmpty()){
-				endDate = "2099-12-31";
+				endDate = "2099-12-31 24:00:00";
 			}else{
-				endDate = DateUtils.UTCStringtODefaultString(endDate);
+				endDate = DateUtils.UTCStringtODefaultString(endDate)+" 24:00:00";
 			}
 			if(patientName.isEmpty()) {
 				List<Prescription> ret = pMapper.getStorePrescripts(storeid, startDate, endDate, offset, pageSize);
@@ -474,4 +473,22 @@ public class PrescriptionService {
 		}
 	}
 	
+	
+	public List<PieData> getPrescriptionNumByHospital(Date startDate,Date endDate, int size){
+		
+		String startTime = DateUtils.formatDate(startDate)+" 00:00:00";
+		String endTime = DateUtils.formatDate(endDate)+" 24:00:00";
+		
+		List<PieData> ret = pMapper.getPrescriptionNumByHospital(startTime, endTime, size);
+		return ret;
+	}
+	
+	public List<PieData> getPrescriptionNumByDoctor(Date startDate,Date endDate, int size){
+		
+		String startTime = DateUtils.formatDate(startDate)+" 00:00:00";
+		String endTime = DateUtils.formatDate(endDate)+" 24:00:00";
+		
+		List<PieData> ret = pMapper.getPrescriptionNumByDoctor(startTime, endTime, size);
+		return ret;
+	}
 }
