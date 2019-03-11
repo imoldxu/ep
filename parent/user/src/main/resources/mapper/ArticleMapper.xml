@@ -8,10 +8,15 @@
 	    <result column="piclist" property="piclist" jdbcType="VARCHAR" typeHandler="com.ly.service.typehandler.JSONArrayHandler"/>
 	    <result column="source" property="source" jdbcType="VARCHAR" />
 	    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+	    <result column="state" property="state" jdbcType="TINYINT" />
   	</resultMap>
 
 	<select id="getArticleList" resultMap="articleitem">
-		SELECT articleid, title, piclist, source, createtime From t_article Order BY articleid DESC LIMIT #{offset, jdbcType=INTEGER},#{size,jdbcType=INTEGER}  
+		SELECT articleid, title, piclist, source, createtime, state From t_article WHERE state = 1 Order BY articleid DESC LIMIT #{offset, jdbcType=INTEGER},#{size,jdbcType=INTEGER}  
+	</select>
+	
+	<select id="getArticleListByTitle" resultMap="articleitem">
+		SELECT articleid, title, piclist, source, createtime, state From t_article WHERE t_article.title LIKE #{title, jdbcType=VARCHAR} Order BY articleid DESC LIMIT #{offset, jdbcType=INTEGER},#{size,jdbcType=INTEGER}  
 	</select>
 	
 </mapper>
