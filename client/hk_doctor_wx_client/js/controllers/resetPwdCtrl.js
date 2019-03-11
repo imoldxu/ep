@@ -14,7 +14,7 @@ define(['weui'], function(weui){
 			
 			var loading = weui.loading('提交中...');
 			
-			//Md.
+			newPwd = Md5.b64_hmac_md5("hk",newPwd);//使用md5对密码加密,并转换为HEX
 			
             $http({
                 method: 'post',
