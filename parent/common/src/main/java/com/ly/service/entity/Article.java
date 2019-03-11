@@ -47,6 +47,13 @@ public class Article {
 	@ColumnType(jdbcType= JdbcType.VARCHAR)
 	private String source;
 	
+	public static final Integer STATE_VALID = 1;
+	public static final Integer STATE_INVALID = 0;
+	
+	@Column(name ="state")
+	@ColumnType(jdbcType= JdbcType.TINYINT)
+	private Integer state;
+	
 	public Integer getArticleid() {
 		return articleid;
 	}
@@ -101,6 +108,14 @@ public class Article {
 
 	public void setSource(String source) {
 		this.source = source;
+	}
+
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
 	}
 
 }
