@@ -16,6 +16,12 @@ define(['jquery'], function($){
 		
         $scope.getPrescriptionByID = function (){
 			
+			
+			if($scope.barcode == undefined || $scope.barcode == null || $scope.barcode.length == 0){
+				alert('请输入或扫描处方码');
+				return false;
+			}
+			
 			$rootScope.myloader = true;
 
 			$http({
@@ -120,7 +126,7 @@ define(['jquery'], function($){
 					}
                 }else{
 				
-					alert(data.msg);
+					alert(resp.msg);
 				
 				}
 
