@@ -21,8 +21,7 @@ define(['weui'], function(weui){
 				return false;
             }
 			
-			//FIXME: 暂时屏蔽
-			//pwd = Md5.b64_hmac_md5("hk",pwd);//使用md5对密码加密,并转换为HEX
+			pwd = Md5.b64_hmac_md5("hk",pwd);//使用md5对密码加密,并转换为HEX
 			
 			var loading = weui.loading("登陆中...");
 			
@@ -40,7 +39,7 @@ define(['weui'], function(weui){
 
                 if (resp.code == 1){
 
-					weui.toast('登陆成功', 3000);
+					weui.toast('登陆成功', 1000);
 
 					dataVer.put('dloginname', phone);
 
@@ -49,7 +48,7 @@ define(['weui'], function(weui){
 					if(resp.data.signatureurl != null && resp.data.name != null && resp.data.department != null){
 						$location.path('/home').replace();
 					}else{
-						$state.go('updateInfo');
+						$location.path('updateInfo').replace();
 					}
 					
                     return false
