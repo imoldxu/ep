@@ -5,6 +5,7 @@ define([], function(){
 
         //默认值
 
+		$scope.email = dataVer.get('loginEmail');
 
         $scope.login = function( email, pwd){
 
@@ -17,8 +18,7 @@ define([], function(){
 				return false;
             }
 			
-			//FIXME: 暂时屏蔽
-			//pwd = Md5.b64_hmac_md5("hk",pwd);//使用md5对密码加密,并转换为HEX
+			pwd = Md5.b64_hmac_md5("hk",pwd);//使用md5对密码加密,并转换为HEX
 			
 			$rootScope.myloader = true;
 			
@@ -37,14 +37,13 @@ define([], function(){
 
                 if (data.code == 1){
 
-                    //dataVer.put('drugInfo','');
+					dataVer.put('loginEmail', email);
 
                     dataVer.put('storeInfo',data.data);
 					
-					//$state.go('index');
 					$location.path('index').replace();
 
-                    return false
+                    return false;
 
                 }else{
 

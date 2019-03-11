@@ -42,8 +42,8 @@ define([], function(){
 		   
 		   $rootScope.myloader = true;
 		   
-		   //oldpwd = Md5.b64_hmac_md5("hk",oldpwd);//使用md5对密码加密,并转换为HEX
-		   //newpwd = Md5.b64_hmac_md5("hk",newpwd);
+		   oldpwd = Md5.b64_hmac_md5("hk",oldpwd);//使用md5对密码加密,并转换为HEX
+		   newpwd = Md5.b64_hmac_md5("hk",newpwd);
 		   
 		   $http({
                 method: 'post',

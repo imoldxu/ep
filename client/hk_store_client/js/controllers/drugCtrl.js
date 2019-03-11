@@ -103,7 +103,7 @@ define(['jquery'], function($){
 
                 if (resp.code == 1){
 					
-					$scope.drugList[$scope.optNum].state = 0;
+					$scope.drugList[$scope.optNum].state = 2;
 				
                     console('修改成功');
 

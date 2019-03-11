@@ -56,7 +56,7 @@
 					<td>{{f2y(x.price)}}</td>
 					<td ng-if="x.state == 1">有货</td>
 					<td class="emptystate" ng-if="x.state == 2">无货</td>
-					<td><img src="img/edit.png" ng-click="openModal(x.id,$index)" width="16px"> <img src="img/down.png" ng-if="x.state == 1" ng-click="downdrug(x.id,$index)" width="16px"><img src="img/up.png" ng-if="x.state == 0" ng-click="updrug(x.id,$index)" width="16px"></td>
+					<td><img src="img/edit.png" ng-click="openModal(x.id,$index)" width="16px"> <img src="img/down.png" ng-if="x.state == 1" ng-click="downdrug(x.id,$index)" width="16px"><img src="img/up.png" ng-if="x.state == 2" ng-click="updrug(x.id,$index)" width="16px"></td>
 				</tr>
             </tbody>
         </table>
@@ -80,32 +80,26 @@
 
             <div class="row">
 
-                <div class="md">药品名称 :{{drugInfo.drugname}}</div>
+                <div class="">药品名称 :{{drugInfo.drugname}}</div>
              
             </div>
 
             <div class="row">
 
-                <div class="md">规<i class="ls"></i>格: {{drugInfo.drugstandard}}</div>
+                <div class="">规<i class="ls"></i>格: {{drugInfo.drugstandard}}</div>
 
             </div>
 
 
             <div class="row">
 
-                <div class="md">厂<i class="ls"></i>商 : {{drugInfo.drugcompany}}</div>
-
-            </div>
-
-			<div class="row">
-
-                <div class="md">信息费 : {{f2y(drugInfo.settlementprice)}}</div>
+                <div class="">厂<i class="ls"></i>商: {{drugInfo.drugcompany}}</div>
 
             </div>
 			
             <div class="row">
 
-                <div class="md">售<i class="ls"></i>价 : <input type="text" ng-init="drugInfo.showprice=f2y(drugInfo.price)" ng-model="drugInfo.showprice"/></div>
+                <div class="">售<i class="ls"></i>价: <input type="text" ng-init="drugInfo.showprice=f2y(drugInfo.price)" ng-model="drugInfo.showprice"/></div>
 
             </div>        
 
