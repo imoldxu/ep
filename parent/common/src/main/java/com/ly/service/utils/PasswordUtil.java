@@ -13,10 +13,15 @@ public class PasswordUtil {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
-		String newPwdStr = oldPwd.toUpperCase()+nonce;
+		String newPwdStr = oldPwd+nonce;
 		byte[] newPwdArray = md5.digest(newPwdStr.getBytes());
 		String newPwd = bytesToHex(newPwdArray);
 		return newPwd;
+	}
+	
+	public static String generateClientPwd(String oldPwd){
+		String nonce = "hk";
+		return generatePwd(oldPwd, nonce);
 	}
 	
 	public static boolean isEqual(String serverPwd, String clientPwd, String nonce){
