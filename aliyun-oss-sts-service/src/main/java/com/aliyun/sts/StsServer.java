@@ -84,7 +84,7 @@ public class StsServer extends HttpServlet {
             System.out.println("RequestId: " + resp.getRequestId());
             response.setHeader("Access-Control-Allow-Origin", "*");
 			response.setHeader("Access-Control-Allow-Methods", "GET, POST");
-			
+			response.setContentType("application/json");
 			Map<String, String> respMap = new LinkedHashMap<String, String>();
             respMap.put("SecurityToken", resp.getCredentials().getSecurityToken());
             respMap.put("AccessKeySecret", resp.getCredentials().getAccessKeySecret());
