@@ -28,7 +28,8 @@ public class PlatformProxy {
 	private static final String URL = "http://127.0.0.1:9201";
 	private static final String URL2 = "http://127.0.0.1:9202";
 	private static final String URL3 = "http://127.0.0.1:9203";
-	private static final String signkey = "pzzyy";
+	private static final Integer hid = 1;
+	private static final String signkey = "c4da3e38-e7e8-46c7-a97b-8fa2ea0561a2";
 	
 	public static Doctor login(String phone, String pwd) {
 		HttpClientUtil h = new HttpClientUtil();
@@ -65,7 +66,7 @@ public class PlatformProxy {
 		return ret;
     }
 	
-	public static List<ShortDrugInfo> getDrugsByKeys(Integer hid, String keys, Integer type) {
+	public static List<ShortDrugInfo> getDrugsByKeys(String keys, Integer type) {
 		HttpClientUtil h = new HttpClientUtil();
 		List<ShortDrugInfo> ret = null;
 		try {
@@ -103,7 +104,7 @@ public class PlatformProxy {
 		return ret;
     }
 	
-	public static List<ShortDrugInfo> getDrugsByTag(Integer hid, String tag, Integer type) {
+	public static List<ShortDrugInfo> getDrugsByTag(String tag, Integer type) {
 		HttpClientUtil h = new HttpClientUtil();
 		List<ShortDrugInfo> ret = null;
 		try {
@@ -221,7 +222,7 @@ public class PlatformProxy {
 		}
 	}
 
-	public static List<ShortDrugInfo> getDrugsByDoctor(Integer hid, Integer doctorid, Integer type) {
+	public static List<ShortDrugInfo> getDrugsByDoctor(Integer doctorid, Integer type) {
 		HttpClientUtil h = new HttpClientUtil();
 		List<ShortDrugInfo> ret = null;
 		try {

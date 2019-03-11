@@ -22,8 +22,6 @@ import tk.mybatis.mapper.entity.Example;
 public class DrugService {
 
 	private static final boolean isUseNative = false;
-	private static final int hid = 1;
-	
 	
 	@Autowired
 	DrugMapper drugMapper;
@@ -60,7 +58,7 @@ public class DrugService {
 			}
 			return ret;
 		}else{
-			List<ShortDrugInfo> ret = PlatformProxy.getDrugsByKeys(hid, keys, type);
+			List<ShortDrugInfo> ret = PlatformProxy.getDrugsByKeys(keys, type);
 			return ret;
 		}
 	}
@@ -89,7 +87,7 @@ public class DrugService {
 			}
 			return ret;
 		}else{
-			List<ShortDrugInfo> ret = PlatformProxy.getDrugsByTag(hid, tag, type);
+			List<ShortDrugInfo> ret = PlatformProxy.getDrugsByTag(tag, type);
 			return ret;
 		}
 	}
@@ -105,7 +103,7 @@ public class DrugService {
 			
 			return ret;
 		}else{
-			List<ShortDrugInfo> ret = PlatformProxy.getDrugsByDoctor(hid, doctorid, type);
+			List<ShortDrugInfo> ret = PlatformProxy.getDrugsByDoctor(doctorid, type);
 			return ret;
 		}
 	}
