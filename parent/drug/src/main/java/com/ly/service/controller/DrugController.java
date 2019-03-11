@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
@@ -170,12 +171,12 @@ public class DrugController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/modifyDrug", method = RequestMethod.POST)
 	@ApiOperation(value = "修改药品信息", notes = "管理接口")
-	public Response modifyDrug(@ApiParam(name="drugInfo",value="{ \"id\": 23,     \"drugname\": \"硫酸亚铁片\",     \"standard\": \"0.3g*60片\",     \"category\": \"OTC\",     \"price\": 38,     \"unit\": \"盒\",     \"form\": \"片剂\",     \"singledose\": \"1\",     \"doseunit\": \"片\",     \"defaultusage\": \"饭前\",     \"frequency\": \"一天三次\",     \"fullkeys\": \"LSYTP\",     \"shortnamekeys\": \"LSYTP\"   }") @RequestParam(value="drugInfo") String drugInfo,HttpServletRequest request,HttpServletResponse response) {
-		//response.setHeader("Access-Control-Allow-Origin", "*");
-		//response.setHeader("Access-Control-Allow-Methods", "POST");
+	public Response modifyDrug(@ApiParam(name="jsdrug",value="{ \"id\": 23,     \"drugname\": \"硫酸亚铁片\",     \"standard\": \"0.3g*60片\",     \"category\": \"OTC\",     \"price\": 38,     \"unit\": \"盒\",     \"form\": \"片剂\",     \"singledose\": \"1\",     \"doseunit\": \"片\",     \"defaultusage\": \"饭前\",     \"frequency\": \"一天三次\",     \"fullkeys\": \"LSYTP\",     \"shortnamekeys\": \"LSYTP\"   }") @RequestParam(value="jsdrug") String jsdrug,
+			HttpServletRequest request,
+			HttpServletResponse response) {
 		Drug drug = null;
 		try{			
-			drug = JSONUtils.getObjectByJson(drugInfo, Drug.class);
+			drug = JSONUtils.getObjectByJson(jsdrug, Drug.class);
 		}catch (Exception e) {
 			return Response.Error(ErrorCode.ARG_ERROR, "参数错误");
 		}
