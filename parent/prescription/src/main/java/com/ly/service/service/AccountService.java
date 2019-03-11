@@ -80,7 +80,7 @@ public class AccountService {
 		boolean isLock = redissonUtil.tryLock("STORE_ACCOUNT_"+storeid, TimeUnit.MILLISECONDS, 1000, 1500);
 		if(isLock){
 			StoreAccount account = getStoreAccount(storeid);
-			if(account.getBalance()>=amount){
+			if(account.getBalance()-amount >= -5000){//允许结算时负5000
 				account.setBalance(account.getBalance()-amount);
 				storeAccountMapper.updateByPrimaryKey(account);
 				
@@ -95,7 +95,7 @@ public class AccountService {
 				return account;
 			}else{
 				redissonUtil.unlock("STORE_ACCOUNT_"+storeid);
-				throw new HandleException(ErrorCode.BALANCE_ERROR, "余额不足");
+				throw new HandleException(ErrorCode.BALANCE_ERROR, "余额不足，请补足余额");
 			}
 			
 		}else{
@@ -104,15 +104,19 @@ public class AccountService {
 	}
 
 	private StoreAccount getStoreAccount(int storeid) {
-		Example ex = new Example(StoreAccount.class);
-		ex.createCriteria().andEqualTo("storeid", storeid);
-		StoreAccount account = storeAccountMapper.selectOneByExample(ex);
+		StoreAccount account = storeAccountMapper.selectByPrimaryKey(storeid);
 		if(null == account){
-			account = new StoreAccount();
-			account.setStoreid(storeid);
-			account.setBalance(0);
-			storeAccountMapper.insertUseGeneratedKeys(account);
+			account = generateAccount(storeid);
 		}
+		return account;
+	}
+
+	public StoreAccount generateAccount(int storeid) {
+		StoreAccount account;
+		account = new StoreAccount();
+		account.setStoreid(storeid);
+		account.setBalance(0);
+		storeAccountMapper.insert(account);
 		return account;
 	}
 
@@ -188,9 +192,7 @@ public class AccountService {
 //	}
 
 	public int getStoreBalance(int id) {
-		Example ex = new Example(StoreAccount.class);
-		ex.createCriteria().andEqualTo("storeid", id);
-		StoreAccount account = storeAccountMapper.selectOneByExample(ex);
+		StoreAccount account = getStoreAccount(id);
 		if(account==null){
 			return 0;
 		}
@@ -217,13 +219,17 @@ public class AccountService {
 
 	public List<StoreAccountRecord> getStoreAccountRecord(int storeid,String startDate, String endDate, int pageIndex, int pageSize) {
 		if(startDate==null || startDate.isEmpty()){
-			startDate = "1970-1-1";
+			startDate = "1970-01-01 00:00:00";
+		}else {
+			startDate = DateUtils.UTCStringtODefaultString(startDate)+" 00:00:00";
 		}
 		if(endDate == null || endDate.isEmpty()){
-			endDate = "2099-12-31";
+			endDate = "2099-12-31 24:00:00";
+		}else {
+			endDate = DateUtils.UTCStringtODefaultString(endDate)+" 24:00:00";
 		}
 		Example ex = new Example(StoreAccountRecord.class);
-		ex.createCriteria().andEqualTo("storeid", storeid).andBetween("createtime", startDate, endDate);
+		ex.createCriteria().andEqualTo("storeid", storeid).andGreaterThanOrEqualTo("createtime", startDate).andLessThanOrEqualTo("createtime", endDate);
 		ex.setOrderByClause("id DESC");
 		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
 		return storeRecordMapper.selectByExampleAndRowBounds(ex, rowBounds);
@@ -236,11 +242,13 @@ public class AccountService {
 //		return sellerAccountMapper.selectByExampleAndRowBounds(ex, rowBounds);
 //	}
 
-	public List<StoreAccount> getAllStoreAccount(int pageIndex, int pageSize) {
-		Example ex = new Example(StoreAccount.class);
-		ex.setOrderByClause("id DESC");
-		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
-		return storeAccountMapper.selectByExampleAndRowBounds(ex, rowBounds);
+	public List<StoreAccount> getAllStoreAccount(String name, int pageIndex, int pageSize) {
+//		Example ex = new Example(StoreAccount.class);
+//		ex.setOrderByClause("id DESC");
+//		RowBounds rowBounds = new RowBounds((pageIndex-1)*pageSize, pageSize);
+//		return storeAccountMapper.selectByExampleAndRowBounds(ex, rowBounds);
+		int offset = (pageIndex-1)*pageSize;
+		return storeAccountMapper.getStoreAccountByName("%"+name+"%", offset, pageSize);
 	}
 
 //	public SellerAccount updateSellerBalance(int sellerid, int type, int amount) {

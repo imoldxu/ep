@@ -52,14 +52,15 @@ public class AccountController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/getAllStoreAccount", method = RequestMethod.GET)
-	@ApiOperation(value = "获取所有销售的账户", notes = "管理接口")
-	public Response getAllStoreAccount(@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
+	@ApiOperation(value = "获取所有药店的账户", notes = "管理接口")
+	public Response getAllStoreAccount(@ApiParam(name = "name", value = "药房名称") @RequestParam(name = "name") String name,
+			@ApiParam(name = "pageIndex", value = "页码") @RequestParam(name = "pageIndex") int pageIndex,
 			@ApiParam(name = "pageSize", value = "最大数") @RequestParam(name = "pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse resp) {
 		try{
 			SessionUtil.getManagerId(request);
 			
-			List<StoreAccount> ret = accountService.getAllStoreAccount(pageIndex, pageSize);
+			List<StoreAccount> ret = accountService.getAllStoreAccount(name, pageIndex, pageSize);
 			return Response.OK(ret);
 		} catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -131,6 +132,29 @@ public class AccountController {
 			HttpServletRequest request, HttpServletResponse resp) {
 		try{
 			int storeid = SessionUtil.getStoreId(request);
+			List<StoreAccountRecord> list = accountService.getStoreAccountRecord(storeid, startDate, endDate, pageIndex, pageSize);
+			return Response.OK(list);
+		} catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getAccountRecordByStore", method = RequestMethod.GET)
+	@ApiOperation(value = "获取店铺账户记录", notes = "管理接口")
+	public Response getAccountRecordByStore(@ApiParam(name="storeid", value="药房id") @RequestParam(name="storeid") Integer storeid,
+			@ApiParam(name="startDate", value="开始日期") @RequestParam(name="startDate") String startDate,
+			@ApiParam(name="endDate", value="结束日期") @RequestParam(name="endDate") String endDate,
+			@ApiParam(name="pageIndex", value="页码") @RequestParam(name="pageIndex") int pageIndex,
+			@ApiParam(name="pageSize", value="每页数量") @RequestParam(name="pageSize") int pageSize,
+			HttpServletRequest request, HttpServletResponse resp) {
+		try{
+			SessionUtil.getManagerId(request);
+			
 			List<StoreAccountRecord> list = accountService.getStoreAccountRecord(storeid, startDate, endDate, pageIndex, pageSize);
 			return Response.OK(list);
 		} catch (HandleException e) {
