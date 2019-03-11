@@ -256,7 +256,23 @@ public class DateUtils {
         int j = localCalendar.get(2) + 1;
         return new Integer(i * 100 + j);
     }
+    
+    /**获取月份,1-12*/
+    public static Integer getMonth(Date paramDate) {
+    	Calendar localCalendar = Calendar.getInstance();
+        localCalendar.setTime(paramDate);
+    	int month = localCalendar.get(Calendar.MONTH) + 1;
+    	return month;
+    }
 
+    /**获取年份*/
+    public static Integer getYear(Date paramDate) {
+    	Calendar localCalendar = Calendar.getInstance();
+        localCalendar.setTime(paramDate);
+    	int year = localCalendar.get(Calendar.YEAR);
+    	return year;
+    }
+    
     public static int addMonths(int paramInt1, int paramInt2) {
         Calendar localCalendar = Calendar.getInstance();
         localCalendar.set(1, paramInt1 / 100);
@@ -266,11 +282,17 @@ public class DateUtils {
         return getYM(localCalendar.getTime()).intValue();
     }
 
+    /**
+              * 变更月份
+     * @param paramDate
+     * @param paramInt 负数为向前的月份
+     * @return
+     */
     public static java.util.Date addMonths(Date paramDate,
                                            int paramInt) {
         Calendar localCalendar = Calendar.getInstance();
         localCalendar.setTime(paramDate);
-        localCalendar.add(2, paramInt);
+        localCalendar.add(Calendar.MONTH, paramInt);
         return localCalendar.getTime();
     }
 
