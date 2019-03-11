@@ -21,6 +21,9 @@ define(['weui'], function(weui){
 				return false;
             }
 			
+			oldPwd = Md5.b64_hmac_md5("hk",oldPwd);//使用md5对密码加密,并转换为HEX
+			newPwd = Md5.b64_hmac_md5("hk",newPwd);
+			
 			//$rootScope.myloader = true;
 			var loading = weui.loading('提交中...');
 			
