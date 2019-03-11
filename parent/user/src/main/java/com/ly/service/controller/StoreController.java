@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
@@ -34,7 +35,7 @@ public class StoreController {
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	@ApiOperation(value = "注册药店", notes = "由管理员调用,注册药店")
+	@ApiOperation(value = "注册药店", notes = "管理员接口")
 	public Response register(@ApiParam(name = "name", value = "药店名") @RequestParam(name = "name") String name,
 			@ApiParam(name = "address", value = "地址") @RequestParam(name = "address")String address,
 			@ApiParam(name = "email", value = "邮箱") @RequestParam(name = "email")String email,
@@ -50,6 +51,48 @@ public class StoreController {
 			Store store = storeService.create(name,address,email,longitude,latitude,password,rate);
  		
 			return Response.OK(store);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		} catch(Exception e){
+			return Response.SystemError();
+		}
+			
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	@ApiOperation(value = "修改药店", notes = "由管理员调用")
+	public Response modify(@ApiParam(name = "jsstore", value = "store的js对象") @RequestParam(name = "jsstore") String jsstore,
+			HttpServletRequest request, HttpServletResponse response){
+		
+		try{
+			SessionUtil.getManagerId(request);
+			
+			Store store = JSONUtils.getObjectByJson(jsstore, Store.class);
+			
+			store = storeService.modify(store);
+ 		
+			return Response.OK(store);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		} catch(Exception e){
+			return Response.SystemError();
+		}
+			
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/resetPwd", method = RequestMethod.POST)
+	@ApiOperation(value = "重置密码", notes = "由管理员调用")
+	public Response resetPwd(@ApiParam(name = "storeid", value = "药房id") @RequestParam(name = "storeid") Integer storeid,
+			HttpServletRequest request, HttpServletResponse response){
+		
+		try{
+			SessionUtil.getManagerId(request);
+			
+			storeService.resetPwd(storeid);
+ 		
+			return Response.OK(null);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
 		} catch(Exception e){
@@ -166,9 +209,9 @@ public class StoreController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
-	@RequestMapping(value = "/getStoreByName", method = RequestMethod.GET)
+	@RequestMapping(value = "/getStoresByName", method = RequestMethod.GET)
 	@ApiOperation(value = "获取所有的药店", notes = "管理接口")
-	public Response getAllStore(@ApiParam(name = "name", value = "药房名称,传入空串则表示搜索所有药店") @RequestParam(name = "name") String name,
+	public Response getStoresByName(@ApiParam(name = "name", value = "药房名称,传入空串则表示搜索所有药店") @RequestParam(name = "name") String name,
 			@ApiParam(name = "pageIndex", value = "页码1-n") @RequestParam(name = "pageIndex") int pageIndex,
 			@ApiParam(name = "pageSize", value = "每页最大数量") @RequestParam(name = "pageSize") int pageSize,
 			HttpServletRequest request, HttpServletResponse response){

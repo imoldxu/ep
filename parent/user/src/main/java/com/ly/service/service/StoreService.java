@@ -5,12 +5,15 @@ import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.entity.Store;
+import com.ly.service.entity.StoreAccount;
 import com.ly.service.entity.StoreDrug;
+import com.ly.service.feign.client.AccountClient;
 import com.ly.service.feign.client.DrugClient;
 import com.ly.service.mapper.StoreMapper;
 import com.ly.service.utils.JSONUtils;
@@ -26,6 +29,8 @@ public class StoreService {
 	StoreMapper storeMapper;
 	@Autowired
 	DrugClient drugClient;
+	@Autowired
+	AccountClient accountClient;
 	
 	public Store login(String email, String password){
 		Example ex = new Example(Store.class);
@@ -77,6 +82,7 @@ public class StoreService {
 		}
 	}
 
+	@Transactional
 	public Store create(String name, String address, String email, double longitude, double latitude, String password, double rate) {
 
 		if(!ValidDataUtil.isEmail(email)) {
@@ -104,6 +110,8 @@ public class StoreService {
 		store.setPassword(newPwd);
 		storeMapper.insertUseGeneratedKeys(store);
 
+		accountClient.create(store.getId()).fetchOKData(StoreAccount.class);
+		
 		return store;
 	}
 
@@ -127,5 +135,30 @@ public class StoreService {
 			throw new HandleException(ErrorCode.ARG_ERROR, "该药店不存在");
 		}
 		return ret;
+	}
+
+	public Store modify(Store store) {
+		if(store.fetchPassword()!=null) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "更新失败，不允许直接更新密码");
+		}
+		int ret = storeMapper.updateByPrimaryKeySelective(store);
+		if(ret == 1) {
+			return store;
+		}else {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "更新失败");
+		}
+	}
+
+	public void resetPwd(Integer storeid) {
+		Store store = storeMapper.selectByPrimaryKey(storeid);
+		
+		String nonce = store.fetchPwdnonce();
+		
+		
+		String clientPwd = PasswordUtil.generateClientPwd("123456");
+		String newPwd = PasswordUtil.generatePwd(clientPwd, nonce);
+		store.setPassword(newPwd);
+		
+		storeMapper.updateByPrimaryKey(store);
 	}
 }
