@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ly.service.mapper.StoreAccountMapper" >
+	
+	<select id="getStoreAccountByName" resultType="com.ly.service.entity.StoreAccount">
+		select storeid, name, address, balance from t_store_account LEFT JOIN t_store ON t_store_account.storeid = t_store.id WHERE t_store.name LIKE #{name, jdbcType=VARCHAR} ORDER BY storeid DESC LIMIT #{offset,jdbcType=INTEGER}, #{size,jdbcType=INTEGER}
+	</select>
+	
+</mapper>
