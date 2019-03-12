@@ -91,7 +91,12 @@
         <a ui-sref="app.drugm">
           <span>药品列表</span>
         </a>
-      </li>     
+      </li>
+	  <li ui-sref-active="active">
+        <a ui-sref="app.drugtag">
+          <span>药品标签</span>
+        </a>
+      </li>   	  
     </ul>
   </li>
   <li ng-class="{active:$state.includes('app.storem')}">

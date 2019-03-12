@@ -124,6 +124,16 @@ angular.module('app')
                       }]
                   }
               })
+			  .state('app.drugtag', {
+                  url: '/drugtag',
+                  templateUrl: 'tpl/drugTag.html',
+				  resolve: {
+                      deps: ['$ocLazyLoad',
+                        function( $ocLazyLoad){
+                          return $ocLazyLoad.load('js/controllers/drugTag.js');
+                      }]
+                  }
+              })
 			  .state('app.doctorm', {
                   url: '/doctorm',
                   templateUrl: 'tpl/doctorm.html',

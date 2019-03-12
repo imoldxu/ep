@@ -48,7 +48,7 @@ app.controller('StoremCtrl', ['$scope','$http','$modal','$state','$stateParams',
 			return false;
         }else if(response.code == 4){
 			alert(response.msg);
-			$state.go('signin');
+			$state.go('access.signin');
 			return false;
 		}else{
 			alert(response.msg);
@@ -112,7 +112,7 @@ app.controller('StoremCtrl', ['$scope','$http','$modal','$state','$stateParams',
 			return false;
         }else if(response.code == 4){
 			alert(response.msg);
-			$state.go('signin');
+			$state.go('access.signin');
 			return false;
 		}else{
 			alert(response.msg);

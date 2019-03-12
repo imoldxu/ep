@@ -1,0 +1,64 @@
+<div ng-controller="DrugTagCtrl">
+  <div class="wrapper-md bg-light b-b">
+    <h1 class="m-n font-thin h3">药品标签</h1>
+  </div>
+  <div class="hbox hbox-auto-xs ng-scope" ng-init="
+	  app.settings.asideFixed = true;
+	  app.settings.asideDock = false;
+	  app.settings.container = false;
+	  app.hideAside = false;
+	  app.hideFooter = false;
+	  ">
+	  <div class="col w-md w-auto-xs bg-light lter b-r">
+		<div class="wrapper">
+		  <div class="clearfix m-b">
+			<form class="form-inline ng-pristine ng-valid" role="form">
+			  <div class="form-group">
+				<input type="text" class="form-control" placeholder="请输入药品名称或简称、拼音缩写" ng-model="keys">
+			  </div>
+			  <button type="submit" class="btn btn-sm" ng-click="getDrugList()">搜索</button>
+			</form>
+		  </div>
+		  <div class="panel panel-default">
+			<div class="table-responsive">
+			  <table class="table table-striped b-t b-light">
+				<thead>
+				  <tr>
+					<th>药品</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr ng-repeat="drug in drugList" ng-click="selectDrug($index)">
+					<td>{{drug.drugname}}</td>
+				  </tr>
+				</tbody>
+			  </table>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	  <div class="col">
+		<div class="wrapper">
+			<h3 class="m-n font-thin h3">{{selectedDrug.drugname}}</h3>
+		</div>
+		<div class="wrapper col-sm-12">
+		  <div class="panel panel-default">
+			<div class="panel-heading">
+			  标签
+			</div>
+			<div class="panel-body">			
+				<div class="col-lg-2-4" ng-repeat="x in tagList">
+					<div class="checkbox">
+					  <label class="i-checks">
+						<input type="checkbox"  ng-model="x.selected" ng-true-value="1" ng-false-value="0" ng-checked="x.drugid != null" ng-init="x.selected = x.drugid != null? 1 : 0" ng-change="changeState($index)">
+						<i></i>
+						{{x.tagname}}
+					  </label>
+					</div>
+				</div>
+			</div>
+		  </div>
+		</div>
+	  </div>
+  </div>
+</div>
