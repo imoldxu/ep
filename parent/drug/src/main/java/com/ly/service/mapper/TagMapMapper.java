@@ -11,5 +11,6 @@ import com.ly.service.entity.DrugTagMap;
 public interface TagMapMapper extends BaseMapper<DrugTagMap>{
 
 	List<DrugTagInfo> getTagsByDrugId(@Param(value="drugid")Integer drugid);
-    
+ 
+	List<DrugTagInfo> getAllTagsByDrugId(@Param(value="drugid")Integer drugid);
 }

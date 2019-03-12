@@ -14,12 +14,6 @@ import tk.mybatis.mapper.annotation.ColumnType;
 @Table(name="t_drug_tag_map")
 public class DrugTagMap {
 
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@ColumnType(jdbcType = JdbcType.BIGINT)
-	private Long id;
-
 	@Column(name = "drugid")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
 	private Integer drugid;
@@ -37,14 +31,6 @@ public class DrugTagMap {
 
 	public void setTarname(String tarname) {
 		this.tarname = tarname;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 	
 	public Integer getTagid() {

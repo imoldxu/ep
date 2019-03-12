@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ly.service.context.DrugTagInfo;
 import com.ly.service.context.ErrorCode;
 import com.ly.service.context.HandleException;
 import com.ly.service.context.Response;
@@ -283,16 +284,32 @@ public class DrugController {
 	}
 	
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(value = "/getAllTagsByDrug", method = RequestMethod.GET)
+	@ApiOperation(value = "获取指定药品的所有的tag", notes = "通用接口")
+	public Response getAllTagsByDrug(@ApiParam(name="drugid", value="药品id") @RequestParam(value="drugid") Integer drugid,
+			HttpServletRequest request,
+			HttpServletResponse response){
+		try{
+			List<DrugTagInfo> taglist = drugService.getAllTagsByDrug(drugid);
+			return Response.OK(taglist);
+		}catch (HandleException e) {
+			return Response.Error(e.getErrorCode(), e.getMessage());
+		}catch (Exception e){
+			e.printStackTrace();
+			return Response.SystemError();
+		}
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/addTag", method = RequestMethod.POST)
 	@ApiOperation(value = "添加药品标签", notes = "管理接口")
 	public Response addTag(@ApiParam(name = "drugid", value = "药品id") @RequestParam(value="drugid") int drugid,
-			@ApiParam(name="tagid", value="标签id,传0则表示新建tag") @RequestParam(value="tagid") int tagid,
-			@ApiParam(name="tag", value="标签名称,只有tagid传0时才有效") @RequestParam(value="tag") String tag,
+			@ApiParam(name="tagid", value="标签id") @RequestParam(value="tagid") int tagid,
 			HttpServletRequest request,HttpServletResponse response){
 		try{
 			SessionUtil.getManagerId(request);
 			
-			drugService.addTag(drugid, tagid, tag);
+			drugService.addTag(drugid, tagid);
 			return Response.OK(null);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());
@@ -305,12 +322,13 @@ public class DrugController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(value = "/delTag", method = RequestMethod.POST)
 	@ApiOperation(value = "删除药品标签", notes = "管理接口")
-	public Response delTag(@ApiParam(name = "mapid", value = "mapid") @RequestParam(value="mapid") long mapid,
+	public Response delTag(@ApiParam(name = "drugid", value = "药品id") @RequestParam(value="drugid") int drugid,
+			@ApiParam(name="tagid", value="标签id") @RequestParam(value="tagid") int tagid,
 			HttpServletRequest request,HttpServletResponse response){
 		try{
 			SessionUtil.getManagerId(request);
 			
-			drugService.delTag(mapid);
+			drugService.delTag(drugid, tagid);
 			return Response.OK(null);
 		}catch (HandleException e) {
 			return Response.Error(e.getErrorCode(), e.getMessage());

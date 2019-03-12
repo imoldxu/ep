@@ -2,8 +2,6 @@ package com.ly.service.context;
 
 public class DrugTagInfo {
 
-	private Long id;
-
 	private Integer drugid;
 	
 	private Integer tagid;
@@ -18,13 +16,7 @@ public class DrugTagInfo {
 		this.tagname = tagname;
 	}
 
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
 	
 	public Integer getTagid() {
 		return tagid;

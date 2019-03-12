@@ -15,6 +15,8 @@ import tk.mybatis.mapper.entity.Example;
 
 import com.ly.service.context.SimpleDrugInfo;
 import com.ly.service.context.DrugTagInfo;
+import com.ly.service.context.ErrorCode;
+import com.ly.service.context.HandleException;
 import com.ly.service.entity.Drug;
 import com.ly.service.entity.DrugTag;
 import com.ly.service.entity.DrugTagMap;
@@ -38,7 +40,9 @@ public class DrugService {
 	
 	public int del(Integer id){
 		int ret = drugMapper.deleteByPrimaryKey(id);
-		//TODO 抛出删除药品事件
+		if(ret!=1) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "删除失败");
+		}
 		return ret;
 	}
 	
@@ -63,7 +67,6 @@ public class DrugService {
 		}else{
 			ret = drugMapper.getZyDrugByTag(tag);	
 		}
-		//TODO 先根据tag获取tag标签id，再获取该标签下的药品id,再根据药品id获取药品信息，重新写联合查询的sql
 		return ret;
 	}
 	
@@ -99,7 +102,9 @@ public class DrugService {
 	
 	public int modify(Drug drug){
 		int opRet = drugMapper.updateByPrimaryKey(drug);
-		//TODO:tag的更新处理，直接调用del和add，不在此处处理
+		if(opRet!=1) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR,"更新失败");
+		}
 		return opRet;
 	}
 	
@@ -114,23 +119,15 @@ public class DrugService {
 		return tagMapper.selectAll();
 	}
 
-	public void addTag(int drugid, int tagid, String tag) {
-		if(tagid>0){
-			DrugTagMap map = new DrugTagMap();
-			map.setDrugid(drugid);
-			map.setTagid(tagid);
-			tagMapMapper.insert(map);
-		}else{
-			DrugTag t = insertTag(tag);
-			
-			DrugTagMap map = new DrugTagMap();
-			map.setDrugid(drugid);
-			map.setTagid(t.getId());
-			tagMapMapper.insert(map);
-		}
+	public void addTag(int drugid, int tagid) {
+		DrugTagMap map = new DrugTagMap();
+		map.setDrugid(drugid);
+		map.setTagid(tagid);
+		tagMapMapper.insert(map);
+		return;
 	}
 
-	private DrugTag insertTag(String tag) {
+	public DrugTag insertTag(String tag) {
 		DrugTag t = getTagByName(tag);
 		if(t==null){
 		    t = new DrugTag();
@@ -147,11 +144,22 @@ public class DrugService {
 		return tag;
 	}
 
-	public void delTag(long tagMapid) {
-		tagMapMapper.deleteByPrimaryKey(tagMapid);
+	public void delTag(Integer drugid, Integer tagid) {
+		Example ex = new Example(DrugTagMap.class);
+		ex.createCriteria().andEqualTo("drugid", drugid).andEqualTo("tagid", tagid);
+		int opRet = tagMapMapper.deleteByExample(ex);
+		if(opRet != 1) {
+			throw new HandleException(ErrorCode.NORMAL_ERROR, "删除失败");
+		}
+		return;
 	}
 	
 	public List<DrugTagInfo> getTagsByDrugId(int targetid){
 		return tagMapMapper.getTagsByDrugId(targetid);
+	}
+
+	public List<DrugTagInfo> getAllTagsByDrug(Integer drugid) {
+		List<DrugTagInfo> ret = tagMapMapper.getAllTagsByDrugId(drugid);
+		return ret;
 	}
 }
