@@ -58,8 +58,9 @@ define(['jquery','app','angular','weui','oss'], function($, app, angular, weui, 
 			return client.put(sigImg, content).then(function (res) {
 				console.log(res);
 				loading.hide();
-				weui.toast('上传成功',3000);
-				var sigurl = client.signatureUrl(sigImg);
+				weui.toast('上传成功',1000);
+				//var sigurl = client.signatureUrl(sigImg);//私有读时
+				var sigurl = client._objectUrl(sigImg);//公共读时
 				$scope.doctorObj.signatureurl = sigurl;
 				dataVer.put('doctorInfo', $scope.doctorObj);//在每次进入修改页之前，应该使用doctor数据初始化signatureurl
 				$window.history.back();
