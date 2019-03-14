@@ -3,7 +3,6 @@ define(['weui'], function(weui){
 
     return ['$scope', '$http', '$window', '$cookieStore','$location','$rootScope','dataVer' ,'$state', 'Md5', function($scope, $http, $window, $cookieStore,$location,$rootScope,dataVer,$state,Md5){
 
-		weui.alert($window.history.length);
         //默认值
 		$scope.doctorObj = dataVer.get('doctorInfo');
 
