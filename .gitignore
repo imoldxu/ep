@@ -38,3 +38,10 @@ zipkin/target/classes/META-INF/maven/com.ly/zipkin/pom.properties
 parent/user/target/classes/META-INF/MANIFEST.MF
 parent/user/target/classes/META-INF/maven/com.ly.service/user/pom.properties
 parent/user/target/classes/META-INF/maven/com.ly.service/user/pom.xml
+*.prefs
+parent/system/.project
+parent/system/.classpath
+*.prefs
+parent/drug/.classpath
+parent/common/.classpath
+*.prefs

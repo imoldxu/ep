@@ -75,7 +75,7 @@ public class StsServer extends HttpServlet {
             req.setRoleArn(roleArn);
             req.setRoleSessionName(roleSessionName);
             req.setPolicy(policy); // 若policy为空，则用户将获得该角色下所有权限
-            req.setDurationSeconds(1000L); // 设置凭证有效时间
+            req.setDurationSeconds(1200L); // 设置凭证有效时间
             final AssumeRoleResponse resp = client.getAcsResponse(req);
             System.out.println("Expiration: " + resp.getCredentials().getExpiration());
             System.out.println("Access Key Id: " + resp.getCredentials().getAccessKeyId());
